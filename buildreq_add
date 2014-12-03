@@ -1,0 +1,10 @@
+#
+# This file contains extra pkgconfig build requirements that don't get picked up but are 
+# desirable. One name per line, no whitespace.
+#
+openssl-dev
+libidn-dev
+python-dev
+zlib-dev
+groff
+

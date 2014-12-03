@@ -1,0 +1,15 @@
+--with-openssl
+--disable-ldap
+--without-winidn
+--with-libidn
+--enable-threaded-resolver
+--disable-ipv6
+--with-zlib
+--enable-symbol-hiding
+--with-ca-path=%{_datadir}/ca-certs
+--with-ca-bundle=%{_sysconfdir}/ssl/cert.pem
+--without-ntlm
+--disable-ntlm-wb
+--disable-ntlm
+--disable-smb
+--enable-proxy

@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index cb00bd6..1236fd9 100755
+--- a/configure
++++ b/configure
+@@ -40583,7 +40583,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
+   if test "x$OPENSSL_ENABLED" = "x1" -o "x$USE_WINDOWS_SSPI" = "x1" \
+       -o "x$GNUTLS_ENABLED" = "x1" -o "x$NSS_ENABLED" = "x1" \
+       -o "x$DARWINSSL_ENABLED" = "x1"; then
+-    SUPPORT_FEATURES="$SUPPORT_FEATURES NTLM"
++    SUPPORT_FEATURES="$SUPPORT_FEATURES"
+ 
+     if test "x$CURL_DISABLE_HTTP" != "x1" -a \
+         "x$NTLM_WB_ENABLED" = "x1"; then
+diff --git a/lib/curl_setup.h b/lib/curl_setup.h
+index 5163273..d899772 100644
+--- a/lib/curl_setup.h
++++ b/lib/curl_setup.h
+@@ -628,7 +628,7 @@ int netware_init(void);
+     defined(USE_GNUTLS) || defined(USE_NSS) || defined(USE_DARWINSSL) || \
+     defined(USE_OS400CRYPTO) || defined(USE_WIN32_CRYPTO)
+ 
+-#define USE_NTLM
++#undef USE_NTLM
+ #endif
+ #endif
+ 

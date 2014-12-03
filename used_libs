@@ -1,0 +1,7 @@
+libc.so.6
+libcrypto.so.1.0.0
+libdbus-1.so.3
+libidn.so.11
+libpthread.so.0
+libssl.so.1.0.0
+libz.so.1
