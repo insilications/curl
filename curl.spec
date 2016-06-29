@@ -4,7 +4,7 @@
 #
 Name     : curl
 Version  : 7.49.1
-Release  : 41
+Release  : 42
 URL      : http://curl.haxx.se/download/curl-7.49.1.tar.bz2
 Source0  : http://curl.haxx.se/download/curl-7.49.1.tar.bz2
 Summary  : Library to transfer files with ftp, http, etc.
@@ -29,7 +29,7 @@ BuildRequires : pkgconfig(dbus-1)
 BuildRequires : python-dev
 BuildRequires : zlib-dev
 Patch1: nodes.patch
-Patch2: stateless.patch
+Patch2: 0001-stateless-plus.patch
 Patch3: Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch4: Check-pacdiscovery-state-file-exists.patch
 
@@ -101,7 +101,6 @@ lib components for the curl package.
 make V=1  %{?_smp_mflags}
 
 %check
-export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost

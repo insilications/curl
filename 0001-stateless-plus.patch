@@ -1,0 +1,74 @@
+From 986cb6451c35a5bb821c11b7289b106184f4e30e Mon Sep 17 00:00:00 2001
+From: "Jaime A. Garcia" <jaime.garcia.naranjo@intel.com>
+Date: Tue, 28 Jun 2016 17:00:45 -0500
+Subject: [PATCH curl] stateless
+
+Currently --capath option is assumed to point to our cert
+path storage, that is our "stateless" path into /usr/share/ca-cert,
+however --cacert (aka --with-ca-bundle) is pointing to an
+initially empty (stateless) directory, this is under
+/etc/ssl/cert.pem storage, then, there is the case when
+a user wants to use --capath to load his own certificates to
+show to the server, when this happens the /usr/share/ca-certs
+cannot be used by the system anymore and fallsback to ca-bundle,
+since this file does not exist at the begining the chances are
+that the curl command is going to fail due a proper signature
+verification.
+
+This patch fixes that "failure" by falling back properly to
+our stateless certificate chain storage if none has been defined
+by the user under /etc/ssl.
+
+I need to remark tha this is quick fix patch, no modification
+to define the needed macro in configure.ac since curl utilizes
+a particular tar dist including home-generated makefiles and
+configure and another under git repository for source code, so
+to avoid polution in the source, it was simplified.
+
+Another upstream patch is going to be proposed for review shortly.
+
+Signed-off-by: Jaime A. Garcia <jaime.garcia.naranjo@intel.com>
+---
+ lib/url.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/lib/url.c b/lib/url.c
+index 2a30266..02eea86 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -78,6 +78,9 @@ void idn_free (void *ptr);
+ bool curl_win32_idn_to_ascii(const char *in, char **out);
+ #endif  /* USE_LIBIDN */
+ 
++#define CURL_CA_BUNDLE_DEFAULT \
++    "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
++
+ #include "urldata.h"
+ #include "netrc.h"
+ 
+@@ -581,9 +584,19 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
+ 
+   /* This is our preferred CA cert bundle/path since install time */
+ #if defined(CURL_CA_BUNDLE)
+-  result = setstropt(&set->str[STRING_SSL_CAFILE], CURL_CA_BUNDLE);
+-  if(result)
+-    return result;
++  /* Load CA_BUNDLE, only if it exists */
++  struct stat st;
++  if(lstat(CURL_CA_BUNDLE, &st) == 0) {
++    if(S_ISREG(st.st_mode)) {
++      result = setstropt(&set->str[STRING_SSL_CAFILE], CURL_CA_BUNDLE);
++      if(result)
++        return result;
++    }
++  }else {
++      result = setstropt(&set->str[STRING_SSL_CAFILE], CURL_CA_BUNDLE_DEFAULT);
++      if(result)
++        return result;
++  }
+ #endif
+ #if defined(CURL_CA_PATH)
+   result = setstropt(&set->str[STRING_SSL_CAPATH], CURL_CA_PATH);
+-- 
+2.1.0
+
