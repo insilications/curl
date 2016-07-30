@@ -4,7 +4,7 @@
 #
 Name     : curl
 Version  : 7.50.0
-Release  : 43
+Release  : 44
 URL      : http://curl.haxx.se/download/curl-7.50.0.tar.bz2
 Source0  : http://curl.haxx.se/download/curl-7.50.0.tar.bz2
 Summary  : Library to transfer files with ftp, http, etc.
@@ -98,7 +98,8 @@ export LANG=C
 --disable-ntlm-wb \
 --disable-ntlm \
 --disable-smb \
---enable-proxy
+--enable-proxy \
+--with-nghttp2
 make V=1  %{?_smp_mflags}
 
 %check

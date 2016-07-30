@@ -13,3 +13,4 @@
 --disable-ntlm
 --disable-smb
 --enable-proxy
+--with-nghttp2
