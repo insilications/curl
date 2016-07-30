@@ -4,7 +4,7 @@
 #
 Name     : curl
 Version  : 7.50.0
-Release  : 44
+Release  : 45
 URL      : http://curl.haxx.se/download/curl-7.50.0.tar.bz2
 Source0  : http://curl.haxx.se/download/curl-7.50.0.tar.bz2
 Summary  : Library to transfer files with ftp, http, etc.
@@ -15,6 +15,7 @@ Requires: curl-lib
 Requires: curl-doc
 BuildRequires : automake
 BuildRequires : automake-dev
+BuildRequires : ca-certs
 BuildRequires : cmake
 BuildRequires : dbus-dev
 BuildRequires : gettext-bin
@@ -23,9 +24,9 @@ BuildRequires : libidn-dev
 BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : m4
+BuildRequires : nghttp2-dev
 BuildRequires : openssl-dev
 BuildRequires : pkg-config-dev
-BuildRequires : pkgconfig(dbus-1)
 BuildRequires : python-dev
 BuildRequires : zlib-dev
 Patch1: nodes.patch
@@ -99,7 +100,8 @@ export LANG=C
 --disable-ntlm \
 --disable-smb \
 --enable-proxy \
---with-nghttp2
+--with-nghttp2 \
+--enable-ipv6
 make V=1  %{?_smp_mflags}
 
 %check
