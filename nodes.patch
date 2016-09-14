@@ -4,8 +4,8 @@ index cb00bd6..1236fd9 100755
 +++ b/configure
 @@ -40583,7 +40583,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
    if test "x$OPENSSL_ENABLED" = "x1" -o "x$USE_WINDOWS_SSPI" = "x1" \
-       -o "x$GNUTLS_ENABLED" = "x1" -o "x$NSS_ENABLED" = "x1" \
-       -o "x$DARWINSSL_ENABLED" = "x1"; then
+       -o "x$GNUTLS_ENABLED" = "x1" -o "x$MBEDTLS_ENABLED" = "x1" \
+       -o "x$NSS_ENABLED" = "x1" -o "x$DARWINSSL_ENABLED" = "x1"; then
 -    SUPPORT_FEATURES="$SUPPORT_FEATURES NTLM"
 +    SUPPORT_FEATURES="$SUPPORT_FEATURES"
  
@@ -21,6 +21,6 @@ index 5163273..d899772 100644
  
 -#define USE_NTLM
 +#undef USE_NTLM
- #endif
- #endif
  
+ #elif defined(USE_MBEDTLS)
+ #  include <mbedtls/md4.h>
