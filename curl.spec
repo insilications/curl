@@ -4,7 +4,7 @@
 #
 Name     : curl
 Version  : 7.50.3
-Release  : 47
+Release  : 48
 URL      : http://curl.haxx.se/download/curl-7.50.3.tar.bz2
 Source0  : http://curl.haxx.se/download/curl-7.50.3.tar.bz2
 Summary  : Library to transfer files with ftp, http, etc.
