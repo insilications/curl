@@ -4,12 +4,12 @@
 #
 Name     : curl
 Version  : 7.51.0
-Release  : 49
+Release  : 50
 URL      : https://curl.haxx.se/download/curl-7.51.0.tar.gz
 Source0  : https://curl.haxx.se/download/curl-7.51.0.tar.gz
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
-License  : ICU MIT
+License  : ICU MIT OpenSSL
 Requires: curl-bin
 Requires: curl-lib
 Requires: curl-doc
@@ -134,8 +134,8 @@ rm -rf %{buildroot}
 /usr/include/curl/multi.h
 /usr/include/curl/stdcheaders.h
 /usr/include/curl/typecheck-gcc.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libcurl.so
+/usr/lib64/pkgconfig/libcurl.pc
 /usr/share/aclocal/*.m4
 
 %files doc
@@ -145,4 +145,5 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libcurl.so.4
+/usr/lib64/libcurl.so.4.4.0
