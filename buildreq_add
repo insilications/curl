@@ -10,3 +10,10 @@ groff
 nghttp2-dev
 ca-certs
 dbus-dev
+
+
+openssl-dev32
+libidn-dev32
+zlib-dev32
+dbus-dev32
+nghttp2-dev32
