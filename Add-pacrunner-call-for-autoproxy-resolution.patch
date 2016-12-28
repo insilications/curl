@@ -246,12 +246,12 @@ index 4044419..1100d5a 100644
 @@ -5636,7 +5757,7 @@ static CURLcode create_conn(struct SessionHandle *data,
      proxy = NULL;
    }
-   else if(!proxy)
+   else if(!proxy && !socksproxy)
 -    proxy = detect_proxy(conn);
 +    proxy = detect_proxy(conn, data->change.url);
  
  #ifdef USE_UNIX_SOCKETS
-   if(proxy && data->set.str[STRING_UNIX_SOCKET_PATH]) {
+   if(data->set.str[STRING_UNIX_SOCKET_PATH]) {
 -- 
 2.7.3
 
