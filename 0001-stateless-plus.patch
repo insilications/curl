@@ -1,7 +1,7 @@
-From 986cb6451c35a5bb821c11b7289b106184f4e30e Mon Sep 17 00:00:00 2001
+From b11feec3e4fa838f4ea9650398162afbd94e4901 Mon Sep 17 00:00:00 2001
 From: "Jaime A. Garcia" <jaime.garcia.naranjo@intel.com>
-Date: Tue, 28 Jun 2016 17:00:45 -0500
-Subject: [PATCH curl] stateless
+Date: Tue, 28 Feb 2017 13:24:10 -0600
+Subject: [PATCH] stateless
 
 Currently --capath option is assumed to point to our cert
 path storage, that is our "stateless" path into /usr/share/ca-cert,
@@ -25,20 +25,18 @@ a particular tar dist including home-generated makefiles and
 configure and another under git repository for source code, so
 to avoid polution in the source, it was simplified.
 
-Another upstream patch is going to be proposed for review shortly.
-
 Signed-off-by: Jaime A. Garcia <jaime.garcia.naranjo@intel.com>
 ---
- lib/url.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ lib/url.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
 diff --git a/lib/url.c b/lib/url.c
-index 2a30266..02eea86 100644
+index 7944d7b..0d4fdbbc 100644
 --- a/lib/url.c
 +++ b/lib/url.c
-@@ -78,6 +78,9 @@ void idn_free (void *ptr);
+@@ -67,6 +67,9 @@
  bool curl_win32_idn_to_ascii(const char *in, char **out);
- #endif  /* USE_LIBIDN */
+ #endif  /* USE_LIBIDN2 */
  
 +#define CURL_CA_BUNDLE_DEFAULT \
 +    "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
@@ -46,7 +44,7 @@ index 2a30266..02eea86 100644
  #include "urldata.h"
  #include "netrc.h"
  
-@@ -581,9 +584,19 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
+@@ -573,9 +576,19 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
  
    /* This is our preferred CA cert bundle/path since install time */
  #if defined(CURL_CA_BUNDLE)
