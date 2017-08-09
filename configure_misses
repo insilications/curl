@@ -1,0 +1,106 @@
+Configure miss: whether to enable debug build options
+Configure miss: whether to enable strict compiler warnings
+Configure miss: whether to enable compiler warnings as errors
+Configure miss: whether to enable curl debug memory tracking
+Configure miss: whether to enable c-ares for DNS lookups
+Configure miss: whether to build with code coverage support
+Configure miss: if OS is AIX (to define _ALL_SOURCE)
+Configure miss: if _THREAD_SAFE is already defined
+Configure miss: if _THREAD_SAFE is actually needed
+Configure miss: if _THREAD_SAFE is onwards defined
+Configure miss: whether to build shared libraries with -no-undefined
+Configure miss: whether to build shared libraries with -mimpure-text
+Configure miss: whether to build static libraries only
+Configure miss: if compiler optimizer assumed setting might be used
+Configure miss: whether build target is a native Windows one
+Configure miss: whether build target supports WIN32 file API
+Configure miss: good-to-use Mac CFLAGS
+Configure miss: whether to support ldap
+Configure miss: whether to support ldaps
+Configure miss: whether to support smb
+Configure miss: whether to use libgcc
+Configure miss: if X/Open network library is required
+Configure miss: clock_gettime in libraries
+Configure miss: if GSS-API support is requested
+Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
+Configure miss: whether to enable Apple OS native SSL/TLS
+Configure miss: BoringSSL
+Configure miss: libressl
+Configure miss: whether to use builtin CA store of SSL library
+Configure miss: library containing psl_builtin
+Configure miss: libssh2_channel_open_ex in -lssh2
+Configure miss: libssh2.h usability
+Configure miss: libssh2.h presence
+Configure miss: libssh2.h
+Configure miss: RTMP_Init in -lrtmp
+Configure miss: whether versioned symbols are wanted
+Configure miss: whether to enable Windows native IDN (Windows native builds only)
+Configure miss: libidn2 options with pkg-config
+Configure miss: if idn2_lookup_ul can be linked
+Configure miss: idn2.h usability
+Configure miss: idn2.h presence
+Configure miss: idn2.h
+Configure miss: memory.h
+Configure miss: sys/utime.h
+Configure miss: socket.h
+Configure miss: working NI_WITHSCOPEID
+Configure miss: gnroff
+Configure miss: whether to enable SSPI support (Windows native builds only)
+Configure miss: whether to enable NTLM delegation to winbind's helper
+Configure miss: whether to enforce SONAME bump
+Configure miss: i686-generic-linux-gnu-pkg-config
+Configure miss: whether to enable debug build options
+Configure miss: whether to enable strict compiler warnings
+Configure miss: whether to enable compiler warnings as errors
+Configure miss: whether to enable curl debug memory tracking
+Configure miss: whether to enable c-ares for DNS lookups
+Configure miss: whether to build with code coverage support
+Configure miss: if OS is AIX (to define _ALL_SOURCE)
+Configure miss: if _THREAD_SAFE is already defined
+Configure miss: if _THREAD_SAFE is actually needed
+Configure miss: if _THREAD_SAFE is onwards defined
+Configure miss: i686-generic-linux-gnu-objdump
+Configure miss: i686-generic-linux-gnu-dlltool
+Configure miss: i686-generic-linux-gnu-strip
+Configure miss: i686-generic-linux-gnu-mt
+Configure miss: whether to build shared libraries with -no-undefined
+Configure miss: whether to build shared libraries with -mimpure-text
+Configure miss: whether to build static libraries with PIC
+Configure miss: whether to build static libraries only
+Configure miss: if compiler optimizer assumed setting might be used
+Configure miss: whether build target is a native Windows one
+Configure miss: whether build target supports WIN32 file API
+Configure miss: good-to-use Mac CFLAGS
+Configure miss: whether to support ldap
+Configure miss: whether to support ldaps
+Configure miss: whether to support smb
+Configure miss: whether to use libgcc
+Configure miss: if X/Open network library is required
+Configure miss: clock_gettime in libraries
+Configure miss: if GSS-API support is requested
+Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
+Configure miss: whether to enable Apple OS native SSL/TLS
+Configure miss: BoringSSL
+Configure miss: libressl
+Configure miss: whether to use builtin CA store of SSL library
+Configure miss: library containing psl_builtin
+Configure miss: libssh2_channel_open_ex in -lssh2
+Configure miss: libssh2.h usability
+Configure miss: libssh2.h presence
+Configure miss: libssh2.h
+Configure miss: RTMP_Init in -lrtmp
+Configure miss: whether versioned symbols are wanted
+Configure miss: whether to enable Windows native IDN (Windows native builds only)
+Configure miss: libidn2 options with pkg-config
+Configure miss: if idn2_lookup_ul can be linked
+Configure miss: idn2.h usability
+Configure miss: idn2.h presence
+Configure miss: idn2.h
+Configure miss: memory.h
+Configure miss: sys/utime.h
+Configure miss: socket.h
+Configure miss: working NI_WITHSCOPEID
+Configure miss: gnroff
+Configure miss: whether to enable SSPI support (Windows native builds only)
+Configure miss: whether to enable NTLM delegation to winbind's helper
+Configure miss: whether to enforce SONAME bump
