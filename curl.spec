@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.55.0
-Release  : 57
-URL      : https://curl.haxx.se/download/curl-7.55.0.tar.xz
-Source0  : https://curl.haxx.se/download/curl-7.55.0.tar.xz
-Source99 : https://curl.haxx.se/download/curl-7.55.0.tar.xz.asc
+Version  : 7.55.1
+Release  : 58
+URL      : https://curl.haxx.se/download/curl-7.55.1.tar.xz
+Source0  : https://curl.haxx.se/download/curl-7.55.1.tar.xz
+Source99 : https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -109,13 +109,13 @@ lib32 components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.55.0
+%setup -q -n curl-7.55.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a curl-7.55.0 build32
+cp -a curl-7.55.1 build32
 popd
 
 %build
@@ -123,7 +123,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1502304764
+export SOURCE_DATE_EPOCH=1502719852
 %reconfigure --disable-static --with-openssl \
 --disable-ldap \
 --without-winidn \
@@ -175,7 +175,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1502304764
+export SOURCE_DATE_EPOCH=1502719852
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -208,6 +208,7 @@ popd
 /usr/include/curl/typecheck-gcc.h
 /usr/lib64/libcurl.so
 /usr/lib64/pkgconfig/libcurl.pc
+/usr/share/aclocal/*.m4
 
 %files dev32
 %defattr(-,root,root,-)
@@ -218,6 +219,7 @@ popd
 %files doc
 %defattr(-,root,root,-)
 %doc /usr/share/man/man1/*
+%doc /usr/share/man/man3/*
 
 %files lib
 %defattr(-,root,root,-)
