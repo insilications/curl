@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.55.1
-Release  : 58
+Release  : 59
 URL      : https://curl.haxx.se/download/curl-7.55.1.tar.xz
 Source0  : https://curl.haxx.se/download/curl-7.55.1.tar.xz
 Source99 : https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
@@ -46,6 +46,7 @@ Patch1: nodes.patch
 Patch2: 0001-stateless-plus.patch
 Patch3: Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch4: Check-pacdiscovery-state-file-exists.patch
+Patch5: Avoid-stripping-the-g-option.patch
 
 %description
 _   _ ____  _
@@ -114,6 +115,7 @@ lib32 components for the curl package.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 pushd ..
 cp -a curl-7.55.1 build32
 popd
@@ -123,7 +125,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1502719852
+export SOURCE_DATE_EPOCH=1504205707
 %reconfigure --disable-static --with-openssl \
 --disable-ldap \
 --without-winidn \
@@ -175,7 +177,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1502719852
+export SOURCE_DATE_EPOCH=1504205707
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
