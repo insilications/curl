@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.55.1
-Release  : 60
+Release  : 61
 URL      : https://curl.haxx.se/download/curl-7.55.1.tar.xz
 Source0  : https://curl.haxx.se/download/curl-7.55.1.tar.xz
 Source99 : https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
@@ -43,10 +43,9 @@ BuildRequires : python-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 Patch1: 0001-Remove-use-of-DES.patch
-Patch2: 0001-stateless-plus.patch
-Patch3: Add-pacrunner-call-for-autoproxy-resolution.patch
-Patch4: Check-pacdiscovery-state-file-exists.patch
-Patch5: Avoid-stripping-the-g-option.patch
+Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
+Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
+Patch4: 0004-Avoid-stripping-the-g-option.patch
 
 %description
 _   _ ____  _
@@ -115,7 +114,6 @@ lib32 components for the curl package.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 pushd ..
 cp -a curl-7.55.1 build32
 popd
@@ -134,11 +132,8 @@ export SOURCE_DATE_EPOCH=1504594642
 --disable-ipv6 \
 --with-zlib \
 --enable-symbol-hiding \
---with-ca-path=%{_datadir}/ca-certs \
---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem \
---without-ntlm \
+--with-ca-path=/var/cache/ca-certs/anchors \
 --disable-ntlm-wb \
---disable-ntlm \
 --disable-smb \
 --enable-proxy \
 --with-nghttp2 \
@@ -157,11 +152,8 @@ export LDFLAGS="$LDFLAGS -m32"
 --disable-ipv6 \
 --with-zlib \
 --enable-symbol-hiding \
---with-ca-path=%{_datadir}/ca-certs \
---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem \
---without-ntlm \
+--with-ca-path=/var/cache/ca-certs/anchors \
 --disable-ntlm-wb \
---disable-ntlm \
 --disable-smb \
 --enable-proxy \
 --with-nghttp2 \

@@ -1,24 +1,19 @@
-From 53c658c3197b6c726ff72069025fc25b33f86371 Mon Sep 17 00:00:00 2001
+From cc1ad84a3e23fd0057924deda7ebcb6e1dbd9f15 Mon Sep 17 00:00:00 2001
 From: Tudor Marcu <tudor.marcu@intel.com>
 Date: Mon, 19 Oct 2015 14:27:02 -0700
-Subject: [PATCH] Check the state file pacdiscovery sets
+Subject: [PATCH 3/4] Check the state file pacdiscovery sets
 
 If pacdiscovery did not run, then Pacrunner has no proxy script, thus proxy
 resolution will not work - so just ignore any dbus connection and run libcurl.
 
 Signed-off-by: Tudor Marcu <tudor.marcu@intel.com>
-
----
-
-Rebased to curl-7.55 by Simental, Magana, Marcos
-
-Signed-off-by: Simental Magana, Marcos <marcos.simental.magana@intel.com>
+Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 ---
  lib/url.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/lib/url.c b/lib/url.c
-index 858f611..f60f8aa 100644
+index afe727680..cd25c9f70 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -72,6 +72,9 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
@@ -28,10 +23,10 @@ index 858f611..f60f8aa 100644
 +#include <sys/stat.h>
 +#define PROXY_STATE_FILE "/run/pacrunner/pac_active"
 +
- #define CURL_CA_BUNDLE_DEFAULT \
-     "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
+ #include "urldata.h"
+ #include "netrc.h"
  
-@@ -5006,6 +5009,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -4989,6 +4992,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
    char *prox;
@@ -39,7 +34,7 @@ index 858f611..f60f8aa 100644
  
    /* Now, build <protocol>_proxy and check for such a one to use */
    while(*protop)
-@@ -5038,7 +5042,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -5021,7 +5025,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    if(prox)
      proxy = prox; /* use this */
  
@@ -51,5 +46,5 @@ index 858f611..f60f8aa 100644
       *     Fallback to pacrunner autoproxy lookup */
      autoproxy_ret = query_pacrunner_proxy(url,
 -- 
-2.14.0
+2.13.2
 

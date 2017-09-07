@@ -1,7 +1,7 @@
-From 5cc7a2ba415c1d117526289958102b9319e5bc41 Mon Sep 17 00:00:00 2001
+From 3c44ba3808d0c55d788edf47e3372dee2f08e45f Mon Sep 17 00:00:00 2001
 From: "Brad T. Peters" <brad.t.peters@intel.com>
 Date: Fri, 25 Mar 2016 13:41:56 +0000
-Subject: [PATCH] Add pacrunner call for autoproxy resolution
+Subject: [PATCH 2/4] Add pacrunner call for autoproxy resolution
 
 When a http_proxy is not set in the environment, query pacrunner
 for the appropriate proxy to use to access the desired URL, if any.
@@ -13,26 +13,15 @@ Assumptions of this patch are:
   by pacrunner
 
 Signed-off-by: Brad T. Peters <brad.t.peters@intel.com>
-
----
-
-Rebased by Ikey
-
-Signed-off-by: Ikey Doherty <michael.i.doherty@intel.com>
-
----
-
-Rebased to curl-7.55 by Simental, Magana, Marcos
-
-Signed-off-by: Simental Magana, Marcos <marcos.simental.magana@intel.com>
+Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 ---
  configure.ac    |   2 +
  lib/Makefile.am |   4 +-
- lib/url.c       | 129 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 130 insertions(+), 5 deletions(-)
+ lib/url.c       | 128 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 129 insertions(+), 5 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index edcb393..52ea5f8 100644
+index edebfc77b..15779d68f 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -45,7 +34,7 @@ index edcb393..52ea5f8 100644
  CURL_CHECK_OPTION_OPTIMIZE
  CURL_CHECK_OPTION_WARNINGS
 diff --git a/lib/Makefile.am b/lib/Makefile.am
-index 176bf33..9a48641 100644
+index 176bf3342..9a4864149 100644
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
 @@ -99,8 +99,8 @@ AM_LDFLAGS =
@@ -60,7 +49,7 @@ index 176bf33..9a48641 100644
  @CODE_COVERAGE_RULES@
  libcurl_la_LDFLAGS_EXTRA += $(CODE_COVERAGE_LDFLAGS)
 diff --git a/lib/url.c b/lib/url.c
-index 34640cf..858f611 100644
+index 71d4d8bb7..afe727680 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -67,6 +67,11 @@
@@ -72,10 +61,10 @@ index 34640cf..858f611 100644
 +#include <dbus/dbus.h>
 +#endif /* CURL_DISABLE_PROXY */
 +
- #define CURL_CA_BUNDLE_DEFAULT \
-     "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
+ #include "urldata.h"
+ #include "netrc.h"
  
-@@ -141,6 +146,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
+@@ -138,6 +143,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
  static CURLcode parse_login_details(const char *login, const size_t len,
                                      char **userptr, char **passwdptr,
                                      char **optionsptr);
@@ -83,7 +72,7 @@ index 34640cf..858f611 100644
  static unsigned int get_protocol_family(unsigned int protocol);
  
  #define READBUFFER_SIZE CURL_MAX_WRITE_SIZE
-@@ -4973,9 +4979,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+@@ -4956,9 +4962,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
  * name and is not limited to HTTP proxies only.
  * The returned pointer must be freed by the caller (unless NULL)
  ****************************************************************/
@@ -96,7 +85,7 @@ index 34640cf..858f611 100644
  
    /* If proxy was not specified, we check for default proxy environment
     * variables, to enable i.e Lynx compliance:
-@@ -5029,7 +5037,18 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -5012,7 +5020,18 @@ static char *detect_proxy(struct connectdata *conn)
  
    if(prox)
      proxy = prox; /* use this */
@@ -116,7 +105,7 @@ index 34640cf..858f611 100644
      proxy = curl_getenv("all_proxy"); /* default proxy to use */
      if(!proxy)
        proxy=curl_getenv("ALL_PROXY");
-@@ -5326,7 +5345,7 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+@@ -5312,7 +5331,7 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
    else if(!proxy && !socksproxy)
  #ifndef CURL_DISABLE_HTTP
      /* if the host is not in the noproxy list, detect proxy. */
@@ -125,11 +114,10 @@ index 34640cf..858f611 100644
  #else  /* !CURL_DISABLE_HTTP */
      proxy = NULL;
  #endif /* CURL_DISABLE_HTTP */
-@@ -6327,6 +6346,109 @@ static void reuse_conn(struct connectdata *old_conn,
- #endif
+@@ -6314,6 +6333,109 @@ static void reuse_conn(struct connectdata *old_conn,
  }
  
-+/**
+ /**
 + * query_pacrunner_proxy() queries pacrunner via dbus in an
 + * attempt to obtain autoproxy rules. Proxy rules set by the
 + * environment (shell ENV variables) should take precidence over
@@ -232,17 +220,10 @@ index 34640cf..858f611 100644
 +    return ret; /* failure */
 +}
 +
- /**
++/**
   * create_conn() sets up a new connectdata struct, or re-uses an already
   * existing one, and resolves host name.
-@@ -6361,6 +6483,7 @@ static CURLcode create_conn(struct Curl_easy *data,
-   bool waitpipe = FALSE;
-   size_t max_host_connections = Curl_multi_max_host_connections(data->multi);
-   size_t max_total_connections = Curl_multi_max_total_connections(data->multi);
-+  char prox_tmp[256];
- 
-   *async = FALSE;
- 
+  *
 -- 
-2.14.0
+2.13.2
 

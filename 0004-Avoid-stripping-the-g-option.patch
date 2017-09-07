@@ -1,7 +1,7 @@
-From 42a1a03dfd47f7b6688add7d34a2085e9c2a11cd Mon Sep 17 00:00:00 2001
+From 947413e1f5f3cd065e91dabb63a09a6da806ca4b Mon Sep 17 00:00:00 2001
 From: Patrick McCarty <patrick.mccarty@intel.com>
 Date: Thu, 31 Aug 2017 00:46:03 -0700
-Subject: [PATCH] Avoid stripping the -g option
+Subject: [PATCH 4/4] Avoid stripping the -g option
 
 This configure macro strips the -g option from CFLAGS if the
 --enable-debug option is not passed. But --enable-debug enables more of
@@ -12,12 +12,13 @@ and distributed in the separate debuginfo package.
 Disable that macro from being called to avoid the -g option stripping.
 
 Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 ---
  configure.ac | 1 -
  1 file changed, 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index ae62112..75f90fe 100644
+index 15779d68f..db94c5222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -262,7 +262,6 @@ dnl **********************************************************************
@@ -29,5 +30,5 @@ index ae62112..75f90fe 100644
  CURL_SET_COMPILER_WARNING_OPTS
  
 -- 
-2.14.1
+2.13.2
 

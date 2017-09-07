@@ -6,11 +6,8 @@
 --disable-ipv6
 --with-zlib
 --enable-symbol-hiding
---with-ca-path=%{_datadir}/ca-certs
---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem
---without-ntlm
+--with-ca-path=/var/cache/ca-certs/anchors
 --disable-ntlm-wb
---disable-ntlm
 --disable-smb
 --enable-proxy
 --with-nghttp2
