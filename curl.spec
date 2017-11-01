@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.56.1
-Release  : 62
+Release  : 63
 URL      : https://curl.haxx.se/download/curl-7.56.1.tar.gz
 Source0  : https://curl.haxx.se/download/curl-7.56.1.tar.gz
 Source99 : https://curl.haxx.se/download/curl-7.56.1.tar.gz.asc
