@@ -15,6 +15,7 @@ Configure miss: if compiler optimizer assumed setting might be used
 Configure miss: whether build target is a native Windows one
 Configure miss: whether build target supports WIN32 file API
 Configure miss: good-to-use Mac CFLAGS
+Configure miss: to see if the compiler supports __builtin_available()
 Configure miss: whether to support ldap
 Configure miss: whether to support ldaps
 Configure miss: whether to support smb
@@ -26,6 +27,7 @@ Configure miss: whether to enable Windows native SSL/TLS (Windows native builds 
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: BoringSSL
 Configure miss: libressl
+Configure miss: ssl_version in -laxtls
 Configure miss: whether to use builtin CA store of SSL library
 Configure miss: library containing psl_builtin
 Configure miss: libssh2_channel_open_ex in -lssh2
@@ -47,7 +49,6 @@ Configure miss: working NI_WITHSCOPEID
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
-Configure miss: whether to enforce SONAME bump
 Configure miss: i686-generic-linux-gnu-pkg-config
 Configure miss: whether to enable debug build options
 Configure miss: whether to enable strict compiler warnings
@@ -71,6 +72,7 @@ Configure miss: if compiler optimizer assumed setting might be used
 Configure miss: whether build target is a native Windows one
 Configure miss: whether build target supports WIN32 file API
 Configure miss: good-to-use Mac CFLAGS
+Configure miss: to see if the compiler supports __builtin_available()
 Configure miss: whether to support ldap
 Configure miss: whether to support ldaps
 Configure miss: whether to support smb
@@ -82,6 +84,7 @@ Configure miss: whether to enable Windows native SSL/TLS (Windows native builds 
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: BoringSSL
 Configure miss: libressl
+Configure miss: ssl_version in -laxtls
 Configure miss: whether to use builtin CA store of SSL library
 Configure miss: library containing psl_builtin
 Configure miss: libssh2_channel_open_ex in -lssh2
@@ -103,4 +106,3 @@ Configure miss: working NI_WITHSCOPEID
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
-Configure miss: whether to enforce SONAME bump

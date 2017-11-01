@@ -2,3 +2,4 @@
 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
 0003-Check-the-state-file-pacdiscovery-sets.patch
 0004-Avoid-stripping-the-g-option.patch
+CVE-2017-1000254.nopatch

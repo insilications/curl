@@ -5,14 +5,14 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.55.1
-Release  : 61
-URL      : https://curl.haxx.se/download/curl-7.55.1.tar.xz
-Source0  : https://curl.haxx.se/download/curl-7.55.1.tar.xz
-Source99 : https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
+Version  : 7.56.1
+Release  : 62
+URL      : https://curl.haxx.se/download/curl-7.56.1.tar.gz
+Source0  : https://curl.haxx.se/download/curl-7.56.1.tar.gz
+Source99 : https://curl.haxx.se/download/curl-7.56.1.tar.gz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
-License  : MIT
+License  : HPND MIT
 Requires: curl-bin
 Requires: curl-lib
 Requires: curl-doc
@@ -46,6 +46,7 @@ Patch1: 0001-Remove-use-of-DES.patch
 Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
+Patch5: CVE-2017-1000254.nopatch
 
 %description
 _   _ ____  _
@@ -109,13 +110,13 @@ lib32 components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.55.1
+%setup -q -n curl-7.56.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a curl-7.55.1 build32
+cp -a curl-7.56.1 build32
 popd
 
 %build
@@ -123,7 +124,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1504594642
+export SOURCE_DATE_EPOCH=1509562909
+export CFLAGS="$CFLAGS -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -fstack-protector-strong "
+export FFLAGS="$CFLAGS -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
 %reconfigure --disable-static --with-openssl \
 --disable-ldap \
 --without-winidn \
@@ -169,7 +174,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1504594642
+export SOURCE_DATE_EPOCH=1509562909
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -218,9 +223,9 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libcurl.so.4
-/usr/lib64/libcurl.so.4.4.0
+/usr/lib64/libcurl.so.4.5.0
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libcurl.so.4
-/usr/lib32/libcurl.so.4.4.0
+/usr/lib32/libcurl.so.4.5.0

@@ -17,11 +17,11 @@ Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 ---
  configure.ac    |   2 +
  lib/Makefile.am |   4 +-
- lib/url.c       | 128 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 129 insertions(+), 5 deletions(-)
+ lib/url.c       | 132 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 132 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index edebfc77b..15779d68f 100644
+index 68b3a07..f1f8fd8 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -34,10 +34,10 @@ index edebfc77b..15779d68f 100644
  CURL_CHECK_OPTION_OPTIMIZE
  CURL_CHECK_OPTION_WARNINGS
 diff --git a/lib/Makefile.am b/lib/Makefile.am
-index 176bf3342..9a4864149 100644
+index 151c261..bc5a230 100644
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
-@@ -99,8 +99,8 @@ AM_LDFLAGS =
+@@ -85,8 +85,8 @@ AM_LDFLAGS =
  AM_CFLAGS =
  
  libcurl_la_CPPFLAGS_EXTRA =
@@ -49,7 +49,7 @@ index 176bf3342..9a4864149 100644
  @CODE_COVERAGE_RULES@
  libcurl_la_LDFLAGS_EXTRA += $(CODE_COVERAGE_LDFLAGS)
 diff --git a/lib/url.c b/lib/url.c
-index 71d4d8bb7..afe727680 100644
+index 76c09c7..2a0044c 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -67,6 +67,11 @@
@@ -64,7 +64,7 @@ index 71d4d8bb7..afe727680 100644
  #include "urldata.h"
  #include "netrc.h"
  
-@@ -138,6 +143,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
+@@ -139,6 +144,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
  static CURLcode parse_login_details(const char *login, const size_t len,
                                      char **userptr, char **passwdptr,
                                      char **optionsptr);
@@ -72,7 +72,7 @@ index 71d4d8bb7..afe727680 100644
  static unsigned int get_protocol_family(unsigned int protocol);
  
  #define READBUFFER_SIZE CURL_MAX_WRITE_SIZE
-@@ -4956,9 +4962,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+@@ -5164,9 +5170,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
  * name and is not limited to HTTP proxies only.
  * The returned pointer must be freed by the caller (unless NULL)
  ****************************************************************/
@@ -85,7 +85,7 @@ index 71d4d8bb7..afe727680 100644
  
    /* If proxy was not specified, we check for default proxy environment
     * variables, to enable i.e Lynx compliance:
-@@ -5012,7 +5020,18 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -5220,7 +5228,18 @@ static char *detect_proxy(struct connectdata *conn)
  
    if(prox)
      proxy = prox; /* use this */
@@ -104,20 +104,27 @@ index 71d4d8bb7..afe727680 100644
 +  if(!proxy) {
      proxy = curl_getenv("all_proxy"); /* default proxy to use */
      if(!proxy)
-       proxy=curl_getenv("ALL_PROXY");
-@@ -5312,7 +5331,7 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+       proxy = curl_getenv("ALL_PROXY");
+@@ -5519,10 +5538,12 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+     Curl_safefree(proxy);
+     Curl_safefree(socksproxy);
+   }
+-#ifndef CURL_DISABLE_HTTP
    else if(!proxy && !socksproxy)
- #ifndef CURL_DISABLE_HTTP
++#ifndef CURL_DISABLE_HTTP
      /* if the host is not in the noproxy list, detect proxy. */
 -    proxy = detect_proxy(conn);
-+    proxy = detect_proxy(conn, data->change.url);
- #else  /* !CURL_DISABLE_HTTP */
-     proxy = NULL;
++      proxy = detect_proxy(conn, data->change.url);
++#else  /* !CURL_DISABLE_HTTP */
++     proxy = NULL;
  #endif /* CURL_DISABLE_HTTP */
-@@ -6314,6 +6333,109 @@ static void reuse_conn(struct connectdata *old_conn,
+ 
+   Curl_safefree(no_proxy);
+@@ -6520,6 +6541,109 @@ static void reuse_conn(struct connectdata *old_conn,
+ #endif
  }
  
- /**
++/**
 + * query_pacrunner_proxy() queries pacrunner via dbus in an
 + * attempt to obtain autoproxy rules. Proxy rules set by the
 + * environment (shell ENV variables) should take precidence over
@@ -220,10 +227,9 @@ index 71d4d8bb7..afe727680 100644
 +    return ret; /* failure */
 +}
 +
-+/**
+ /**
   * create_conn() sets up a new connectdata struct, or re-uses an already
   * existing one, and resolves host name.
-  *
 -- 
-2.13.2
+2.14.3
 

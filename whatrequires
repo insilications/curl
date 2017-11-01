@@ -1,0 +1,6 @@
+# This file contains recursive sources that require this package
+cargo
+ister
+pycurl
+rustc
+scala
