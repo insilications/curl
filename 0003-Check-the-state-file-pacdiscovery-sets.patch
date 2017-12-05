@@ -1,4 +1,4 @@
-From cc1ad84a3e23fd0057924deda7ebcb6e1dbd9f15 Mon Sep 17 00:00:00 2001
+From be162b51c2900bfeb187f0ef18697b8681767040 Mon Sep 17 00:00:00 2001
 From: Tudor Marcu <tudor.marcu@intel.com>
 Date: Mon, 19 Oct 2015 14:27:02 -0700
 Subject: [PATCH 3/4] Check the state file pacdiscovery sets
@@ -8,12 +8,13 @@ resolution will not work - so just ignore any dbus connection and run libcurl.
 
 Signed-off-by: Tudor Marcu <tudor.marcu@intel.com>
 Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
 ---
  lib/url.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/lib/url.c b/lib/url.c
-index 2a0044c..a3169c3 100644
+index 0c2bed7..4bd25fc 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -71,6 +71,8 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
@@ -25,7 +26,7 @@ index 2a0044c..a3169c3 100644
  
  #include "urldata.h"
  #include "netrc.h"
-@@ -5197,6 +5199,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2682,6 +2684,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
    char *prox;
@@ -33,17 +34,17 @@ index 2a0044c..a3169c3 100644
  
    /* Now, build <protocol>_proxy and check for such a one to use */
    while(*protop)
-@@ -5229,7 +5232,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2714,7 +2717,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    if(prox)
      proxy = prox; /* use this */
  
 -  if(!proxy) {
-+    /* Check that no proxy is set AND that pacdiscovery has set pacrunner
-+     * with a PAC script */
++  /* Check that no proxy is set AND that pacdiscovery has set pacrunner
++   * with a PAC script */
 +  if(!proxy && stat(PROXY_STATE_FILE, &sbuff) == 0) {
      /* No protocol-specific proxy set in the environment.
       *     Fallback to pacrunner autoproxy lookup */
      autoproxy_ret = query_pacrunner_proxy(url,
 -- 
-2.14.3
+2.15.0
 

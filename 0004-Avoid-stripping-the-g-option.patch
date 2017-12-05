@@ -1,4 +1,4 @@
-From 947413e1f5f3cd065e91dabb63a09a6da806ca4b Mon Sep 17 00:00:00 2001
+From 49d664c18719f6701fe4ce9e1e72782e0975e718 Mon Sep 17 00:00:00 2001
 From: Patrick McCarty <patrick.mccarty@intel.com>
 Date: Thu, 31 Aug 2017 00:46:03 -0700
 Subject: [PATCH 4/4] Avoid stripping the -g option
@@ -18,10 +18,10 @@ Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index 15779d68f..db94c5222 100644
+index 1b7cfc3..18f29b9 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -262,7 +262,6 @@ dnl **********************************************************************
+@@ -260,7 +260,6 @@ dnl **********************************************************************
  
  CURL_CHECK_COMPILER
  CURL_SET_COMPILER_BASIC_OPTS
@@ -30,5 +30,5 @@ index 15779d68f..db94c5222 100644
  CURL_SET_COMPILER_WARNING_OPTS
  
 -- 
-2.13.2
+2.15.0
 
