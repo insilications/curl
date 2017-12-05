@@ -22,6 +22,10 @@ Configure miss: whether to support smb
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
 Configure miss: clock_gettime in libraries
+Configure miss: BrotliDecoderDecompress in -lbrotlidec
+Configure miss: brotli/decode.h usability
+Configure miss: brotli/decode.h presence
+Configure miss: brotli/decode.h
 Configure miss: if GSS-API support is requested
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
@@ -79,6 +83,10 @@ Configure miss: whether to support smb
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
 Configure miss: clock_gettime in libraries
+Configure miss: BrotliDecoderDecompress in -lbrotlidec
+Configure miss: brotli/decode.h usability
+Configure miss: brotli/decode.h presence
+Configure miss: brotli/decode.h
 Configure miss: if GSS-API support is requested
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
