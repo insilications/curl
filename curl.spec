@@ -5,14 +5,14 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.57.0
-Release  : 64
-URL      : https://curl.haxx.se/download/curl-7.57.0.tar.gz
-Source0  : https://curl.haxx.se/download/curl-7.57.0.tar.gz
-Source99 : https://curl.haxx.se/download/curl-7.57.0.tar.gz.asc
+Version  : 7.58.0
+Release  : 65
+URL      : https://curl.haxx.se/download/curl-7.58.0.tar.gz
+Source0  : https://curl.haxx.se/download/curl-7.58.0.tar.gz
+Source99 : https://curl.haxx.se/download/curl-7.58.0.tar.gz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
-License  : HPND MIT
+License  : MIT
 Requires: curl-bin
 Requires: curl-lib
 Requires: curl-doc
@@ -110,13 +110,13 @@ lib32 components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.57.0
+%setup -q -n curl-7.58.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a curl-7.57.0 build32
+cp -a curl-7.58.0 build32
 popd
 
 %build
@@ -124,7 +124,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1512449224
+export SOURCE_DATE_EPOCH=1516807750
 export CFLAGS="$CFLAGS -fstack-protector-strong "
 export FCFLAGS="$CFLAGS -fstack-protector-strong "
 export FFLAGS="$CFLAGS -fstack-protector-strong "
@@ -143,7 +143,7 @@ export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
 --enable-proxy \
 --with-nghttp2 \
 --enable-ipv6
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export CFLAGS="$CFLAGS -m32"
@@ -163,7 +163,7 @@ export LDFLAGS="$LDFLAGS -m32"
 --enable-proxy \
 --with-nghttp2 \
 --enable-ipv6  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 popd
 
 %check
@@ -174,7 +174,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1512449224
+export SOURCE_DATE_EPOCH=1516807750
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

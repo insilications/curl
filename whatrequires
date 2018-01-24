@@ -1,6 +1,22 @@
 # This file contains recursive sources that require this package
+adwaita-icon-theme
+babl
 cargo
+cheese
+faba-icon-theme
+gdk-pixbuf
+gedit
+gimp
+gst-plugins-good
+gtk+
+hexchat
 ister
+libmediaart
+librsvg
+moka-icon-theme
+proc-macro2
 pycurl
 rustc
 scala
+totem
+unicode-xid
