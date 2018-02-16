@@ -17,6 +17,5 @@ moka-icon-theme
 proc-macro2
 pycurl
 rustc
-scala
 totem
 unicode-xid

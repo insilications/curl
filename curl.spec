@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.58.0
-Release  : 66
+Release  : 67
 URL      : https://curl.haxx.se/download/curl-7.58.0.tar.gz
 Source0  : https://curl.haxx.se/download/curl-7.58.0.tar.gz
 Source99 : https://curl.haxx.se/download/curl-7.58.0.tar.gz.asc
@@ -16,6 +16,7 @@ License  : MIT
 Requires: curl-bin
 Requires: curl-lib
 Requires: curl-doc
+Requires: ca-certs
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : ca-certs
@@ -124,11 +125,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1516807750
-export CFLAGS="$CFLAGS -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -fstack-protector-strong "
-export FFLAGS="$CFLAGS -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
+export SOURCE_DATE_EPOCH=1518811904
+export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 %reconfigure --disable-static --with-openssl \
 --disable-ldap \
 --without-winidn \
@@ -174,7 +175,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1516807750
+export SOURCE_DATE_EPOCH=1518811904
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
