@@ -25,7 +25,9 @@ Configure miss: BrotliDecoderDecompress in -lbrotlidec
 Configure miss: brotli/decode.h usability
 Configure miss: brotli/decode.h presence
 Configure miss: brotli/decode.h
-Configure miss: if GSS-API support is requested
+Configure miss: gss.h usability
+Configure miss: gss.h presence
+Configure miss: gss.h
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: BoringSSL

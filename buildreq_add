@@ -10,6 +10,11 @@ groff
 nghttp2-dev
 ca-certs
 dbus-dev
+krb5-dev
+e2fsprogs-dev
+glibc-dev
+libc6
+glibc-staticdev
 
 
 openssl-dev32
@@ -17,3 +22,4 @@ libidn-dev32
 zlib-dev32
 dbus-dev32
 nghttp2-dev32
+e2fsprogs-dev32

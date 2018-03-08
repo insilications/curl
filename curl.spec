@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.58.0
-Release  : 67
+Release  : 69
 URL      : https://curl.haxx.se/download/curl-7.58.0.tar.gz
 Source0  : https://curl.haxx.se/download/curl-7.58.0.tar.gz
 Source99 : https://curl.haxx.se/download/curl-7.58.0.tar.gz.asc
@@ -23,13 +23,19 @@ BuildRequires : ca-certs
 BuildRequires : cmake
 BuildRequires : dbus-dev
 BuildRequires : dbus-dev32
+BuildRequires : e2fsprogs-dev
+BuildRequires : e2fsprogs-dev32
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : gettext-bin
+BuildRequires : glibc-dev
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
+BuildRequires : glibc-staticdev
 BuildRequires : groff
+BuildRequires : krb5-dev
+BuildRequires : libc6
 BuildRequires : libidn-dev
 BuildRequires : libidn-dev32
 BuildRequires : libtool
@@ -125,12 +131,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1518811904
-export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-%reconfigure --disable-static --with-openssl \
+export SOURCE_DATE_EPOCH=1520546165
+export CFLAGS="$CFLAGS -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -fstack-protector-strong "
+export FFLAGS="$CFLAGS -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
+%reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
 --with-libidn \
@@ -143,14 +149,14 @@ export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 --disable-smb \
 --enable-proxy \
 --with-nghttp2 \
---enable-ipv6
+--enable-ipv6 --with-gssapi=/usr
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
-%reconfigure --disable-static --with-openssl \
+%reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
 --with-libidn \
@@ -175,7 +181,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1518811904
+export SOURCE_DATE_EPOCH=1520546165
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

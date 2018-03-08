@@ -1,4 +1,4 @@
---with-openssl
+--with-ssl=/usr
 --disable-ldap
 --without-winidn
 --with-libidn
