@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.58.0
-Release  : 69
-URL      : https://curl.haxx.se/download/curl-7.58.0.tar.gz
-Source0  : https://curl.haxx.se/download/curl-7.58.0.tar.gz
-Source99 : https://curl.haxx.se/download/curl-7.58.0.tar.gz.asc
+Version  : 7.59.0
+Release  : 70
+URL      : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
+Source0  : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
+Source99 : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -117,13 +117,13 @@ lib32 components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.58.0
+%setup -q -n curl-7.59.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a curl-7.58.0 build32
+cp -a curl-7.59.0 build32
 popd
 
 %build
@@ -131,11 +131,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1520546165
-export CFLAGS="$CFLAGS -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -fstack-protector-strong "
-export FFLAGS="$CFLAGS -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
+export SOURCE_DATE_EPOCH=1522117040
+export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 %reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
@@ -181,7 +181,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1520546165
+export SOURCE_DATE_EPOCH=1522117040
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

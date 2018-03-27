@@ -46,6 +46,7 @@ Configure miss: idn2.h
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
+Configure miss: if time_t is unsigned
 Configure miss: working NI_WITHSCOPEID
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
@@ -97,6 +98,7 @@ Configure miss: idn2.h
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
+Configure miss: if time_t is unsigned
 Configure miss: working NI_WITHSCOPEID
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
