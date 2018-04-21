@@ -10,7 +10,7 @@ groff
 nghttp2-dev
 ca-certs
 dbus-dev
-krb5-dev
+#krb5-dev
 e2fsprogs-dev
 glibc-dev
 libc6
