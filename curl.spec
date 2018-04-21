@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.59.0
-Release  : 71
+Release  : 72
 URL      : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
 Source0  : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
 Source99 : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2.asc
@@ -34,7 +34,6 @@ BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : glibc-staticdev
 BuildRequires : groff
-BuildRequires : krb5-dev
 BuildRequires : libc6
 BuildRequires : libidn-dev
 BuildRequires : libidn-dev32
@@ -131,17 +130,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1522117040
-export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export SOURCE_DATE_EPOCH=1524325446
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
 %reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
 --with-libidn \
 --enable-threaded-resolver \
---disable-ipv6 \
 --with-zlib \
 --enable-symbol-hiding \
 --with-ca-path=/var/cache/ca-certs/anchors \
@@ -149,7 +147,12 @@ export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 --disable-smb \
 --enable-proxy \
 --with-nghttp2 \
---enable-ipv6 --with-gssapi=/usr
+--enable-ipv6 \
+--disable-telnet \
+--disable-tftp \
+--disable-pop3 \
+--disable-gopher \
+--without-zlib --with-gssapi=/usr
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -161,7 +164,6 @@ export LDFLAGS="$LDFLAGS -m32"
 --without-winidn \
 --with-libidn \
 --enable-threaded-resolver \
---disable-ipv6 \
 --with-zlib \
 --enable-symbol-hiding \
 --with-ca-path=/var/cache/ca-certs/anchors \
@@ -169,7 +171,12 @@ export LDFLAGS="$LDFLAGS -m32"
 --disable-smb \
 --enable-proxy \
 --with-nghttp2 \
---enable-ipv6  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+--enable-ipv6 \
+--disable-telnet \
+--disable-tftp \
+--disable-pop3 \
+--disable-gopher \
+--without-zlib  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
 
@@ -181,7 +188,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1522117040
+export SOURCE_DATE_EPOCH=1524325446
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

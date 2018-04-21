@@ -17,7 +17,11 @@ Configure miss: good-to-use Mac CFLAGS
 Configure miss: to see if the compiler supports __builtin_available()
 Configure miss: whether to support ldap
 Configure miss: whether to support ldaps
+Configure miss: whether to support telnet
+Configure miss: whether to support tftp
+Configure miss: whether to support pop3
 Configure miss: whether to support smb
+Configure miss: whether to support gopher
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
 Configure miss: clock_gettime in libraries
@@ -28,6 +32,14 @@ Configure miss: brotli/decode.h
 Configure miss: gss.h usability
 Configure miss: gss.h presence
 Configure miss: gss.h
+Configure miss: gssapi/gssapi.h usability
+Configure miss: gssapi/gssapi.h presence
+Configure miss: gssapi/gssapi.h
+Configure miss: gssapi/gssapi_generic.h
+Configure miss: gssapi/gssapi_krb5.h
+Configure miss: gssapi.h usability
+Configure miss: gssapi.h presence
+Configure miss: gssapi.h
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: BoringSSL
@@ -71,7 +83,11 @@ Configure miss: good-to-use Mac CFLAGS
 Configure miss: to see if the compiler supports __builtin_available()
 Configure miss: whether to support ldap
 Configure miss: whether to support ldaps
+Configure miss: whether to support telnet
+Configure miss: whether to support tftp
+Configure miss: whether to support pop3
 Configure miss: whether to support smb
+Configure miss: whether to support gopher
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
 Configure miss: clock_gettime in libraries
