@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.59.0
-Release  : 72
+Release  : 73
 URL      : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
 Source0  : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2
 Source99 : https://github.com/curl/curl/releases/download/curl-7_59_0/curl-7.59.0.tar.bz2.asc
@@ -130,7 +130,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1524325446
+export SOURCE_DATE_EPOCH=1525467401
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs "
@@ -151,8 +151,7 @@ export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic
 --disable-telnet \
 --disable-tftp \
 --disable-pop3 \
---disable-gopher \
---without-zlib --with-gssapi=/usr
+--disable-gopher --with-gssapi=/usr
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -175,8 +174,7 @@ export LDFLAGS="$LDFLAGS -m32"
 --disable-telnet \
 --disable-tftp \
 --disable-pop3 \
---disable-gopher \
---without-zlib  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+--disable-gopher  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
 
@@ -188,7 +186,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1524325446
+export SOURCE_DATE_EPOCH=1525467401
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

@@ -18,5 +18,7 @@ moka-icon-theme
 proc-macro2
 pycurl
 rustc
+spice-gtk
 totem
 unicode-xid
+virt-viewer

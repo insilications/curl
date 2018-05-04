@@ -15,4 +15,3 @@
 --disable-tftp
 --disable-pop3
 --disable-gopher
---without-zlib
