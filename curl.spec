@@ -45,7 +45,7 @@ BuildRequires : nghttp2-dev32
 BuildRequires : openssl-dev
 BuildRequires : openssl-dev32
 BuildRequires : pkg-config-dev
-BuildRequires : python-dev
+
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 Patch1: 0001-Remove-use-of-DES.patch
