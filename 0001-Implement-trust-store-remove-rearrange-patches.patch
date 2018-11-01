@@ -1,0 +1,463 @@
+From 3c1c461a84d223a418890da2956966cc063ff8cc Mon Sep 17 00:00:00 2001
+From: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
+Date: Thu, 7 Sep 2017 07:12:46 +0000
+Subject: [PATCH curl] Implement trust store, remove/rearrange patches.
+
+---
+ 0001-stateless-plus.patch                          | 89 ----------------------
+ ...d-pacrunner-call-for-autoproxy-resolution.patch | 57 +++++---------
+ ...03-Check-the-state-file-pacdiscovery-sets.patch | 23 +++---
+ ...atch => 0004-Avoid-stripping-the-g-option.patch |  9 ++-
+ configure                                          |  5 +-
+ curl.spec                                          | 20 ++---
+ release                                            |  2 +-
+ series                                             |  7 +-
+ 8 files changed, 44 insertions(+), 168 deletions(-)
+ delete mode 100644 0001-stateless-plus.patch
+ rename Add-pacrunner-call-for-autoproxy-resolution.patch => 0002-Add-pacrunner-call-for-autoproxy-resolution.patch (83%)
+ rename Check-pacdiscovery-state-file-exists.patch => 0003-Check-the-state-file-pacdiscovery-sets.patch (71%)
+ rename Avoid-stripping-the-g-option.patch => 0004-Avoid-stripping-the-g-option.patch (81%)
+
+diff --git a/0001-stateless-plus.patch b/0001-stateless-plus.patch
+deleted file mode 100644
+index a0a3121..0000000
+--- a/0001-stateless-plus.patch
++++ /dev/null
+@@ -1,89 +0,0 @@
+-From 5c4a8d5ae15a0f9e3e640e4f1ef76fb7f8230198 Mon Sep 17 00:00:00 2001
+-From: "Jaime A. Garcia" <jaime.garcia.naranjo@intel.com>
+-Date: Tue, 28 Feb 2017 13:24:10 -0600
+-Subject: [PATCH] stateless
+-
+-Currently --capath option is assumed to point to our cert
+-path storage, that is our "stateless" path into /usr/share/ca-cert,
+-however --cacert (aka --with-ca-bundle) is pointing to an
+-initially empty (stateless) directory, this is under
+-/etc/ssl/cert.pem storage, then, there is the case when
+-a user wants to use --capath to load his own certificates to
+-show to the server, when this happens the /usr/share/ca-certs
+-cannot be used by the system anymore and fallsback to ca-bundle,
+-since this file does not exist at the begining the chances are
+-that the curl command is going to fail due a proper signature
+-verification.
+-
+-This patch fixes that "failure" by falling back properly to
+-our stateless certificate chain storage if none has been defined
+-by the user under /etc/ssl.
+-
+-I need to remark tha this is quick fix patch, no modification
+-to define the needed macro in configure.ac since curl utilizes
+-a particular tar dist including home-generated makefiles and
+-configure and another under git repository for source code, so
+-to avoid polution in the source, it was simplified.
+-
+-Signed-off-by: Jaime A. Garcia <jaime.garcia.naranjo@intel.com>
+-
+----
+-
+-Rebased to curl-7.55 by Simental, Magana, Marcos
+-
+-Signed-off-by: Simental Magana, Marcos <marcos.simental.magana@intel.com>
+----
+- lib/url.c | 29 +++++++++++++++++++++++------
+- 1 file changed, 23 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/url.c b/lib/url.c
+-index 2e79343..9c3beb8 100644
+---- a/lib/url.c
+-+++ b/lib/url.c
+-@@ -67,6 +67,9 @@
+- bool curl_win32_idn_to_ascii(const char *in, char **out);
+- #endif  /* USE_LIBIDN2 */
+- 
+-+#define CURL_CA_BUNDLE_DEFAULT \
+-+    "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
+-+
+- #include "urldata.h"
+- #include "netrc.h"
+- 
+-@@ -588,13 +591,27 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
+- 
+-   /* This is our preferred CA cert bundle/path since install time */
+- #if defined(CURL_CA_BUNDLE)
+--  result = setstropt(&set->str[STRING_SSL_CAFILE_ORIG], CURL_CA_BUNDLE);
+--  if(result)
+--    return result;
+-+  /* Load CA_BUNDLE, only if it exists */
+-+  struct stat st;
+-+  if(lstat(CURL_CA_BUNDLE, &st) == 0) {
+-+    if(S_ISREG(st.st_mode)) {
+-+      result = setstropt(&set->str[STRING_SSL_CAFILE_ORIG], CURL_CA_BUNDLE);
+-+      if(result)
+-+        return result;
+- 
+--  result = setstropt(&set->str[STRING_SSL_CAFILE_PROXY], CURL_CA_BUNDLE);
+--  if(result)
+--    return result;
+-+      result = setstropt(&set->str[STRING_SSL_CAFILE_PROXY], CURL_CA_BUNDLE);
+-+      if(result)
+-+        return result;
+-+    }
+-+  }else {
+-+      result = setstropt(&set->str[STRING_SSL_CAFILE_ORIG], CURL_CA_BUNDLE_DEFAULT);
+-+      if(result)
+-+        return result;
+-+
+-+      result = setstropt(&set->str[STRING_SSL_CAFILE_PROXY], CURL_CA_BUNDLE_DEFAULT);
+-+      if(result)
+-+        return result;
+-+  }
+- #endif
+- #if defined(CURL_CA_PATH)
+-   result = setstropt(&set->str[STRING_SSL_CAPATH_ORIG], CURL_CA_PATH);
+--- 
+-2.14.0
+-
+diff --git a/Add-pacrunner-call-for-autoproxy-resolution.patch b/0002-Add-pacrunner-call-for-autoproxy-resolution.patch
+similarity index 83%
+rename from Add-pacrunner-call-for-autoproxy-resolution.patch
+rename to 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
+index e18e622..df50ae6 100644
+--- a/Add-pacrunner-call-for-autoproxy-resolution.patch
++++ b/0002-Add-pacrunner-call-for-autoproxy-resolution.patch
+@@ -1,7 +1,7 @@
+-From 5cc7a2ba415c1d117526289958102b9319e5bc41 Mon Sep 17 00:00:00 2001
++From 3c44ba3808d0c55d788edf47e3372dee2f08e45f Mon Sep 17 00:00:00 2001
+ From: "Brad T. Peters" <brad.t.peters@intel.com>
+ Date: Fri, 25 Mar 2016 13:41:56 +0000
+-Subject: [PATCH] Add pacrunner call for autoproxy resolution
++Subject: [PATCH 2/4] Add pacrunner call for autoproxy resolution
+ 
+ When a http_proxy is not set in the environment, query pacrunner
+ for the appropriate proxy to use to access the desired URL, if any.
+@@ -13,26 +13,15 @@ Assumptions of this patch are:
+   by pacrunner
+ 
+ Signed-off-by: Brad T. Peters <brad.t.peters@intel.com>
+-
+----
+-
+-Rebased by Ikey
+-
+-Signed-off-by: Ikey Doherty <michael.i.doherty@intel.com>
+-
+----
+-
+-Rebased to curl-7.55 by Simental, Magana, Marcos
+-
+-Signed-off-by: Simental Magana, Marcos <marcos.simental.magana@intel.com>
++Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
+ ---
+  configure.ac    |   2 +
+  lib/Makefile.am |   4 +-
+- lib/url.c       | 129 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+- 3 files changed, 130 insertions(+), 5 deletions(-)
++ lib/url.c       | 128 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
++ 3 files changed, 129 insertions(+), 5 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index edcb393..52ea5f8 100644
++index edebfc77b..15779d68f 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
+@@ -45,7 +34,7 @@ index edcb393..52ea5f8 100644
+  CURL_CHECK_OPTION_OPTIMIZE
+  CURL_CHECK_OPTION_WARNINGS
+ diff --git a/lib/Makefile.am b/lib/Makefile.am
+-index 176bf33..9a48641 100644
++index 176bf3342..9a4864149 100644
+ --- a/lib/Makefile.am
+ +++ b/lib/Makefile.am
+ @@ -99,8 +99,8 @@ AM_LDFLAGS =
+@@ -60,7 +49,7 @@ index 176bf33..9a48641 100644
+  @CODE_COVERAGE_RULES@
+  libcurl_la_LDFLAGS_EXTRA += $(CODE_COVERAGE_LDFLAGS)
+ diff --git a/lib/url.c b/lib/url.c
+-index 34640cf..858f611 100644
++index 71d4d8bb7..afe727680 100644
+ --- a/lib/url.c
+ +++ b/lib/url.c
+ @@ -67,6 +67,11 @@
+@@ -72,10 +61,10 @@ index 34640cf..858f611 100644
+ +#include <dbus/dbus.h>
+ +#endif /* CURL_DISABLE_PROXY */
+ +
+- #define CURL_CA_BUNDLE_DEFAULT \
+-     "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
++ #include "urldata.h"
++ #include "netrc.h"
+  
+-@@ -141,6 +146,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
++@@ -138,6 +143,7 @@ static CURLcode parse_url_login(struct Curl_easy *data,
+  static CURLcode parse_login_details(const char *login, const size_t len,
+                                      char **userptr, char **passwdptr,
+                                      char **optionsptr);
+@@ -83,7 +72,7 @@ index 34640cf..858f611 100644
+  static unsigned int get_protocol_family(unsigned int protocol);
+  
+  #define READBUFFER_SIZE CURL_MAX_WRITE_SIZE
+-@@ -4973,9 +4979,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
++@@ -4956,9 +4962,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+  * name and is not limited to HTTP proxies only.
+  * The returned pointer must be freed by the caller (unless NULL)
+  ****************************************************************/
+@@ -96,7 +85,7 @@ index 34640cf..858f611 100644
+  
+    /* If proxy was not specified, we check for default proxy environment
+     * variables, to enable i.e Lynx compliance:
+-@@ -5029,7 +5037,18 @@ static char *detect_proxy(struct connectdata *conn)
++@@ -5012,7 +5020,18 @@ static char *detect_proxy(struct connectdata *conn)
+  
+    if(prox)
+      proxy = prox; /* use this */
+@@ -116,7 +105,7 @@ index 34640cf..858f611 100644
+      proxy = curl_getenv("all_proxy"); /* default proxy to use */
+      if(!proxy)
+        proxy=curl_getenv("ALL_PROXY");
+-@@ -5326,7 +5345,7 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
++@@ -5312,7 +5331,7 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+    else if(!proxy && !socksproxy)
+  #ifndef CURL_DISABLE_HTTP
+      /* if the host is not in the noproxy list, detect proxy. */
+@@ -125,11 +114,10 @@ index 34640cf..858f611 100644
+  #else  /* !CURL_DISABLE_HTTP */
+      proxy = NULL;
+  #endif /* CURL_DISABLE_HTTP */
+-@@ -6327,6 +6346,109 @@ static void reuse_conn(struct connectdata *old_conn,
+- #endif
++@@ -6314,6 +6333,109 @@ static void reuse_conn(struct connectdata *old_conn,
+  }
+  
+-+/**
++ /**
+ + * query_pacrunner_proxy() queries pacrunner via dbus in an
+ + * attempt to obtain autoproxy rules. Proxy rules set by the
+ + * environment (shell ENV variables) should take precidence over
+@@ -232,17 +220,10 @@ index 34640cf..858f611 100644
+ +    return ret; /* failure */
+ +}
+ +
+- /**
+++/**
+   * create_conn() sets up a new connectdata struct, or re-uses an already
+   * existing one, and resolves host name.
+-@@ -6361,6 +6483,7 @@ static CURLcode create_conn(struct Curl_easy *data,
+-   bool waitpipe = FALSE;
+-   size_t max_host_connections = Curl_multi_max_host_connections(data->multi);
+-   size_t max_total_connections = Curl_multi_max_total_connections(data->multi);
+-+  char prox_tmp[256];
+- 
+-   *async = FALSE;
+- 
++  *
+ -- 
+-2.14.0
++2.13.2
+ 
+diff --git a/Check-pacdiscovery-state-file-exists.patch b/0003-Check-the-state-file-pacdiscovery-sets.patch
+similarity index 71%
+rename from Check-pacdiscovery-state-file-exists.patch
+rename to 0003-Check-the-state-file-pacdiscovery-sets.patch
+index 68d4542..dd30a71 100644
+--- a/Check-pacdiscovery-state-file-exists.patch
++++ b/0003-Check-the-state-file-pacdiscovery-sets.patch
+@@ -1,24 +1,19 @@
+-From 53c658c3197b6c726ff72069025fc25b33f86371 Mon Sep 17 00:00:00 2001
++From cc1ad84a3e23fd0057924deda7ebcb6e1dbd9f15 Mon Sep 17 00:00:00 2001
+ From: Tudor Marcu <tudor.marcu@intel.com>
+ Date: Mon, 19 Oct 2015 14:27:02 -0700
+-Subject: [PATCH] Check the state file pacdiscovery sets
++Subject: [PATCH 3/4] Check the state file pacdiscovery sets
+ 
+ If pacdiscovery did not run, then Pacrunner has no proxy script, thus proxy
+ resolution will not work - so just ignore any dbus connection and run libcurl.
+ 
+ Signed-off-by: Tudor Marcu <tudor.marcu@intel.com>
+-
+----
+-
+-Rebased to curl-7.55 by Simental, Magana, Marcos
+-
+-Signed-off-by: Simental Magana, Marcos <marcos.simental.magana@intel.com>
++Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
+ ---
+  lib/url.c | 8 +++++++-
+  1 file changed, 7 insertions(+), 1 deletion(-)
+ 
+ diff --git a/lib/url.c b/lib/url.c
+-index 858f611..f60f8aa 100644
++index afe727680..cd25c9f70 100644
+ --- a/lib/url.c
+ +++ b/lib/url.c
+ @@ -72,6 +72,9 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
+@@ -28,10 +23,10 @@ index 858f611..f60f8aa 100644
+ +#include <sys/stat.h>
+ +#define PROXY_STATE_FILE "/run/pacrunner/pac_active"
+ +
+- #define CURL_CA_BUNDLE_DEFAULT \
+-     "/usr/share/ca-certs/cache/extracted/openssl/ca-bundle.trust.pem"
++ #include "urldata.h"
++ #include "netrc.h"
+  
+-@@ -5006,6 +5009,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
++@@ -4989,6 +4992,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+    const char *protop = conn->handler->scheme;
+    char *envp = proxy_env;
+    char *prox;
+@@ -39,7 +34,7 @@ index 858f611..f60f8aa 100644
+  
+    /* Now, build <protocol>_proxy and check for such a one to use */
+    while(*protop)
+-@@ -5038,7 +5042,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
++@@ -5021,7 +5025,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+    if(prox)
+      proxy = prox; /* use this */
+  
+@@ -51,5 +46,5 @@ index 858f611..f60f8aa 100644
+       *     Fallback to pacrunner autoproxy lookup */
+      autoproxy_ret = query_pacrunner_proxy(url,
+ -- 
+-2.14.0
++2.13.2
+ 
+diff --git a/Avoid-stripping-the-g-option.patch b/0004-Avoid-stripping-the-g-option.patch
+similarity index 81%
+rename from Avoid-stripping-the-g-option.patch
+rename to 0004-Avoid-stripping-the-g-option.patch
+index 665f3ed..e9e5630 100644
+--- a/Avoid-stripping-the-g-option.patch
++++ b/0004-Avoid-stripping-the-g-option.patch
+@@ -1,7 +1,7 @@
+-From 42a1a03dfd47f7b6688add7d34a2085e9c2a11cd Mon Sep 17 00:00:00 2001
++From 947413e1f5f3cd065e91dabb63a09a6da806ca4b Mon Sep 17 00:00:00 2001
+ From: Patrick McCarty <patrick.mccarty@intel.com>
+ Date: Thu, 31 Aug 2017 00:46:03 -0700
+-Subject: [PATCH] Avoid stripping the -g option
++Subject: [PATCH 4/4] Avoid stripping the -g option
+ 
+ This configure macro strips the -g option from CFLAGS if the
+ --enable-debug option is not passed. But --enable-debug enables more of
+@@ -12,12 +12,13 @@ and distributed in the separate debuginfo package.
+ Disable that macro from being called to avoid the -g option stripping.
+ 
+ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
++Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
+ ---
+  configure.ac | 1 -
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index ae62112..75f90fe 100644
++index 15779d68f..db94c5222 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -262,7 +262,6 @@ dnl **********************************************************************
+@@ -29,5 +30,5 @@ index ae62112..75f90fe 100644
+  CURL_SET_COMPILER_WARNING_OPTS
+  
+ -- 
+-2.14.1
++2.13.2
+ 
+diff --git a/configure b/configure
+index ceb3887..bbb5027 100644
+--- a/configure
++++ b/configure
+@@ -6,11 +6,8 @@
+ --disable-ipv6
+ --with-zlib
+ --enable-symbol-hiding
+---with-ca-path=%{_datadir}/ca-certs
+---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem
+---without-ntlm
++--with-ca-path=/var/cache/ca-certs/anchors
+ --disable-ntlm-wb
+---disable-ntlm
+ --disable-smb
+ --enable-proxy
+ --with-nghttp2
+diff --git a/curl.spec b/curl.spec
+index 1832241..52833ac 100644
+--- a/curl.spec
++++ b/curl.spec
+@@ -6,7 +6,7 @@
+ #
+ Name     : curl
+ Version  : 7.55.1
+-Release  : 60
++Release  : 61
+ URL      : https://curl.haxx.se/download/curl-7.55.1.tar.xz
+ Source0  : https://curl.haxx.se/download/curl-7.55.1.tar.xz
+ Source99 : https://curl.haxx.se/download/curl-7.55.1.tar.xz.asc
+@@ -43,10 +43,9 @@ BuildRequires : python-dev
+ BuildRequires : zlib-dev
+ BuildRequires : zlib-dev32
+ Patch1: 0001-Remove-use-of-DES.patch
+-Patch2: 0001-stateless-plus.patch
+-Patch3: Add-pacrunner-call-for-autoproxy-resolution.patch
+-Patch4: Check-pacdiscovery-state-file-exists.patch
+-Patch5: Avoid-stripping-the-g-option.patch
++Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
++Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
++Patch4: 0004-Avoid-stripping-the-g-option.patch
+ 
+ %description
+ _   _ ____  _
+@@ -115,7 +114,6 @@ lib32 components for the curl package.
+ %patch2 -p1
+ %patch3 -p1
+ %patch4 -p1
+-%patch5 -p1
+ pushd ..
+ cp -a curl-7.55.1 build32
+ popd
+@@ -134,11 +132,8 @@ export SOURCE_DATE_EPOCH=1504594642
+ --disable-ipv6 \
+ --with-zlib \
+ --enable-symbol-hiding \
+---with-ca-path=%{_datadir}/ca-certs \
+---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem \
+---without-ntlm \
++--with-ca-path=/var/cache/ca-certs/anchors \
+ --disable-ntlm-wb \
+---disable-ntlm \
+ --disable-smb \
+ --enable-proxy \
+ --with-nghttp2 \
+@@ -157,11 +152,8 @@ export LDFLAGS="$LDFLAGS -m32"
+ --disable-ipv6 \
+ --with-zlib \
+ --enable-symbol-hiding \
+---with-ca-path=%{_datadir}/ca-certs \
+---with-ca-bundle=%{_sysconfdir}/ssl/cert.pem \
+---without-ntlm \
++--with-ca-path=/var/cache/ca-certs/anchors \
+ --disable-ntlm-wb \
+---disable-ntlm \
+ --disable-smb \
+ --enable-proxy \
+ --with-nghttp2 \
+diff --git a/release b/release
+index abdfb05..b1e7d26 100644
+--- a/release
++++ b/release
+@@ -1 +1 @@
+-60
++61
+diff --git a/series b/series
+index 3674464..4217808 100644
+--- a/series
++++ b/series
+@@ -1,5 +1,4 @@
+ 0001-Remove-use-of-DES.patch
+-0001-stateless-plus.patch
+-Add-pacrunner-call-for-autoproxy-resolution.patch
+-Check-pacdiscovery-state-file-exists.patch
+-Avoid-stripping-the-g-option.patch
++0002-Add-pacrunner-call-for-autoproxy-resolution.patch
++0003-Check-the-state-file-pacdiscovery-sets.patch
++0004-Avoid-stripping-the-g-option.patch
+-- 
+2.13.2
+

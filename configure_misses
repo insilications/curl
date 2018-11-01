@@ -68,13 +68,10 @@ Configure miss: whether to enable strict compiler warnings
 Configure miss: whether to enable compiler warnings as errors
 Configure miss: whether to enable curl debug memory tracking
 Configure miss: whether to enable c-ares for DNS lookups
-Configure miss: i686-generic-linux-gnu-ar
-Configure miss: i686-generic-linux-gnu-gcc
 Configure miss: if OS is AIX (to define _ALL_SOURCE)
 Configure miss: if _THREAD_SAFE is already defined
 Configure miss: if _THREAD_SAFE is actually needed
 Configure miss: if _THREAD_SAFE is onwards defined
-Configure miss: i686-generic-linux-gnu-ranlib
 Configure miss: whether to build shared libraries with -no-undefined
 Configure miss: whether to build shared libraries with -mimpure-text
 Configure miss: whether to build static libraries with PIC

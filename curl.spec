@@ -5,18 +5,18 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.61.1
-Release  : 78
-URL      : https://github.com/curl/curl/releases/download/curl-7_61_1/curl-7.61.1.tar.bz2
-Source0  : https://github.com/curl/curl/releases/download/curl-7_61_1/curl-7.61.1.tar.bz2
-Source99 : https://github.com/curl/curl/releases/download/curl-7_61_1/curl-7.61.1.tar.bz2.asc
+Version  : 7.62.0
+Release  : 79
+URL      : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
+Source99 : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
-Requires: curl-bin
-Requires: curl-lib
-Requires: curl-license
-Requires: curl-man
+Requires: curl-bin = %{version}-%{release}
+Requires: curl-lib = %{version}-%{release}
+Requires: curl-license = %{version}-%{release}
+Requires: curl-man = %{version}-%{release}
 Requires: ca-certs
 BuildRequires : automake
 BuildRequires : automake-dev
@@ -68,8 +68,8 @@ ___| | | |  _ \| |
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
-Requires: curl-license
-Requires: curl-man
+Requires: curl-license = %{version}-%{release}
+Requires: curl-man = %{version}-%{release}
 
 %description bin
 bin components for the curl package.
@@ -78,9 +78,9 @@ bin components for the curl package.
 %package dev
 Summary: dev components for the curl package.
 Group: Development
-Requires: curl-lib
-Requires: curl-bin
-Provides: curl-devel
+Requires: curl-lib = %{version}-%{release}
+Requires: curl-bin = %{version}-%{release}
+Provides: curl-devel = %{version}-%{release}
 
 %description dev
 dev components for the curl package.
@@ -89,9 +89,9 @@ dev components for the curl package.
 %package dev32
 Summary: dev32 components for the curl package.
 Group: Default
-Requires: curl-lib32
-Requires: curl-bin
-Requires: curl-dev
+Requires: curl-lib32 = %{version}-%{release}
+Requires: curl-bin = %{version}-%{release}
+Requires: curl-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the curl package.
@@ -100,7 +100,7 @@ dev32 components for the curl package.
 %package lib
 Summary: lib components for the curl package.
 Group: Libraries
-Requires: curl-license
+Requires: curl-license = %{version}-%{release}
 
 %description lib
 lib components for the curl package.
@@ -109,7 +109,7 @@ lib components for the curl package.
 %package lib32
 Summary: lib32 components for the curl package.
 Group: Default
-Requires: curl-license
+Requires: curl-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the curl package.
@@ -132,14 +132,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.61.1
+%setup -q -n curl-7.62.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.61.1 build32
+cp -a curl-7.62.0 build32
 popd
 
 %build
@@ -147,7 +147,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1536640063
+export SOURCE_DATE_EPOCH=1541045847
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -172,6 +172,7 @@ export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="$ASFLAGS --32"
 export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
@@ -202,13 +203,13 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1536640063
+export SOURCE_DATE_EPOCH=1541045847
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/curl
-cp COPYING %{buildroot}/usr/share/doc/curl/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/curl
+cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -238,9 +239,10 @@ popd
 /usr/include/curl/stdcheaders.h
 /usr/include/curl/system.h
 /usr/include/curl/typecheck-gcc.h
+/usr/include/curl/urlapi.h
 /usr/lib64/libcurl.so
 /usr/lib64/pkgconfig/libcurl.pc
-/usr/share/aclocal/libcurl.m4
+/usr/share/aclocal/*.m4
 /usr/share/man/man3/CURLINFO_ACTIVESOCKET.3
 /usr/share/man/man3/CURLINFO_APPCONNECT_TIME.3
 /usr/share/man/man3/CURLINFO_APPCONNECT_TIME_T.3
@@ -362,6 +364,7 @@ popd
 /usr/share/man/man3/CURLOPT_DNS_SERVERS.3
 /usr/share/man/man3/CURLOPT_DNS_SHUFFLE_ADDRESSES.3
 /usr/share/man/man3/CURLOPT_DNS_USE_GLOBAL_CACHE.3
+/usr/share/man/man3/CURLOPT_DOH_URL.3
 /usr/share/man/man3/CURLOPT_EGDSOCKET.3
 /usr/share/man/man3/CURLOPT_ERRORBUFFER.3
 /usr/share/man/man3/CURLOPT_EXPECT_100_TIMEOUT_MS.3
@@ -565,7 +568,9 @@ popd
 /usr/share/man/man3/CURLOPT_TRANSFER_ENCODING.3
 /usr/share/man/man3/CURLOPT_UNIX_SOCKET_PATH.3
 /usr/share/man/man3/CURLOPT_UNRESTRICTED_AUTH.3
+/usr/share/man/man3/CURLOPT_UPKEEP_INTERVAL_MS.3
 /usr/share/man/man3/CURLOPT_UPLOAD.3
+/usr/share/man/man3/CURLOPT_UPLOAD_BUFFERSIZE.3
 /usr/share/man/man3/CURLOPT_URL.3
 /usr/share/man/man3/CURLOPT_USERAGENT.3
 /usr/share/man/man3/CURLOPT_USERNAME.3
@@ -591,6 +596,7 @@ popd
 /usr/share/man/man3/curl_easy_setopt.3
 /usr/share/man/man3/curl_easy_strerror.3
 /usr/share/man/man3/curl_easy_unescape.3
+/usr/share/man/man3/curl_easy_upkeep.3
 /usr/share/man/man3/curl_escape.3
 /usr/share/man/man3/curl_formadd.3
 /usr/share/man/man3/curl_formfree.3
@@ -639,6 +645,11 @@ popd
 /usr/share/man/man3/curl_strequal.3
 /usr/share/man/man3/curl_strnequal.3
 /usr/share/man/man3/curl_unescape.3
+/usr/share/man/man3/curl_url.3
+/usr/share/man/man3/curl_url_cleanup.3
+/usr/share/man/man3/curl_url_dup.3
+/usr/share/man/man3/curl_url_get.3
+/usr/share/man/man3/curl_url_set.3
 /usr/share/man/man3/curl_version.3
 /usr/share/man/man3/curl_version_info.3
 /usr/share/man/man3/libcurl-easy.3
@@ -650,6 +661,7 @@ popd
 /usr/share/man/man3/libcurl-symbols.3
 /usr/share/man/man3/libcurl-thread.3
 /usr/share/man/man3/libcurl-tutorial.3
+/usr/share/man/man3/libcurl-url.3
 /usr/share/man/man3/libcurl.3
 
 %files dev32
@@ -669,10 +681,10 @@ popd
 /usr/lib32/libcurl.so.4.5.0
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/curl/COPYING
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/curl/COPYING
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/curl-config.1
 /usr/share/man/man1/curl.1
