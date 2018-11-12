@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.62.0
-Release  : 82
+Release  : 83
 URL      : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
 Source99 : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz.asc
@@ -14,7 +14,6 @@ Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
 Requires: curl-bin = %{version}-%{release}
-Requires: curl-data = %{version}-%{release}
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-license = %{version}-%{release}
 Requires: curl-man = %{version}-%{release}
@@ -66,10 +65,17 @@ ___| | | |  _ \| |
 | (__| |_| |  _ <| |___
 \___|\___/|_| \_\_____|
 
+%package abi
+Summary: abi components for the curl package.
+Group: Default
+
+%description abi
+abi components for the curl package.
+
+
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
-Requires: curl-data = %{version}-%{release}
 Requires: curl-license = %{version}-%{release}
 Requires: curl-man = %{version}-%{release}
 
@@ -77,20 +83,11 @@ Requires: curl-man = %{version}-%{release}
 bin components for the curl package.
 
 
-%package data
-Summary: data components for the curl package.
-Group: Data
-
-%description data
-data components for the curl package.
-
-
 %package dev
 Summary: dev components for the curl package.
 Group: Development
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-bin = %{version}-%{release}
-Requires: curl-data = %{version}-%{release}
 Provides: curl-devel = %{version}-%{release}
 
 %description dev
@@ -102,7 +99,6 @@ Summary: dev32 components for the curl package.
 Group: Default
 Requires: curl-lib32 = %{version}-%{release}
 Requires: curl-bin = %{version}-%{release}
-Requires: curl-data = %{version}-%{release}
 Requires: curl-dev = %{version}-%{release}
 
 %description dev32
@@ -112,7 +108,6 @@ dev32 components for the curl package.
 %package lib
 Summary: lib components for the curl package.
 Group: Libraries
-Requires: curl-data = %{version}-%{release}
 Requires: curl-license = %{version}-%{release}
 
 %description lib
@@ -122,7 +117,6 @@ lib components for the curl package.
 %package lib32
 Summary: lib32 components for the curl package.
 Group: Default
-Requires: curl-data = %{version}-%{release}
 Requires: curl-license = %{version}-%{release}
 
 %description lib32
@@ -161,7 +155,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1541630082
+export SOURCE_DATE_EPOCH=1542058945
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -220,7 +214,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1541630082
+export SOURCE_DATE_EPOCH=1542058945
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
 cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
@@ -238,15 +232,14 @@ popd
 %files
 %defattr(-,root,root,-)
 
+%files abi
+%defattr(-,root,root,-)
+/usr/share/abi/libcurl.so.4.5.0.abi
+
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/curl
 /usr/bin/curl-config
-
-%files data
-%defattr(-,root,root,-)
-/usr/share/abi/libcurl.so.4.5.0.abi
-/usr/share/abi/libcurl.so.4.abi
 
 %files dev
 %defattr(-,root,root,-)
