@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.62.0
-Release  : 84
+Release  : 85
 URL      : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
 Source99 : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz.asc
