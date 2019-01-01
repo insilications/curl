@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.62.0
-Release  : 86
-URL      : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz
-Source99 : https://github.com/curl/curl/releases/download/curl-7_62_0/curl-7.62.0.tar.gz.asc
+Version  : 7.63.0
+Release  : 89
+URL      : https://github.com/curl/curl/releases/download/curl-7_63_0/curl-7.63.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_63_0/curl-7.63.0.tar.xz
+Source99 : https://github.com/curl/curl/releases/download/curl-7_63_0/curl-7.63.0.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -22,7 +22,6 @@ BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : buildreq-cmake
 BuildRequires : ca-certs
-BuildRequires : curl-dev
 BuildRequires : dbus-dev
 BuildRequires : dbus-dev32
 BuildRequires : e2fsprogs-dev
@@ -132,14 +131,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.62.0
+%setup -q -n curl-7.63.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.62.0 build32
+cp -a curl-7.63.0 build32
 popd
 
 %build
@@ -147,7 +146,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1545258530
+export SOURCE_DATE_EPOCH=1546316580
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -206,7 +205,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1545258530
+export SOURCE_DATE_EPOCH=1546316580
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
 cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
@@ -351,6 +350,7 @@ popd
 /usr/share/man/man3/CURLOPT_COPYPOSTFIELDS.3
 /usr/share/man/man3/CURLOPT_CRLF.3
 /usr/share/man/man3/CURLOPT_CRLFILE.3
+/usr/share/man/man3/CURLOPT_CURLU.3
 /usr/share/man/man3/CURLOPT_CUSTOMREQUEST.3
 /usr/share/man/man3/CURLOPT_DEBUGDATA.3
 /usr/share/man/man3/CURLOPT_DEBUGFUNCTION.3

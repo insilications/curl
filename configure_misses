@@ -44,11 +44,9 @@ Configure miss: gssapi.h
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: RAND_egd
-Configure miss: ENGINE_cleanup
 Configure miss: SSLv2_client_method
 Configure miss: BoringSSL
 Configure miss: libressl
-Configure miss: ssl_version in -laxtls
 Configure miss: whether to use builtin CA store of SSL library
 Configure miss: library containing psl_builtin
 Configure miss: RTMP_Init in -lrtmp
@@ -103,11 +101,9 @@ Configure miss: if GSS-API support is requested
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Apple OS native SSL/TLS
 Configure miss: RAND_egd
-Configure miss: ENGINE_cleanup
 Configure miss: SSLv2_client_method
 Configure miss: BoringSSL
 Configure miss: libressl
-Configure miss: ssl_version in -laxtls
 Configure miss: whether to use builtin CA store of SSL library
 Configure miss: library containing psl_builtin
 Configure miss: RTMP_Init in -lrtmp
