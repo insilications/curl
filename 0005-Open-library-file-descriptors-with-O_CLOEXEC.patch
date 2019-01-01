@@ -1,7 +1,7 @@
-From eeeb939218f45ba29f9b4b5324942a3f77d20516 Mon Sep 17 00:00:00 2001
+From 678496ea5c8f2664476bfaa793fe265e0e28e4b3 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Mon, 10 Sep 2018 21:01:00 -0700
-Subject: [PATCH] Open library file descriptors with O_CLOEXEC
+Subject: [PATCH 5/5] Open library file descriptors with O_CLOEXEC
 
 This patch is non-portable, it needs linux 2.6.23 and glibc 2.7
 or later, different combinations (old linux, new glibc and vice-versa)
@@ -18,7 +18,7 @@ compile time is not enough.
  5 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 9d0450b3a..6902939a9 100755
+index b0a64c9..3b53d19 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -200,6 +200,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
@@ -31,7 +31,7 @@ index 9d0450b3a..6902939a9 100755
  CURL_CHECK_AIX_ALL_SOURCE
  
 diff --git a/lib/connect.c b/lib/connect.c
-index 41f220268..9c8fb6f90 100644
+index ec3cd3a..e8238cd 100644
 --- a/lib/connect.c
 +++ b/lib/connect.c
 @@ -1387,7 +1387,7 @@ CURLcode Curl_socket(struct connectdata *conn,
@@ -44,7 +44,7 @@ index 41f220268..9c8fb6f90 100644
    if(*sockfd == CURL_SOCKET_BAD)
      /* no socket, no connection */
 diff --git a/lib/file.c b/lib/file.c
-index e50e98876..3ea5710d2 100644
+index 8bba3b9..efb7171 100644
 --- a/lib/file.c
 +++ b/lib/file.c
 @@ -190,7 +190,7 @@ static CURLcode file_connect(struct connectdata *conn, bool *done)
@@ -66,7 +66,7 @@ index e50e98876..3ea5710d2 100644
      failf(data, "Can't open %s for writing", file->path);
      return CURLE_WRITE_ERROR;
 diff --git a/lib/hostip6.c b/lib/hostip6.c
-index 3bf47b467..9d18b6ffa 100644
+index e06d034..75ab6c4 100644
 --- a/lib/hostip6.c
 +++ b/lib/hostip6.c
 @@ -44,7 +44,7 @@
@@ -88,7 +88,7 @@ index 3bf47b467..9d18b6ffa 100644
        /* an IPv6 address was requested but we can't get/use one */
        ipv6_works = 0;
 diff --git a/lib/if2ip.c b/lib/if2ip.c
-index ce38ea117..0869eb3fa 100644
+index 566061a..0a73bf3 100644
 --- a/lib/if2ip.c
 +++ b/lib/if2ip.c
 @@ -225,7 +225,7 @@ if2ip_result_t Curl_if2ip(int af, unsigned int remote_scope,
@@ -101,5 +101,5 @@ index ce38ea117..0869eb3fa 100644
      return IF2IP_NOT_FOUND;
  
 -- 
-2.18.0
+2.20.0
 
