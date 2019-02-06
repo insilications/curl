@@ -3,6 +3,7 @@ Configure miss: whether to enable strict compiler warnings
 Configure miss: whether to enable compiler warnings as errors
 Configure miss: whether to enable curl debug memory tracking
 Configure miss: whether to enable c-ares for DNS lookups
+Configure miss: code coverage support
 Configure miss: if OS is AIX (to define _ALL_SOURCE)
 Configure miss: if _THREAD_SAFE is already defined
 Configure miss: if _THREAD_SAFE is actually needed
@@ -69,6 +70,7 @@ Configure miss: whether to enable strict compiler warnings
 Configure miss: whether to enable compiler warnings as errors
 Configure miss: whether to enable curl debug memory tracking
 Configure miss: whether to enable c-ares for DNS lookups
+Configure miss: code coverage support
 Configure miss: if OS is AIX (to define _ALL_SOURCE)
 Configure miss: if _THREAD_SAFE is already defined
 Configure miss: if _THREAD_SAFE is actually needed
