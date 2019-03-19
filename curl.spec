@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.64.0
-Release  : 90
+Release  : 91
 URL      : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz
 Source99 : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz.asc
@@ -55,6 +55,8 @@ Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 Patch6: CVE-2017-1000254.nopatch
+Patch7: 0006-connection_check-set-data-to-the-transfer-doing-the-.patch
+Patch8: 0007-connection_check-restore-original-conn-data-after-th.patch
 
 %description
 _   _ ____  _
@@ -66,7 +68,6 @@ ___| | | |  _ \| |
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
-Requires: curl-man = %{version}-%{release}
 
 %description bin
 bin components for the curl package.
@@ -125,6 +126,8 @@ man components for the curl package.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch7 -p1
+%patch8 -p1
 pushd ..
 cp -a curl-7.64.0 build32
 popd
@@ -134,7 +137,8 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1549487705
+export SOURCE_DATE_EPOCH=1553035278
+export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -193,7 +197,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1549487705
+export SOURCE_DATE_EPOCH=1553035278
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

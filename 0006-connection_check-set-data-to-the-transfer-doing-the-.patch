@@ -1,0 +1,31 @@
+From a0409ebee1670aa7ef99987c2634b37aab94367a Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Mon, 11 Feb 2019 07:56:00 +0100
+Subject: [PATCH 1/2] connection_check: set ->data to the transfer doing the
+ check
+
+The http2 code for connection checking needs a transfer to use. Make
+sure a working one is set before handler->connection_check() is called.
+
+Reported-by: jnbr on github
+Fixes #3541
+Closes #3547
+---
+ lib/url.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/url.c b/lib/url.c
+index 994f7d608..abf012a88 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -973,6 +973,7 @@ static bool extract_if_dead(struct connectdata *conn,
+       /* The protocol has a special method for checking the state of the
+          connection. Use it to check if the connection is dead. */
+       unsigned int state;
++      conn->data = data; /* use this transfer for now */
+       state = conn->handler->connection_check(conn, CONNCHECK_ISDEAD);
+       dead = (state & CONNRESULT_DEAD);
+     }
+-- 
+2.21.0
+
