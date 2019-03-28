@@ -25,6 +25,7 @@ Configure miss: whether to support smb
 Configure miss: whether to support gopher
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
+Configure miss: proto/bsdsocket.h
 Configure miss: clock_gettime in libraries
 Configure miss: BrotliDecoderDecompress in -lbrotlidec
 Configure miss: brotli/decode.h usability
@@ -43,7 +44,8 @@ Configure miss: gssapi.h usability
 Configure miss: gssapi.h presence
 Configure miss: gssapi.h
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
-Configure miss: whether to enable Apple OS native SSL/TLS
+Configure miss: whether to enable Secure Transport
+Configure miss: whether to enable Amiga native SSL/TLS (AmiSSL)
 Configure miss: RAND_egd
 Configure miss: SSLv2_client_method
 Configure miss: BoringSSL
@@ -65,6 +67,7 @@ Configure miss: if time_t is unsigned
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
+Configure miss: whether to support alt-svc
 Configure miss: whether to enable debug build options
 Configure miss: whether to enable strict compiler warnings
 Configure miss: whether to enable compiler warnings as errors
@@ -93,6 +96,7 @@ Configure miss: whether to support smb
 Configure miss: whether to support gopher
 Configure miss: whether to use libgcc
 Configure miss: if X/Open network library is required
+Configure miss: proto/bsdsocket.h
 Configure miss: clock_gettime in libraries
 Configure miss: BrotliDecoderDecompress in -lbrotlidec
 Configure miss: brotli/decode.h usability
@@ -101,7 +105,8 @@ Configure miss: brotli/decode.h
 Configure miss: if argv can be written to
 Configure miss: if GSS-API support is requested
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
-Configure miss: whether to enable Apple OS native SSL/TLS
+Configure miss: whether to enable Secure Transport
+Configure miss: whether to enable Amiga native SSL/TLS (AmiSSL)
 Configure miss: RAND_egd
 Configure miss: SSLv2_client_method
 Configure miss: BoringSSL
@@ -123,3 +128,4 @@ Configure miss: if time_t is unsigned
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
+Configure miss: whether to support alt-svc

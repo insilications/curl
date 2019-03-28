@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.64.0
-Release  : 91
-URL      : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz
-Source99 : https://github.com/curl/curl/releases/download/curl-7_64_0/curl-7.64.0.tar.xz.asc
+Version  : 7.64.1
+Release  : 92
+URL      : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
+Source99 : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -55,8 +55,6 @@ Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 Patch6: CVE-2017-1000254.nopatch
-Patch7: 0006-connection_check-set-data-to-the-transfer-doing-the-.patch
-Patch8: 0007-connection_check-restore-original-conn-data-after-th.patch
 
 %description
 _   _ ____  _
@@ -68,6 +66,7 @@ ___| | | |  _ \| |
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
+Requires: curl-man = %{version}-%{release}
 
 %description bin
 bin components for the curl package.
@@ -120,16 +119,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.64.0
+%setup -q -n curl-7.64.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch7 -p1
-%patch8 -p1
 pushd ..
-cp -a curl-7.64.0 build32
+cp -a curl-7.64.1 build32
 popd
 
 %build
@@ -137,7 +134,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1553035278
+export SOURCE_DATE_EPOCH=1553805948
 export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -197,7 +194,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1553035278
+export SOURCE_DATE_EPOCH=1553805948
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -314,6 +311,8 @@ popd
 /usr/share/man/man3/CURLOPT_ACCEPTTIMEOUT_MS.3
 /usr/share/man/man3/CURLOPT_ACCEPT_ENCODING.3
 /usr/share/man/man3/CURLOPT_ADDRESS_SCOPE.3
+/usr/share/man/man3/CURLOPT_ALTSVC.3
+/usr/share/man/man3/CURLOPT_ALTSVC_CTRL.3
 /usr/share/man/man3/CURLOPT_APPEND.3
 /usr/share/man/man3/CURLOPT_AUTOREFERER.3
 /usr/share/man/man3/CURLOPT_BUFFERSIZE.3

@@ -4,5 +4,3 @@
 0004-Avoid-stripping-the-g-option.patch
 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 CVE-2017-1000254.nopatch
-0006-connection_check-set-data-to-the-transfer-doing-the-.patch
-0007-connection_check-restore-original-conn-data-after-th.patch
