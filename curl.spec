@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.64.1
-Release  : 93
+Release  : 94
 URL      : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
 Source99 : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz.asc
@@ -55,6 +55,7 @@ Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 Patch6: CVE-2017-1000254.nopatch
+Patch7: 64cbae31078b2b64818a1d793516fbe73a7e4c45.patch
 
 %description
 _   _ ____  _
@@ -77,6 +78,7 @@ Group: Development
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-bin = %{version}-%{release}
 Provides: curl-devel = %{version}-%{release}
+Requires: curl = %{version}-%{release}
 
 %description dev
 dev components for the curl package.
@@ -124,6 +126,7 @@ man components for the curl package.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch7 -p1
 pushd ..
 cp -a curl-7.64.1 build32
 popd
@@ -133,7 +136,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1553816107
+export SOURCE_DATE_EPOCH=1556752953
 export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -193,7 +196,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1553816107
+export SOURCE_DATE_EPOCH=1556752953
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
