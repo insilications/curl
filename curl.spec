@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.64.1
-Release  : 94
-URL      : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz
-Source99 : https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz.asc
+Version  : 7.65.0
+Release  : 95
+URL      : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz
+Source99 : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -55,14 +55,17 @@ Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 Patch6: CVE-2017-1000254.nopatch
-Patch7: 64cbae31078b2b64818a1d793516fbe73a7e4c45.patch
 
 %description
-_   _ ____  _
-___| | | |  _ \| |
-/ __| | | | |_) | |
-| (__| |_| |  _ <| |___
-\___|\___/|_| \_\_____|
+Curl on Symbian OS
+==================
+This is a basic port of curl and libcurl to Symbian OS.  The port is
+a straightforward one using Symbian's P.I.P.S. POSIX compatibility
+layer, which was first available for OS version 9.1. A more complete
+port would involve writing a Symbian C++ binding, or wrapping libcurl
+as a Symbian application server with a C++ API to handle requests
+from client applications as well as creating a GUI application to allow
+file transfers.  The author has no current plans to do so.
 
 %package bin
 Summary: bin components for the curl package.
@@ -78,6 +81,7 @@ Group: Development
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-bin = %{version}-%{release}
 Provides: curl-devel = %{version}-%{release}
+Requires: curl = %{version}-%{release}
 Requires: curl = %{version}-%{release}
 
 %description dev
@@ -120,15 +124,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.64.1
+%setup -q -n curl-7.65.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch7 -p1
 pushd ..
-cp -a curl-7.64.1 build32
+cp -a curl-7.65.0 build32
 popd
 
 %build
@@ -136,12 +139,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1556752953
-export LDFLAGS="${LDFLAGS} -fno-lto"
-export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export SOURCE_DATE_EPOCH=1558515390
+export CFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
+export FFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
 %reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
@@ -196,7 +198,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1556752953
+export SOURCE_DATE_EPOCH=1558515390
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -416,6 +418,7 @@ popd
 /usr/share/man/man3/CURLOPT_MAIL_AUTH.3
 /usr/share/man/man3/CURLOPT_MAIL_FROM.3
 /usr/share/man/man3/CURLOPT_MAIL_RCPT.3
+/usr/share/man/man3/CURLOPT_MAXAGE_CONN.3
 /usr/share/man/man3/CURLOPT_MAXCONNECTS.3
 /usr/share/man/man3/CURLOPT_MAXFILESIZE.3
 /usr/share/man/man3/CURLOPT_MAXFILESIZE_LARGE.3

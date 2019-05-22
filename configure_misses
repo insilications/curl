@@ -52,7 +52,6 @@ Configure miss: BoringSSL
 Configure miss: libressl
 Configure miss: whether to use builtin CA store of SSL library
 Configure miss: library containing psl_builtin
-Configure miss: RTMP_Init in -lrtmp
 Configure miss: whether versioned symbols are wanted
 Configure miss: whether to enable Windows native IDN (Windows native builds only)
 Configure miss: libidn2 options with pkg-config
@@ -60,6 +59,7 @@ Configure miss: if idn2_lookup_ul can be linked
 Configure miss: idn2.h usability
 Configure miss: idn2.h presence
 Configure miss: idn2.h
+Configure miss: fish options with pkg-config
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
@@ -121,6 +121,7 @@ Configure miss: if idn2_lookup_ul can be linked
 Configure miss: idn2.h usability
 Configure miss: idn2.h presence
 Configure miss: idn2.h
+Configure miss: fish options with pkg-config
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
