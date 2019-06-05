@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.65.0
-Release  : 95
-URL      : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz
-Source99 : https://github.com/curl/curl/releases/download/curl-7_65_0/curl-7.65.0.tar.xz.asc
+Version  : 7.65.1
+Release  : 96
+URL      : https://github.com/curl/curl/releases/download/curl-7_65_1/curl-7.65.1.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_65_1/curl-7.65.1.tar.xz
+Source99 : https://github.com/curl/curl/releases/download/curl-7_65_1/curl-7.65.1.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -124,14 +124,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.65.0
+%setup -q -n curl-7.65.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.65.0 build32
+cp -a curl-7.65.1 build32
 popd
 
 %build
@@ -139,7 +139,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1558515390
+export SOURCE_DATE_EPOCH=1559746568
 export CFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
 export FCFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
 export FFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
@@ -198,7 +198,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1558515390
+export SOURCE_DATE_EPOCH=1559746568
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
