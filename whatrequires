@@ -1,5 +1,7 @@
 # This file contains recursive sources that require this package
+clr-network-troubleshooter
 deprecated-pycurl
 kubernetes
 pycurl
 tensorboard
+tensorflow-serving

@@ -60,11 +60,14 @@ Configure miss: if idn2_lookup_ul can be linked
 Configure miss: idn2.h usability
 Configure miss: idn2.h presence
 Configure miss: idn2.h
+Configure miss: libngtcp2 options with pkg-config
+Configure miss: quiche options with pkg-config
 Configure miss: fish options with pkg-config
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
 Configure miss: if time_t is unsigned
+Configure miss: stropts.h
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
@@ -122,11 +125,14 @@ Configure miss: if idn2_lookup_ul can be linked
 Configure miss: idn2.h usability
 Configure miss: idn2.h presence
 Configure miss: idn2.h
+Configure miss: libngtcp2 options with pkg-config
+Configure miss: quiche options with pkg-config
 Configure miss: fish options with pkg-config
 Configure miss: memory.h
 Configure miss: netinet/in6.h
 Configure miss: socket.h
 Configure miss: if time_t is unsigned
+Configure miss: stropts.h
 Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper

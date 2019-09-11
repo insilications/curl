@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.65.3
-Release  : 97
-URL      : https://github.com/curl/curl/releases/download/curl-7_65_3/curl-7.65.3.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_65_3/curl-7.65.3.tar.xz
-Source1 : https://github.com/curl/curl/releases/download/curl-7_65_3/curl-7.65.3.tar.xz.asc
+Version  : 7.66.0
+Release  : 98
+URL      : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
+Source1 : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -131,14 +131,14 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.65.3
+%setup -q -n curl-7.66.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.65.3 build32
+cp -a curl-7.66.0 build32
 popd
 
 %build
@@ -146,7 +146,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564944732
+export SOURCE_DATE_EPOCH=1568220490
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -173,9 +173,9 @@ make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
-export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
-export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
-export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
@@ -201,12 +201,12 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make VERBOSE=1 V=1 %{?_smp_mflags} check
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1564944732
+export SOURCE_DATE_EPOCH=1568220490
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
 cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
@@ -285,6 +285,7 @@ popd
 /usr/share/man/man3/CURLINFO_REDIRECT_URL.3
 /usr/share/man/man3/CURLINFO_REQUEST_SIZE.3
 /usr/share/man/man3/CURLINFO_RESPONSE_CODE.3
+/usr/share/man/man3/CURLINFO_RETRY_AFTER.3
 /usr/share/man/man3/CURLINFO_RTSP_CLIENT_CSEQ.3
 /usr/share/man/man3/CURLINFO_RTSP_CSEQ_RECV.3
 /usr/share/man/man3/CURLINFO_RTSP_SERVER_CSEQ.3
@@ -511,6 +512,7 @@ popd
 /usr/share/man/man3/CURLOPT_RTSP_SESSION_ID.3
 /usr/share/man/man3/CURLOPT_RTSP_STREAM_URI.3
 /usr/share/man/man3/CURLOPT_RTSP_TRANSPORT.3
+/usr/share/man/man3/CURLOPT_SASL_AUTHZID.3
 /usr/share/man/man3/CURLOPT_SASL_IR.3
 /usr/share/man/man3/CURLOPT_SEEKDATA.3
 /usr/share/man/man3/CURLOPT_SEEKFUNCTION.3
@@ -635,6 +637,7 @@ popd
 /usr/share/man/man3/curl_multi_info_read.3
 /usr/share/man/man3/curl_multi_init.3
 /usr/share/man/man3/curl_multi_perform.3
+/usr/share/man/man3/curl_multi_poll.3
 /usr/share/man/man3/curl_multi_remove_handle.3
 /usr/share/man/man3/curl_multi_setopt.3
 /usr/share/man/man3/curl_multi_socket.3
@@ -680,12 +683,12 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libcurl.so.4
-/usr/lib64/libcurl.so.4.5.0
+/usr/lib64/libcurl.so.4.6.0
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libcurl.so.4
-/usr/lib32/libcurl.so.4.5.0
+/usr/lib32/libcurl.so.4.6.0
 
 %files license
 %defattr(0644,root,root,0755)
