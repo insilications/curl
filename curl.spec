@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.66.0
-Release  : 98
+Release  : 99
 URL      : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
 Source1 : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz.asc
@@ -47,7 +47,6 @@ BuildRequires : openssl-dev
 BuildRequires : openssl-dev32
 BuildRequires : pkg-config
 BuildRequires : pkg-config-dev
-BuildRequires : python-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 Patch1: 0001-Remove-use-of-DES.patch
@@ -146,7 +145,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568220490
+export SOURCE_DATE_EPOCH=1569352166
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -206,7 +205,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1568220490
+export SOURCE_DATE_EPOCH=1569352166
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
 cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
