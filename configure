@@ -15,3 +15,4 @@
 --disable-tftp
 --disable-pop3
 --disable-gopher
+--enable-negotiate

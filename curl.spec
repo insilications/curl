@@ -6,7 +6,7 @@
 #
 Name     : curl
 Version  : 7.66.0
-Release  : 99
+Release  : 100
 URL      : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
 Source0  : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz
 Source1 : https://github.com/curl/curl/releases/download/curl-7_66_0/curl-7.66.0.tar.xz.asc
@@ -47,6 +47,7 @@ BuildRequires : openssl-dev
 BuildRequires : openssl-dev32
 BuildRequires : pkg-config
 BuildRequires : pkg-config-dev
+BuildRequires : util-linux
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 Patch1: 0001-Remove-use-of-DES.patch
@@ -145,7 +146,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1569352166
+export SOURCE_DATE_EPOCH=1572978213
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -167,7 +168,8 @@ export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno
 --disable-telnet \
 --disable-tftp \
 --disable-pop3 \
---disable-gopher --with-gssapi=/usr
+--disable-gopher \
+--enable-negotiate --with-gssapi=/usr
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -191,7 +193,8 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 --disable-telnet \
 --disable-tftp \
 --disable-pop3 \
---disable-gopher  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+--disable-gopher \
+--enable-negotiate  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
 
@@ -205,10 +208,10 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1569352166
+export SOURCE_DATE_EPOCH=1572978213
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
-cp COPYING %{buildroot}/usr/share/package-licenses/curl/COPYING
+cp %{_builddir}/curl-7.66.0/COPYING %{buildroot}/usr/share/package-licenses/curl/2b73f04c727a998f71fe2b2fbca3fa2d422b9018
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -691,7 +694,7 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/curl/COPYING
+/usr/share/package-licenses/curl/2b73f04c727a998f71fe2b2fbca3fa2d422b9018
 
 %files man
 %defattr(0644,root,root,0755)
