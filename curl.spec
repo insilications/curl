@@ -5,17 +5,16 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.67.0
-Release  : 101
-URL      : https://github.com/curl/curl/releases/download/curl-7_67_0/curl-7.67.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_67_0/curl-7.67.0.tar.xz
-Source1 : https://github.com/curl/curl/releases/download/curl-7_67_0/curl-7.67.0.tar.xz.asc
+Version  : 7.68.0
+Release  : 102
+URL      : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz
+Source1  : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz.asc
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
 Requires: curl-bin = %{version}-%{release}
 Requires: curl-lib = %{version}-%{release}
-Requires: curl-license = %{version}-%{release}
 Requires: curl-man = %{version}-%{release}
 Requires: ca-certs
 BuildRequires : automake
@@ -70,7 +69,6 @@ file transfers.  The author has no current plans to do so.
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
-Requires: curl-license = %{version}-%{release}
 
 %description bin
 bin components for the curl package.
@@ -103,7 +101,6 @@ dev32 components for the curl package.
 %package lib
 Summary: lib components for the curl package.
 Group: Libraries
-Requires: curl-license = %{version}-%{release}
 
 %description lib
 lib components for the curl package.
@@ -112,18 +109,9 @@ lib components for the curl package.
 %package lib32
 Summary: lib32 components for the curl package.
 Group: Default
-Requires: curl-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the curl package.
-
-
-%package license
-Summary: license components for the curl package.
-Group: Default
-
-%description license
-license components for the curl package.
 
 
 %package man
@@ -135,14 +123,15 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.67.0
+%setup -q -n curl-7.68.0
+cd %{_builddir}/curl-7.68.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.67.0 build32
+cp -a curl-7.68.0 build32
 popd
 
 %build
@@ -150,7 +139,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1573052595
+export SOURCE_DATE_EPOCH=1578675070
 # -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
@@ -213,10 +202,8 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1573052595
+export SOURCE_DATE_EPOCH=1578675070
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/package-licenses/curl
-cp %{_builddir}/curl-7.67.0/COPYING %{buildroot}/usr/share/package-licenses/curl/2b73f04c727a998f71fe2b2fbca3fa2d422b9018
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -654,6 +641,7 @@ popd
 /usr/share/man/man3/curl_multi_strerror.3
 /usr/share/man/man3/curl_multi_timeout.3
 /usr/share/man/man3/curl_multi_wait.3
+/usr/share/man/man3/curl_multi_wakeup.3
 /usr/share/man/man3/curl_share_cleanup.3
 /usr/share/man/man3/curl_share_init.3
 /usr/share/man/man3/curl_share_setopt.3
@@ -697,10 +685,6 @@ popd
 %defattr(-,root,root,-)
 /usr/lib32/libcurl.so.4
 /usr/lib32/libcurl.so.4.6.0
-
-%files license
-%defattr(0644,root,root,0755)
-/usr/share/package-licenses/curl/2b73f04c727a998f71fe2b2fbca3fa2d422b9018
 
 %files man
 %defattr(0644,root,root,0755)
