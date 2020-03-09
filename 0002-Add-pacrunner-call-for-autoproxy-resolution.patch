@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 75fbc5920aedc67b0b6cadbbb8cf974337cbc968 Mon Sep 17 00:00:00 2001
 From: "Brad T. Peters" <brad.t.peters@intel.com>
 Date: Fri, 25 Mar 2016 13:41:56 +0000
-Subject: [PATCH] Add pacrunner call for autoproxy resolution
+Subject: [PATCH 2/5] Add pacrunner call for autoproxy resolution
 
 When a http_proxy is not set in the environment, query pacrunner
 for the appropriate proxy to use to access the desired URL, if any.
@@ -22,7 +22,7 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  3 files changed, 132 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 94c0fa9..5a54e51 100755
+index d737aad..fc75440 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -35,10 +35,10 @@ index 94c0fa9..5a54e51 100755
  CURL_CHECK_OPTION_OPTIMIZE
  CURL_CHECK_OPTION_WARNINGS
 diff --git a/lib/Makefile.am b/lib/Makefile.am
-index 516a239..ca73532 100644
+index a7b5262..abcd2d9 100644
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
-@@ -84,8 +84,8 @@ AM_LDFLAGS =
+@@ -85,8 +85,8 @@ AM_LDFLAGS =
  AM_CFLAGS =
  
  libcurl_la_CPPFLAGS_EXTRA =
@@ -47,13 +47,13 @@ index 516a239..ca73532 100644
 +libcurl_la_LDFLAGS_EXTRA = $(DBUS_LIBS)
 +libcurl_la_CFLAGS_EXTRA = $(DBUS_CFLAGS)
  
- if CURL_LT_SHLIB_USE_VERSION_INFO
- libcurl_la_LDFLAGS_EXTRA += $(VERSIONINFO)
+ @CODE_COVERAGE_RULES@
+ libcurl_la_LDFLAGS_EXTRA += $(CODE_COVERAGE_LDFLAGS)
 diff --git a/lib/url.c b/lib/url.c
-index 47fc66a..b31f1b7 100644
+index 7839dfa..a9415b2 100644
 --- a/lib/url.c
 +++ b/lib/url.c
-@@ -67,6 +67,11 @@
+@@ -65,6 +65,11 @@
  bool curl_win32_idn_to_ascii(const char *in, char **out);
  #endif  /* USE_LIBIDN2 */
  
@@ -66,14 +66,14 @@ index 47fc66a..b31f1b7 100644
  #include "netrc.h"
  
 @@ -128,6 +133,7 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
- #include "memdebug.h"
  
  static void conn_free(struct connectdata *conn);
+ static void free_idnconverted_hostname(struct hostname *host);
 +static int query_pacrunner_proxy(char *url, char *host, char *proxy_host);
  static unsigned int get_protocol_family(unsigned int protocol);
  
  /* Some parts of the code (e.g. chunked encoding) assume this buffer has at
-@@ -2121,9 +2127,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+@@ -2373,9 +2379,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
  * name and is not limited to HTTP proxies only.
  * The returned pointer must be freed by the caller (unless NULL)
  ****************************************************************/
@@ -86,7 +86,7 @@ index 47fc66a..b31f1b7 100644
  
    /* If proxy was not specified, we check for default proxy environment
     * variables, to enable i.e Lynx compliance:
-@@ -2179,7 +2187,18 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -2431,7 +2439,18 @@ static char *detect_proxy(struct connectdata *conn)
    if(prox) {
      proxy = prox; /* use this */
    }
@@ -106,7 +106,7 @@ index 47fc66a..b31f1b7 100644
      envp = (char *)"all_proxy";
      proxy = curl_getenv(envp); /* default proxy to use */
      if(!proxy) {
-@@ -2425,10 +2444,12 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+@@ -2741,10 +2760,12 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
      Curl_safefree(proxy);
      Curl_safefree(socksproxy);
    }
@@ -121,7 +121,7 @@ index 47fc66a..b31f1b7 100644
  #endif /* CURL_DISABLE_HTTP */
  
    Curl_safefree(no_proxy);
-@@ -3318,6 +3339,109 @@ static void reuse_conn(struct connectdata *old_conn,
+@@ -3577,6 +3598,109 @@ static void reuse_conn(struct connectdata *old_conn,
  #endif
  }
  
@@ -231,3 +231,6 @@ index 47fc66a..b31f1b7 100644
  /**
   * create_conn() sets up a new connectdata struct, or re-uses an already
   * existing one, and resolves host name.
+-- 
+2.20.0
+
