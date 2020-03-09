@@ -3,5 +3,3 @@
 0003-Check-the-state-file-pacdiscovery-sets.patch
 0004-Avoid-stripping-the-g-option.patch
 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
-CVE-2017-1000254.nopatch
-#64cbae31078b2b64818a1d793516fbe73a7e4c45.patch
