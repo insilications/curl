@@ -5,16 +5,17 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.68.0
-Release  : 104
-URL      : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz
-Source1  : https://github.com/curl/curl/releases/download/curl-7_68_0/curl-7.68.0.tar.xz.asc
-Summary  : Library to transfer files with ftp, http, etc.
+Version  : 7.69.0
+Release  : 103
+URL      : https://github.com/curl/curl/releases/download/curl-7_69_0/curl-7.69.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_69_0/curl-7.69.0.tar.xz
+Source1  : https://github.com/curl/curl/releases/download/curl-7_69_0/curl-7.69.0.tar.xz.asc
+Summary  : Command line tool and library for transferring data with URLs
 Group    : Development/Tools
 License  : MIT
 Requires: curl-bin = %{version}-%{release}
 Requires: curl-lib = %{version}-%{release}
+Requires: curl-license = %{version}-%{release}
 Requires: curl-man = %{version}-%{release}
 Requires: ca-certs
 BuildRequires : automake
@@ -53,22 +54,17 @@ Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
-Patch6: CVE-2017-1000254.nopatch
 
 %description
-Curl on Symbian OS
-==================
-This is a basic port of curl and libcurl to Symbian OS.  The port is
-a straightforward one using Symbian's P.I.P.S. POSIX compatibility
-layer, which was first available for OS version 9.1. A more complete
-port would involve writing a Symbian C++ binding, or wrapping libcurl
-as a Symbian application server with a C++ API to handle requests
-from client applications as well as creating a GUI application to allow
-file transfers.  The author has no current plans to do so.
+curl is used in command lines or scripts to transfer data. It is also used in
+cars, television sets, routers, printers, audio equipment, mobile phones,
+tablets, settop boxes, media players and is the internet transfer backbone for
+thousands of software applications affecting billions of humans daily.
 
 %package bin
 Summary: bin components for the curl package.
 Group: Binaries
+Requires: curl-license = %{version}-%{release}
 
 %description bin
 bin components for the curl package.
@@ -80,7 +76,6 @@ Group: Development
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-bin = %{version}-%{release}
 Provides: curl-devel = %{version}-%{release}
-Requires: curl = %{version}-%{release}
 Requires: curl = %{version}-%{release}
 
 %description dev
@@ -101,6 +96,7 @@ dev32 components for the curl package.
 %package lib
 Summary: lib components for the curl package.
 Group: Libraries
+Requires: curl-license = %{version}-%{release}
 
 %description lib
 lib components for the curl package.
@@ -109,9 +105,18 @@ lib components for the curl package.
 %package lib32
 Summary: lib32 components for the curl package.
 Group: Default
+Requires: curl-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the curl package.
+
+
+%package license
+Summary: license components for the curl package.
+Group: Default
+
+%description license
+license components for the curl package.
 
 
 %package man
@@ -123,15 +128,15 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.68.0
-cd %{_builddir}/curl-7.68.0
+%setup -q -n curl-7.69.0
+cd %{_builddir}/curl-7.69.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.68.0 build32
+cp -a curl-7.69.0 build32
 popd
 
 %build
@@ -139,13 +144,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1578675070
-# -Werror is for werrorists
+export SOURCE_DATE_EPOCH=1583793525
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
-export FFLAGS="$CFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -Os -fcf-protection=full -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong "
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 %reconfigure --disable-static --with-ssl=/usr \
 --disable-ldap \
 --without-winidn \
@@ -202,8 +206,10 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1578675070
+export SOURCE_DATE_EPOCH=1583793525
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/curl
+cp %{_builddir}/curl-7.69.0/COPYING %{buildroot}/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -424,6 +430,7 @@ popd
 /usr/share/man/man3/CURLOPT_MAIL_AUTH.3
 /usr/share/man/man3/CURLOPT_MAIL_FROM.3
 /usr/share/man/man3/CURLOPT_MAIL_RCPT.3
+/usr/share/man/man3/CURLOPT_MAIL_RCPT_ALLLOWFAILS.3
 /usr/share/man/man3/CURLOPT_MAXAGE_CONN.3
 /usr/share/man/man3/CURLOPT_MAXCONNECTS.3
 /usr/share/man/man3/CURLOPT_MAXFILESIZE.3
@@ -685,6 +692,10 @@ popd
 %defattr(-,root,root,-)
 /usr/lib32/libcurl.so.4
 /usr/lib32/libcurl.so.4.6.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
 
 %files man
 %defattr(0644,root,root,0755)
