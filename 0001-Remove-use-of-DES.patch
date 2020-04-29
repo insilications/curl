@@ -10,10 +10,10 @@ Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index e7ad639..94c0fa9 100755
+index 768f52f..7670c5d 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -4686,7 +4686,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
+@@ -4786,7 +4786,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
    if test "x$OPENSSL_ENABLED" = "x1" -o "x$USE_WINDOWS_SSPI" = "x1" \
        -o "x$GNUTLS_ENABLED" = "x1" -o "x$MBEDTLS_ENABLED" = "x1" \
        -o "x$NSS_ENABLED" = "x1" -o "x$SECURETRANSPORT_ENABLED" = "x1"; then
@@ -23,10 +23,10 @@ index e7ad639..94c0fa9 100755
      if test "x$CURL_DISABLE_HTTP" != "x1" -a \
          "x$NTLM_WB_ENABLED" = "x1"; then
 diff --git a/lib/curl_setup.h b/lib/curl_setup.h
-index 4ecda6a..1ace0c1 100644
+index 56e6db8..2ec8d53 100644
 --- a/lib/curl_setup.h
 +++ b/lib/curl_setup.h
-@@ -676,7 +676,7 @@ int netware_init(void);
+@@ -632,7 +632,7 @@ int netware_init(void);
      defined(USE_OS400CRYPTO) || defined(USE_WIN32_CRYPTO) || \
      defined(USE_MBEDTLS)
  

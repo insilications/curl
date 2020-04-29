@@ -20,10 +20,10 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  5 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 0d13b5f..99b2949 100755
+index 5471245..5c15470 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -198,6 +198,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
+@@ -185,6 +185,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
  # Silence warning: ar: 'u' modifier ignored since 'D' is the default
  AC_SUBST(AR_FLAGS, [cr])
  
@@ -33,10 +33,10 @@ index 0d13b5f..99b2949 100755
  CURL_CHECK_AIX_ALL_SOURCE
  
 diff --git a/lib/connect.c b/lib/connect.c
-index 0a7475c..6ef5901 100644
+index 421f904..5ac90b1 100644
 --- a/lib/connect.c
 +++ b/lib/connect.c
-@@ -1529,7 +1529,7 @@ CURLcode Curl_socket(struct connectdata *conn,
+@@ -1524,7 +1524,7 @@ CURLcode Curl_socket(struct connectdata *conn,
    }
    else
      /* opensocket callback not set, so simply create the socket now */
@@ -46,10 +46,10 @@ index 0a7475c..6ef5901 100644
    if(*sockfd == CURL_SOCKET_BAD)
      /* no socket, no connection */
 diff --git a/lib/file.c b/lib/file.c
-index 2492370..ccde9b4 100644
+index 576a794..99e7393 100644
 --- a/lib/file.c
 +++ b/lib/file.c
-@@ -192,7 +192,7 @@ static CURLcode file_connect(struct connectdata *conn, bool *done)
+@@ -190,7 +190,7 @@ static CURLcode file_connect(struct connectdata *conn, bool *done)
      return CURLE_URL_MALFORMAT;
    }
  
@@ -58,7 +58,7 @@ index 2492370..ccde9b4 100644
    file->path = real_path;
  #endif
    file->freepath = real_path; /* free this when done */
-@@ -285,7 +285,7 @@ static CURLcode file_upload(struct connectdata *conn)
+@@ -283,7 +283,7 @@ static CURLcode file_upload(struct connectdata *conn)
    else
      mode = MODE_DEFAULT|O_TRUNC;
  
@@ -90,7 +90,7 @@ index 41ff986..74ccaad 100644
        /* an IPv6 address was requested but we can't get/use one */
        ipv6_works = 0;
 diff --git a/lib/if2ip.c b/lib/if2ip.c
-index d003de6..97896c7 100644
+index b283f67..e5401f9 100644
 --- a/lib/if2ip.c
 +++ b/lib/if2ip.c
 @@ -201,7 +201,7 @@ if2ip_result_t Curl_if2ip(int af, unsigned int remote_scope,
