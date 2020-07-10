@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.70.0
-Release  : 104
-URL      : https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.xz
-Source1  : https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.xz.asc
+Version  : 7.71.1
+Release  : 105
+URL      : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz
+Source1  : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz.asc
 Summary  : Command line tool and library for transferring data with URLs
 Group    : Development/Tools
 License  : MIT
@@ -128,15 +128,15 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.70.0
-cd %{_builddir}/curl-7.70.0
+%setup -q -n curl-7.71.1
+cd %{_builddir}/curl-7.71.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.70.0 build32
+cp -a curl-7.71.1 build32
 popd
 
 %build
@@ -144,7 +144,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1588183911
+export SOURCE_DATE_EPOCH=1594413434
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -201,15 +201,15 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1588183911
+export SOURCE_DATE_EPOCH=1594413434
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
-cp %{_builddir}/curl-7.70.0/COPYING %{buildroot}/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
+cp %{_builddir}/curl-7.71.1/COPYING %{buildroot}/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -419,6 +419,7 @@ popd
 /usr/share/man/man3/CURLOPT_IOCTLFUNCTION.3
 /usr/share/man/man3/CURLOPT_IPRESOLVE.3
 /usr/share/man/man3/CURLOPT_ISSUERCERT.3
+/usr/share/man/man3/CURLOPT_ISSUERCERT_BLOB.3
 /usr/share/man/man3/CURLOPT_KEEP_SENDING_ON_ERROR.3
 /usr/share/man/man3/CURLOPT_KEYPASSWD.3
 /usr/share/man/man3/CURLOPT_KRBLEVEL.3
@@ -477,13 +478,17 @@ popd
 /usr/share/man/man3/CURLOPT_PROXY_CAINFO.3
 /usr/share/man/man3/CURLOPT_PROXY_CAPATH.3
 /usr/share/man/man3/CURLOPT_PROXY_CRLFILE.3
+/usr/share/man/man3/CURLOPT_PROXY_ISSUERCERT.3
+/usr/share/man/man3/CURLOPT_PROXY_ISSUERCERT_BLOB.3
 /usr/share/man/man3/CURLOPT_PROXY_KEYPASSWD.3
 /usr/share/man/man3/CURLOPT_PROXY_PINNEDPUBLICKEY.3
 /usr/share/man/man3/CURLOPT_PROXY_SERVICE_NAME.3
 /usr/share/man/man3/CURLOPT_PROXY_SSLCERT.3
 /usr/share/man/man3/CURLOPT_PROXY_SSLCERTTYPE.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLCERT_BLOB.3
 /usr/share/man/man3/CURLOPT_PROXY_SSLKEY.3
 /usr/share/man/man3/CURLOPT_PROXY_SSLKEYTYPE.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLKEY_BLOB.3
 /usr/share/man/man3/CURLOPT_PROXY_SSLVERSION.3
 /usr/share/man/man3/CURLOPT_PROXY_SSL_CIPHER_LIST.3
 /usr/share/man/man3/CURLOPT_PROXY_SSL_OPTIONS.3
@@ -535,10 +540,12 @@ popd
 /usr/share/man/man3/CURLOPT_SSH_PUBLIC_KEYFILE.3
 /usr/share/man/man3/CURLOPT_SSLCERT.3
 /usr/share/man/man3/CURLOPT_SSLCERTTYPE.3
+/usr/share/man/man3/CURLOPT_SSLCERT_BLOB.3
 /usr/share/man/man3/CURLOPT_SSLENGINE.3
 /usr/share/man/man3/CURLOPT_SSLENGINE_DEFAULT.3
 /usr/share/man/man3/CURLOPT_SSLKEY.3
 /usr/share/man/man3/CURLOPT_SSLKEYTYPE.3
+/usr/share/man/man3/CURLOPT_SSLKEY_BLOB.3
 /usr/share/man/man3/CURLOPT_SSLVERSION.3
 /usr/share/man/man3/CURLOPT_SSL_CIPHER_LIST.3
 /usr/share/man/man3/CURLOPT_SSL_CTX_DATA.3

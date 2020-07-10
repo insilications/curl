@@ -20,7 +20,7 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  5 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 5471245..5c15470 100755
+index 543fd75..6153716 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -185,6 +185,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
@@ -33,10 +33,10 @@ index 5471245..5c15470 100755
  CURL_CHECK_AIX_ALL_SOURCE
  
 diff --git a/lib/connect.c b/lib/connect.c
-index 421f904..5ac90b1 100644
+index 29293f0..34ba77c 100644
 --- a/lib/connect.c
 +++ b/lib/connect.c
-@@ -1524,7 +1524,7 @@ CURLcode Curl_socket(struct connectdata *conn,
+@@ -1536,7 +1536,7 @@ CURLcode Curl_socket(struct connectdata *conn,
    }
    else
      /* opensocket callback not set, so simply create the socket now */
@@ -46,7 +46,7 @@ index 421f904..5ac90b1 100644
    if(*sockfd == CURL_SOCKET_BAD)
      /* no socket, no connection */
 diff --git a/lib/file.c b/lib/file.c
-index 576a794..99e7393 100644
+index cd3e49c..b5a1b8f 100644
 --- a/lib/file.c
 +++ b/lib/file.c
 @@ -190,7 +190,7 @@ static CURLcode file_connect(struct connectdata *conn, bool *done)
@@ -68,7 +68,7 @@ index 576a794..99e7393 100644
      failf(data, "Can't open %s for writing", file->path);
      return CURLE_WRITE_ERROR;
 diff --git a/lib/hostip6.c b/lib/hostip6.c
-index 41ff986..74ccaad 100644
+index 1121575..f85e0b9 100644
 --- a/lib/hostip6.c
 +++ b/lib/hostip6.c
 @@ -44,7 +44,7 @@
@@ -90,10 +90,10 @@ index 41ff986..74ccaad 100644
        /* an IPv6 address was requested but we can't get/use one */
        ipv6_works = 0;
 diff --git a/lib/if2ip.c b/lib/if2ip.c
-index b283f67..e5401f9 100644
+index 3938869..a2f43b5 100644
 --- a/lib/if2ip.c
 +++ b/lib/if2ip.c
-@@ -201,7 +201,7 @@ if2ip_result_t Curl_if2ip(int af, unsigned int remote_scope,
+@@ -202,7 +202,7 @@ if2ip_result_t Curl_if2ip(int af, unsigned int remote_scope,
    if(len >= sizeof(req.ifr_name))
      return IF2IP_NOT_FOUND;
  

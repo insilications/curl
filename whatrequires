@@ -1,6 +1,7 @@
 # This file contains recursive sources that require this package
 clr-network-troubleshooter
 kubernetes
+libsoup
 pycurl
 tensorboard
 tensorflow-serving

@@ -18,7 +18,7 @@ Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index 66f339b..5471245 100755
+index 36f8073..543fd75 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -259,7 +259,6 @@ dnl **********************************************************************

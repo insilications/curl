@@ -14,7 +14,7 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/lib/url.c b/lib/url.c
-index c924b97..3429eb4 100644
+index f1b53d5..d3997f3 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -71,6 +71,8 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
@@ -26,7 +26,7 @@ index c924b97..3429eb4 100644
  
  #include "urldata.h"
  #include "netrc.h"
-@@ -2159,6 +2161,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2187,6 +2189,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
    char *prox;
@@ -34,7 +34,7 @@ index c924b97..3429eb4 100644
  
    /* Now, build <protocol>_proxy and check for such a one to use */
    while(*protop)
-@@ -2193,7 +2196,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2221,7 +2224,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
      proxy = prox; /* use this */
    }
  
