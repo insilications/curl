@@ -1,0 +1,9 @@
+find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlicommon\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlicommon.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlienc\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlienc.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+make  %{?_smp_mflags} V=1 VERBOSE=1
