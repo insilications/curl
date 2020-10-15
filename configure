@@ -1,1 +1,0 @@
---enable-shared --with-ssl=/usr --disable-ldap --without-winidn --with-libidn --enable-threaded-resolver --with-zlib --enable-symbol-hiding --with-ca-path=/var/cache/ca-certs/anchors --disable-ntlm-wb --disable-smb --enable-proxy --with-nghttp2 --enable-ipv6 --disable-telnet --disable-tftp --disable-pop3 --disable-gopher --enable-negotiate

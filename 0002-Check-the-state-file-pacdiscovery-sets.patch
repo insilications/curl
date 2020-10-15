@@ -1,20 +1,14 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tudor Marcu <tudor.marcu@intel.com>
-Date: Mon, 19 Oct 2015 14:27:02 -0700
-Subject: [PATCH] Check the state file pacdiscovery sets
+From 342c82fcdbbdc6cd58fd6fb945d401d718bab6b3 Mon Sep 17 00:00:00 2001
+From: insilications <boboniboni@gmail.com>
+Date: Wed, 14 Oct 2020 19:28:35 -0300
+Subject: [PATCH 2/4] Check the state file pacdiscovery sets
 
-If pacdiscovery did not run, then Pacrunner has no proxy script, thus proxy
-resolution will not work - so just ignore any dbus connection and run libcurl.
-
-Signed-off-by: Tudor Marcu <tudor.marcu@intel.com>
-Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
-Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
 ---
  lib/url.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/lib/url.c b/lib/url.c
-index f1b53d5..d3997f3 100644
+index d0e803917..0adf59176 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -71,6 +71,8 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
@@ -26,7 +20,7 @@ index f1b53d5..d3997f3 100644
  
  #include "urldata.h"
  #include "netrc.h"
-@@ -2187,6 +2189,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2208,6 +2210,7 @@ static char *detect_proxy(struct connectdata *conn, char *url)
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
    char *prox;
@@ -34,7 +28,7 @@ index f1b53d5..d3997f3 100644
  
    /* Now, build <protocol>_proxy and check for such a one to use */
    while(*protop)
-@@ -2221,7 +2224,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
+@@ -2242,7 +2245,9 @@ static char *detect_proxy(struct connectdata *conn, char *url)
      proxy = prox; /* use this */
    }
  
@@ -45,3 +39,6 @@ index f1b53d5..d3997f3 100644
      /* No protocol-specific proxy set in the environment.
       *     Fallback to pacrunner autoproxy lookup */
      autoproxy_ret = query_pacrunner_proxy(url,
+-- 
+2.28.0
+
