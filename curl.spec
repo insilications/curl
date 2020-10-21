@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.71.1
-Release  : 105
-URL      : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz
-Source1  : https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz.asc
+Version  : 7.73.0
+Release  : 106
+URL      : https://github.com/curl/curl/releases/download/curl-7_73_0/curl-7.73.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_73_0/curl-7.73.0.tar.xz
+Source1  : https://github.com/curl/curl/releases/download/curl-7_73_0/curl-7.73.0.tar.xz.asc
 Summary  : Command line tool and library for transferring data with URLs
 Group    : Development/Tools
 License  : MIT
@@ -49,6 +49,7 @@ BuildRequires : pkg-config
 BuildRequires : pkg-config-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
+BuildRequires : zstd-dev
 Patch1: 0001-Remove-use-of-DES.patch
 Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
@@ -128,15 +129,15 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.71.1
-cd %{_builddir}/curl-7.71.1
+%setup -q -n curl-7.73.0
+cd %{_builddir}/curl-7.73.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.71.1 build32
+cp -a curl-7.73.0 build32
 popd
 
 %build
@@ -144,7 +145,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1594413434
+export SOURCE_DATE_EPOCH=1603318810
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -206,10 +207,10 @@ cd ../build32;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1594413434
+export SOURCE_DATE_EPOCH=1603318810
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
-cp %{_builddir}/curl-7.71.1/COPYING %{buildroot}/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
+cp %{_builddir}/curl-7.73.0/COPYING %{buildroot}/usr/share/package-licenses/curl/0a31fbdd5090bd461236bca4b1a86c79fd244d7a
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -236,6 +237,7 @@ popd
 /usr/include/curl/easy.h
 /usr/include/curl/mprintf.h
 /usr/include/curl/multi.h
+/usr/include/curl/options.h
 /usr/include/curl/stdcheaders.h
 /usr/include/curl/system.h
 /usr/include/curl/typecheck-gcc.h
@@ -256,6 +258,7 @@ popd
 /usr/share/man/man3/CURLINFO_CONTENT_LENGTH_UPLOAD_T.3
 /usr/share/man/man3/CURLINFO_CONTENT_TYPE.3
 /usr/share/man/man3/CURLINFO_COOKIELIST.3
+/usr/share/man/man3/CURLINFO_EFFECTIVE_METHOD.3
 /usr/share/man/man3/CURLINFO_EFFECTIVE_URL.3
 /usr/share/man/man3/CURLINFO_FILETIME.3
 /usr/share/man/man3/CURLINFO_FILETIME_T.3
@@ -278,6 +281,7 @@ popd
 /usr/share/man/man3/CURLINFO_PRIVATE.3
 /usr/share/man/man3/CURLINFO_PROTOCOL.3
 /usr/share/man/man3/CURLINFO_PROXYAUTH_AVAIL.3
+/usr/share/man/man3/CURLINFO_PROXY_ERROR.3
 /usr/share/man/man3/CURLINFO_PROXY_SSL_VERIFYRESULT.3
 /usr/share/man/man3/CURLINFO_REDIRECT_COUNT.3
 /usr/share/man/man3/CURLINFO_REDIRECT_TIME.3
@@ -550,6 +554,7 @@ popd
 /usr/share/man/man3/CURLOPT_SSL_CIPHER_LIST.3
 /usr/share/man/man3/CURLOPT_SSL_CTX_DATA.3
 /usr/share/man/man3/CURLOPT_SSL_CTX_FUNCTION.3
+/usr/share/man/man3/CURLOPT_SSL_EC_CURVES.3
 /usr/share/man/man3/CURLOPT_SSL_ENABLE_ALPN.3
 /usr/share/man/man3/CURLOPT_SSL_ENABLE_NPN.3
 /usr/share/man/man3/CURLOPT_SSL_FALSESTART.3
@@ -606,6 +611,9 @@ popd
 /usr/share/man/man3/curl_easy_escape.3
 /usr/share/man/man3/curl_easy_getinfo.3
 /usr/share/man/man3/curl_easy_init.3
+/usr/share/man/man3/curl_easy_option_by_id.3
+/usr/share/man/man3/curl_easy_option_by_name.3
+/usr/share/man/man3/curl_easy_option_next.3
 /usr/share/man/man3/curl_easy_pause.3
 /usr/share/man/man3/curl_easy_perform.3
 /usr/share/man/man3/curl_easy_recv.3
@@ -693,12 +701,12 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libcurl.so.4
-/usr/lib64/libcurl.so.4.6.0
+/usr/lib64/libcurl.so.4.7.0
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libcurl.so.4
-/usr/lib32/libcurl.so.4.6.0
+/usr/lib32/libcurl.so.4.7.0
 
 %files license
 %defattr(0644,root,root,0755)

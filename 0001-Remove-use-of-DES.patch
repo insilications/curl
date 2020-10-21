@@ -10,10 +10,10 @@ Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index f0fbcb0..26605d7 100755
+index 2304775..77397b1 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -4863,7 +4863,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
+@@ -5005,7 +5005,7 @@ if test "x$CURL_DISABLE_CRYPTO_AUTH" != "x1"; then
        -o "x$GNUTLS_ENABLED" = "x1" -o "x$MBEDTLS_ENABLED" = "x1" \
        -o "x$NSS_ENABLED" = "x1" -o "x$SECURETRANSPORT_ENABLED" = "x1" \
        -o "x$WOLFSSL_NTLM" = "x1"; then
@@ -23,15 +23,15 @@ index f0fbcb0..26605d7 100755
      if test "x$CURL_DISABLE_HTTP" != "x1" -a \
          "x$NTLM_WB_ENABLED" = "x1"; then
 diff --git a/lib/curl_setup.h b/lib/curl_setup.h
-index d76c630..3beaf9d 100644
+index 3872dbb..98f839d 100644
 --- a/lib/curl_setup.h
 +++ b/lib/curl_setup.h
-@@ -643,7 +643,7 @@ int netware_init(void);
-   defined(USE_MBEDTLS) ||                                               \
-   (defined(USE_WOLFSSL) && defined(HAVE_WOLFSSL_DES_SET_ODD_PARITY))
+@@ -629,7 +629,7 @@ int netware_init(void);
+   defined(USE_OS400CRYPTO) || defined(USE_WIN32_CRYPTO) ||              \
+   (defined(USE_WOLFSSL) && defined(HAVE_WOLFSSL_DES_ECB_ENCRYPT))
  
--#define USE_NTLM
-+#undef USE_NTLM
+-#define USE_CURL_NTLM_CORE
++#undef USE_CURL_NTLM_CORE
  
  #  if defined(USE_MBEDTLS)
  /* Get definition of MBEDTLS_MD4_C */

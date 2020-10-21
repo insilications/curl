@@ -22,7 +22,7 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  3 files changed, 132 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 26605d7..36f8073 100755
+index 77397b1..217173e 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -35,7 +35,7 @@ index 26605d7..36f8073 100755
  CURL_CHECK_OPTION_OPTIMIZE
  CURL_CHECK_OPTION_WARNINGS
 diff --git a/lib/Makefile.am b/lib/Makefile.am
-index f2886ec..19fa95c 100644
+index 78b068f..33785c8 100644
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
 @@ -85,8 +85,8 @@ AM_LDFLAGS =
@@ -50,7 +50,7 @@ index f2886ec..19fa95c 100644
  if CURL_LT_SHLIB_USE_VERSION_INFO
  libcurl_la_LDFLAGS_EXTRA += $(VERSIONINFO)
 diff --git a/lib/url.c b/lib/url.c
-index a1a6b69..f1b53d5 100644
+index 8af33c0..d0e8039 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -67,6 +67,11 @@
@@ -70,10 +70,10 @@ index a1a6b69..f1b53d5 100644
  
  static void conn_free(struct connectdata *conn);
 +static int query_pacrunner_proxy(char *url, char *host, char *proxy_host);
- static unsigned int get_protocol_family(unsigned int protocol);
  
  /* Some parts of the code (e.g. chunked encoding) assume this buffer has at
-@@ -2154,9 +2160,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+  * more than just a few bytes to play with. Don't let it become too small or
+@@ -2175,9 +2181,11 @@ static bool check_noproxy(const char *name, const char *no_proxy)
  * name and is not limited to HTTP proxies only.
  * The returned pointer must be freed by the caller (unless NULL)
  ****************************************************************/
@@ -86,7 +86,7 @@ index a1a6b69..f1b53d5 100644
  
    /* If proxy was not specified, we check for default proxy environment
     * variables, to enable i.e Lynx compliance:
-@@ -2212,7 +2220,18 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -2233,7 +2241,18 @@ static char *detect_proxy(struct connectdata *conn)
    if(prox) {
      proxy = prox; /* use this */
    }
@@ -106,7 +106,7 @@ index a1a6b69..f1b53d5 100644
      envp = (char *)"all_proxy";
      proxy = curl_getenv(envp); /* default proxy to use */
      if(!proxy) {
-@@ -2448,10 +2467,12 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
+@@ -2471,10 +2490,12 @@ static CURLcode create_conn_helper_init_proxy(struct connectdata *conn)
      Curl_safefree(proxy);
      Curl_safefree(socksproxy);
    }
@@ -121,7 +121,7 @@ index a1a6b69..f1b53d5 100644
  #endif /* CURL_DISABLE_HTTP */
  
    Curl_safefree(no_proxy);
-@@ -3362,6 +3383,109 @@ static void reuse_conn(struct connectdata *old_conn,
+@@ -3388,6 +3409,109 @@ static void reuse_conn(struct connectdata *old_conn,
  #endif
  }
  
