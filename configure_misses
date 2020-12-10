@@ -30,19 +30,11 @@ Configure miss: if X/Open network library is required
 Configure miss: proto/bsdsocket.h
 Configure miss: clock_gettime in libraries
 Configure miss: BrotliDecoderDecompress in -lbrotlidec
-Configure miss: brotli/decode.h usability
-Configure miss: brotli/decode.h presence
 Configure miss: brotli/decode.h
-Configure miss: gss.h usability
-Configure miss: gss.h presence
 Configure miss: gss.h
-Configure miss: gssapi/gssapi.h usability
-Configure miss: gssapi/gssapi.h presence
 Configure miss: gssapi/gssapi.h
 Configure miss: gssapi/gssapi_generic.h
 Configure miss: gssapi/gssapi_krb5.h
-Configure miss: gssapi.h usability
-Configure miss: gssapi.h presence
 Configure miss: gssapi.h
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Secure Transport
@@ -59,8 +51,6 @@ Configure miss: whether versioned symbols are wanted
 Configure miss: whether to enable Windows native IDN (Windows native builds only)
 Configure miss: libidn2 options with pkg-config
 Configure miss: if idn2_lookup_ul can be linked
-Configure miss: idn2.h usability
-Configure miss: idn2.h presence
 Configure miss: idn2.h
 Configure miss: libngtcp2 options with pkg-config
 Configure miss: quiche options with pkg-config
@@ -74,6 +64,7 @@ Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
 Configure miss: whether to support alt-svc
+Configure miss: whether to support HSTS
 Configure miss: whether to enable debug build options
 Configure miss: whether to enable strict compiler warnings
 Configure miss: whether to enable compiler warnings as errors
@@ -107,8 +98,6 @@ Configure miss: if X/Open network library is required
 Configure miss: proto/bsdsocket.h
 Configure miss: clock_gettime in libraries
 Configure miss: BrotliDecoderDecompress in -lbrotlidec
-Configure miss: brotli/decode.h usability
-Configure miss: brotli/decode.h presence
 Configure miss: brotli/decode.h
 Configure miss: ZSTD_createDStream in -lzstd
 Configure miss: if GSS-API support is requested
@@ -127,8 +116,6 @@ Configure miss: whether versioned symbols are wanted
 Configure miss: whether to enable Windows native IDN (Windows native builds only)
 Configure miss: libidn2 options with pkg-config
 Configure miss: if idn2_lookup_ul can be linked
-Configure miss: idn2.h usability
-Configure miss: idn2.h presence
 Configure miss: idn2.h
 Configure miss: libngtcp2 options with pkg-config
 Configure miss: quiche options with pkg-config
@@ -142,3 +129,4 @@ Configure miss: gnroff
 Configure miss: whether to enable SSPI support (Windows native builds only)
 Configure miss: whether to enable NTLM delegation to winbind's helper
 Configure miss: whether to support alt-svc
+Configure miss: whether to support HSTS
