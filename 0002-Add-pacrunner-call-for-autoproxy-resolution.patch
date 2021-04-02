@@ -12,6 +12,9 @@ Assumptions of this patch are:
  - The decision as to when to refresh the proxy script is also made
   by pacrunner
 
+2021-04-01: Rebased for 7.76.0. Adjustments were needed to accommodate
+            refactoring in https://github.com/curl/curl/pull/6798.
+
 Signed-off-by: Brad T. Peters <brad.t.peters@intel.com>
 Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
@@ -22,7 +25,7 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  3 files changed, 133 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 8827ac4..7b1f165 100755
+index 916904f..7c3a067 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,8 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -50,7 +53,7 @@ index b51796f..bdbf7eb 100644
  if CURL_LT_SHLIB_USE_VERSION_INFO
  libcurl_la_LDFLAGS_EXTRA += $(VERSIONINFO)
 diff --git a/lib/url.c b/lib/url.c
-index c02d2c2..8561284 100644
+index 19fcfb8..7e1e875 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -67,6 +67,11 @@
@@ -73,7 +76,7 @@ index c02d2c2..8561284 100644
  
  /* Some parts of the code (e.g. chunked encoding) assume this buffer has at
   * more than just a few bytes to play with. Don't let it become too small or
-@@ -2230,9 +2236,12 @@ static bool check_noproxy(const char *name, const char *no_proxy)
+@@ -2249,9 +2255,12 @@ static bool check_noproxy(const char *name, const char *no_proxy)
  * The returned pointer must be freed by the caller (unless NULL)
  ****************************************************************/
  static char *detect_proxy(struct Curl_easy *data,
@@ -87,7 +90,7 @@ index c02d2c2..8561284 100644
  
    /* If proxy was not specified, we check for default proxy environment
     * variables, to enable i.e Lynx compliance:
-@@ -2291,7 +2300,18 @@ static char *detect_proxy(struct Curl_easy *data,
+@@ -2310,7 +2319,18 @@ static char *detect_proxy(struct Curl_easy *data,
    if(prox) {
      proxy = prox; /* use this */
    }
@@ -107,7 +110,7 @@ index c02d2c2..8561284 100644
      envp = (char *)"all_proxy";
      proxy = curl_getenv(envp); /* default proxy to use */
      if(!proxy) {
-@@ -2529,10 +2549,12 @@ static CURLcode create_conn_helper_init_proxy(struct Curl_easy *data,
+@@ -2571,10 +2591,12 @@ static CURLcode create_conn_helper_init_proxy(struct Curl_easy *data,
      Curl_safefree(proxy);
      Curl_safefree(socksproxy);
    }
@@ -116,13 +119,13 @@ index c02d2c2..8561284 100644
 +#ifndef CURL_DISABLE_HTTP
      /* if the host is not in the noproxy list, detect proxy. */
 -    proxy = detect_proxy(data, conn);
-+    proxy = detect_proxy(data, conn, data->change.url);
++    proxy = detect_proxy(data, conn, data->state.url);
 +#else  /* !CURL_DISABLE_HTTP */
 +    proxy = NULL;
  #endif /* CURL_DISABLE_HTTP */
  
    Curl_safefree(no_proxy);
-@@ -3456,6 +3478,109 @@ static void reuse_conn(struct Curl_easy *data,
+@@ -3485,6 +3507,109 @@ static void reuse_conn(struct Curl_easy *data,
  #endif
  }
  

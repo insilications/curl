@@ -20,10 +20,10 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  5 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 83594da..3557a9f 100755
+index 910cf32..8725a69 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -191,6 +191,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
+@@ -192,6 +192,8 @@ AC_DEFINE_UNQUOTED(OS, "${host}", [cpu-machine-OS])
  # Silence warning: ar: 'u' modifier ignored since 'D' is the default
  AC_SUBST(AR_FLAGS, [cr])
  
@@ -33,10 +33,10 @@ index 83594da..3557a9f 100755
  CURL_CHECK_AIX_ALL_SOURCE
  
 diff --git a/lib/connect.c b/lib/connect.c
-index baab184..6633c74 100644
+index 296fb62..18a9bee 100644
 --- a/lib/connect.c
 +++ b/lib/connect.c
-@@ -1575,7 +1575,7 @@ CURLcode Curl_socket(struct Curl_easy *data,
+@@ -1573,7 +1573,7 @@ CURLcode Curl_socket(struct Curl_easy *data,
    }
    else
      /* opensocket callback not set, so simply create the socket now */

@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x5CC908FDB71E12C2 (daniel@haxx.se)
 #
 Name     : curl
-Version  : 7.75.0
-Release  : 108
-URL      : https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz
-Source0  : https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz
-Source1  : https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz.asc
+Version  : 7.76.0
+Release  : 109
+URL      : https://github.com/curl/curl/releases/download/curl-7_76_0/curl-7.76.0.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_76_0/curl-7.76.0.tar.xz
+Source1  : https://github.com/curl/curl/releases/download/curl-7_76_0/curl-7.76.0.tar.xz.asc
 Summary  : Command line tool and library for transferring data with URLs
 Group    : Development/Tools
 License  : MIT
@@ -129,15 +129,15 @@ man components for the curl package.
 
 
 %prep
-%setup -q -n curl-7.75.0
-cd %{_builddir}/curl-7.75.0
+%setup -q -n curl-7.76.0
+cd %{_builddir}/curl-7.76.0
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 pushd ..
-cp -a curl-7.75.0 build32
+cp -a curl-7.76.0 build32
 popd
 
 %build
@@ -145,7 +145,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1612399659
+export SOURCE_DATE_EPOCH=1617338292
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -207,10 +207,10 @@ cd ../build32;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1612399659
+export SOURCE_DATE_EPOCH=1617338292
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/curl
-cp %{_builddir}/curl-7.75.0/COPYING %{buildroot}/usr/share/package-licenses/curl/73bcd04aed1c45b611fd34aaa29e72069a49049b
+cp %{_builddir}/curl-7.76.0/COPYING %{buildroot}/usr/share/package-licenses/curl/73bcd04aed1c45b611fd34aaa29e72069a49049b
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -287,6 +287,7 @@ popd
 /usr/share/man/man3/CURLINFO_REDIRECT_TIME.3
 /usr/share/man/man3/CURLINFO_REDIRECT_TIME_T.3
 /usr/share/man/man3/CURLINFO_REDIRECT_URL.3
+/usr/share/man/man3/CURLINFO_REFERER.3
 /usr/share/man/man3/CURLINFO_REQUEST_SIZE.3
 /usr/share/man/man3/CURLINFO_RESPONSE_CODE.3
 /usr/share/man/man3/CURLINFO_RETRY_AFTER.3
@@ -374,6 +375,9 @@ popd
 /usr/share/man/man3/CURLOPT_DNS_SERVERS.3
 /usr/share/man/man3/CURLOPT_DNS_SHUFFLE_ADDRESSES.3
 /usr/share/man/man3/CURLOPT_DNS_USE_GLOBAL_CACHE.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYHOST.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYPEER.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYSTATUS.3
 /usr/share/man/man3/CURLOPT_DOH_URL.3
 /usr/share/man/man3/CURLOPT_EGDSOCKET.3
 /usr/share/man/man3/CURLOPT_ERRORBUFFER.3
