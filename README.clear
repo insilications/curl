@@ -1,0 +1,2 @@
+When updating this package to a new release, make sure to update the
+'compat-curl-gnutls-soname4' package as well (via its 'update.sh' script).
