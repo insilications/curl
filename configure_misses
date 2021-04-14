@@ -13,6 +13,8 @@ Configure miss: SSLv2_client_method
 Configure miss: ZSTD_createDStream in -lzstd
 Configure miss: brotli/decode.h
 Configure miss: brotli/decode.h
+Configure miss: clock_gettime in libraries
+Configure miss: clock_gettime in libraries
 Configure miss: code coverage support
 Configure miss: code coverage support
 Configure miss: fish options with pkg-config
@@ -21,8 +23,8 @@ Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gnroff
 Configure miss: gnroff
-Configure miss: good-to-use Mac CFLAGS
-Configure miss: good-to-use Mac CFLAGS
+Configure miss: good-to-use Darwin CFLAGS
+Configure miss: good-to-use Darwin CFLAGS
 Configure miss: gss.h
 Configure miss: gssapi.h
 Configure miss: gssapi/gssapi.h
@@ -43,16 +45,8 @@ Configure miss: if _THREAD_SAFE is onwards defined
 Configure miss: if _THREAD_SAFE is onwards defined
 Configure miss: if compiler optimizer assumed setting might be used
 Configure miss: if compiler optimizer assumed setting might be used
-Configure miss: if gmtime_r is prototyped
-Configure miss: if gmtime_r is prototyped
-Configure miss: if gmtime_r might be used
-Configure miss: if gmtime_r might be used
 Configure miss: if idn2_lookup_ul can be linked
 Configure miss: if idn2_lookup_ul can be linked
-Configure miss: if localtime_r is prototyped
-Configure miss: if localtime_r is prototyped
-Configure miss: if localtime_r might be used
-Configure miss: if localtime_r might be used
 Configure miss: if time_t is unsigned
 Configure miss: if time_t is unsigned
 Configure miss: libidn2 options with pkg-config
@@ -60,15 +54,12 @@ Configure miss: libidn2 options with pkg-config
 Configure miss: libngtcp2 options with pkg-config
 Configure miss: libngtcp2 options with pkg-config
 Configure miss: library containing gsasl_init
-Configure miss: library containing gsasl_init
 Configure miss: library containing psl_builtin
 Configure miss: library containing psl_builtin
 Configure miss: libressl
 Configure miss: libressl
 Configure miss: memory.h
 Configure miss: memory.h
-Configure miss: monotonic clock_gettime
-Configure miss: monotonic clock_gettime
 Configure miss: netinet/in6.h
 Configure miss: netinet/in6.h
 Configure miss: proto/bsdsocket.h
@@ -104,7 +95,6 @@ Configure miss: whether to enable Secure Transport
 Configure miss: whether to enable Secure Transport
 Configure miss: whether to enable Windows native IDN (Windows native builds only)
 Configure miss: whether to enable Windows native IDN (Windows native builds only)
-Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable Windows native SSL/TLS (Windows native builds only)
 Configure miss: whether to enable c-ares for DNS lookups
 Configure miss: whether to enable c-ares for DNS lookups
