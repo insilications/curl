@@ -1,1 +1,20 @@
---disable-static --enable-shared --with-ssl=/usr --disable-ldap --without-winidn --with-libidn2 --enable-threaded-resolver --with-zlib --enable-symbol-hiding --with-ca-path=/var/cache/ca-certs/anchors --disable-ntlm-wb --disable-smb --enable-proxy --with-nghttp2 --enable-ipv6 --disable-telnet --disable-tftp --disable-pop3 --disable-gopher --enable-negotiate --without-brotli --without-zstd
+--enable-shared
+--disable-ldap
+--without-winidn
+--with-libidn2
+--enable-threaded-resolver
+--with-zlib
+--enable-symbol-hiding
+--with-ca-path=/var/cache/ca-certs/anchors
+--disable-ntlm-wb
+--disable-smb
+--enable-proxy
+--with-nghttp2
+--enable-ipv6
+--disable-telnet
+--disable-tftp
+--disable-pop3
+--disable-gopher
+--enable-negotiate
+--with-brotli
+--with-zstd

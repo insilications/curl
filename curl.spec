@@ -4,68 +4,141 @@
 #
 %define keepstatic 1
 Name     : curl
-Version  : 7.73.0
-Release  : 106
-URL      : https://github.com/curl/curl/releases/download/curl-7_73_0/curl-7.73.0.tar.bz2
-Source0  : https://github.com/curl/curl/releases/download/curl-7_73_0/curl-7.73.0.tar.bz2
-Summary  : Command line tool and library for transferring data with URLs
+Version  : 7.76.1
+Release  : 111
+URL      : https://github.com/curl/curl/releases/download/curl-7_76_1/curl-7.76.1.tar.xz
+Source0  : https://github.com/curl/curl/releases/download/curl-7_76_1/curl-7.76.1.tar.xz
+Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
 Requires: curl-bin = %{version}-%{release}
 Requires: curl-lib = %{version}-%{release}
 Requires: curl-man = %{version}-%{release}
 Requires: ca-certs
+BuildRequires : Flask
+BuildRequires : Sphinx
+BuildRequires : acl-dev
+BuildRequires : acl-staticdev
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : brotli-dev
+BuildRequires : brotli-dev32
 BuildRequires : brotli-staticdev
+BuildRequires : brotli-staticdev32
 BuildRequires : buildreq-cmake
+BuildRequires : buildreq-distutils3
+BuildRequires : bzip2-dev
+BuildRequires : bzip2-staticdev
 BuildRequires : ca-certs
 BuildRequires : ca-certs-static
+BuildRequires : check-dev
+BuildRequires : curl-dev
 BuildRequires : dbus-dev
 BuildRequires : dbus-dev32
 BuildRequires : diffstat
 BuildRequires : diffutils
+BuildRequires : doxygen
 BuildRequires : e2fsprogs-dev
 BuildRequires : e2fsprogs-dev32
+BuildRequires : expat-dev
+BuildRequires : expat-staticdev
+BuildRequires : extra-cmake-modules
+BuildRequires : file-dev
+BuildRequires : gcc
+BuildRequires : gcc-abi
+BuildRequires : gcc-dev
 BuildRequires : gcc-dev32
+BuildRequires : gcc-doc
 BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libs-math
 BuildRequires : gcc-libstdc++32
+BuildRequires : gcc-libubsan
+BuildRequires : gcc-locale
 BuildRequires : gettext-bin
+BuildRequires : gettext-dev
+BuildRequires : glibc-bin
 BuildRequires : glibc-dev
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : glibc-staticdev
+BuildRequires : gnupg
+BuildRequires : gpgme
+BuildRequires : gpgme-dev
 BuildRequires : groff
+BuildRequires : json-c
+BuildRequires : json-c-dev
+BuildRequires : json-c-staticdev
+BuildRequires : libassuan-dev
 BuildRequires : libc6
+BuildRequires : libcomps-dev
+BuildRequires : libcomps-staticdev
+BuildRequires : libdnf-dev
+BuildRequires : libdnf-staticdev
+BuildRequires : libgcc1
+BuildRequires : libgcrypt
+BuildRequires : libgcrypt-dev
 BuildRequires : libidn-dev
 BuildRequires : libidn-dev32
 BuildRequires : libidn2-dev
 BuildRequires : libidn2-dev32
 BuildRequires : libidn2-staticdev
 BuildRequires : libidn2-staticdev32
+BuildRequires : libmodulemd
+BuildRequires : libmodulemd-dev
+BuildRequires : libmodulemd-staticdev
+BuildRequires : librepo-dev
+BuildRequires : librepo-staticdev
+BuildRequires : libsolv-dev
+BuildRequires : libsolv-staticdev
+BuildRequires : libstdc++
 BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : libunistring-dev
 BuildRequires : libunistring-dev32
 BuildRequires : libunistring-staticdev
 BuildRequires : libunistring-staticdev32
+BuildRequires : libxml2-dev
+BuildRequires : libxml2-staticdev
+BuildRequires : lz4-dev
+BuildRequires : lz4-staticdev
+BuildRequires : lzo-dev
+BuildRequires : lzo-staticdev
 BuildRequires : m4
+BuildRequires : nettle-dev
+BuildRequires : nettle-staticdev
 BuildRequires : nghttp2-dev
 BuildRequires : nghttp2-dev32
-BuildRequires : nghttp2-staticdev
+BuildRequires : nose
 BuildRequires : openssl-dev
 BuildRequires : openssl-dev32
 BuildRequires : openssl-staticdev
 BuildRequires : perl
 BuildRequires : pkg-config
 BuildRequires : pkg-config-dev
+BuildRequires : pkgconfig(gthread-2.0)
 BuildRequires : pkgconfig(libbrotlicommon)
 BuildRequires : pkgconfig(libbrotlidec)
 BuildRequires : pkgconfig(libbrotlienc)
+BuildRequires : pkgconfig(liblzma)
+BuildRequires : pkgconfig(sqlite3)
+BuildRequires : pluggy
+BuildRequires : popt-dev
+BuildRequires : py-python
+BuildRequires : pytest
+BuildRequires : python3-dev
+BuildRequires : python3-staticdev
+BuildRequires : rpm-dev
+BuildRequires : rpm-staticdev
 BuildRequires : sqlite-autoconf-dev
 BuildRequires : sqlite-autoconf-staticdev
 BuildRequires : stunnel
+BuildRequires : swig
+BuildRequires : tox
+BuildRequires : virtualenv
+BuildRequires : xattr
+BuildRequires : xz-dev
+BuildRequires : xz-staticdev
+BuildRequires : zlib
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 BuildRequires : zlib-staticdev
@@ -76,10 +149,11 @@ BuildRequires : zstd-staticdev32
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
-Patch1: 0001-Add-pacrunner-call-for-autoproxy-resolution.patch
-Patch2: 0002-Check-the-state-file-pacdiscovery-sets.patch
-Patch3: 0003-Avoid-stripping-the-g-option.patch
-Patch4: 0004-Open-library-file-descriptors-with-O_CLOEXEC.patch
+Patch1: 0001-Remove-use-of-DES.patch
+Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
+Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
+Patch4: 0004-Avoid-stripping-the-g-option.patch
+Patch5: 0005-Open-library-file-descriptors-with-O_CLOEXEC.patch
 
 %description
 curl is used in command lines or scripts to transfer data. It is also used in
@@ -151,15 +225,25 @@ Requires: curl-dev = %{version}-%{release}
 staticdev components for the curl package.
 
 
+%package staticdev32
+Summary: staticdev32 components for the curl package.
+Group: Default
+Requires: curl-dev32 = %{version}-%{release}
+
+%description staticdev32
+staticdev32 components for the curl package.
+
+
 %prep
-%setup -q -n curl-7.73.0
-cd %{_builddir}/curl-7.73.0
+%setup -q -n curl-7.76.1
+cd %{_builddir}/curl-7.76.1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 pushd ..
-cp -a curl-7.73.0 build32
+cp -a curl-7.76.1 build32
 popd
 
 %build
@@ -168,84 +252,139 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1602723289
+export SOURCE_DATE_EPOCH=1618919250
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
 export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
-export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -fPIC -flto=16 $PGO_GEN"
-export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -fPIC -flto=16 $PGO_GEN"
-export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -fPIC -flto=16 $PGO_GEN"
-export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -flto=16 $PGO_GEN"
-export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -fPIC -flto=16 $PGO_GEN -Wl,--allow-multiple-definition"
+export CFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_GEN"
+export FFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -ffat-lto-objects -flto=16 -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -lpthread $PGO_GEN"
 ## pgo use
 ## -ffat-lto-objects -fno-PIE -fno-PIE -m64 -no-pie -fpic -fvisibility=hidden -flto-partition=none
 ## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fno-common
 export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
-export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE"
-export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE"
-export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE"
-export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC $PGO_USE"
-export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE -Wl,--allow-multiple-definition"
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
+export CFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
+export FCFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
+export FFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
+export CXXFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
+export LDFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -lpthread $PGO_USE"
+#
+export AR=/usr/bin/gcc-ar
+export RANLIB=/usr/bin/gcc-ranlib
+export NM=/usr/bin/gcc-nm
 #
 export MAKEFLAGS=%{?_smp_mflags}
 #
 %global _lto_cflags 1
 #global _lto_cflags %{nil}
+%global _disable_maintainer_mode 1
+#%global _disable_maintainer_mode %{nil}
 #
-# export PATH="/usr/lib64/ccache/bin:$PATH"
-# export CCACHE_NOHASHDIR=1
-# export CCACHE_DIRECT=1
-# export CCACHE_SLOPPINESS=pch_defines,locale,time_macros
-# export CCACHE_DISABLE=1
+export CCACHE_DISABLE=true
+export PATH="/usr/lib64/ccache/bin:$PATH"
+export CCACHE_NOHASHDIR=true
+export CCACHE_CPP2=true
+export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,file_stat_matches,file_stat_matches_ctime,include_file_ctime,include_file_mtime,modules,system_headers,clang_index_store,file_macro
+#export CCACHE_SLOPPINESS=modules,include_file_mtime,include_file_ctime,time_macros,pch_defines,file_stat_matches,clang_index_store,system_headers,locale
+#export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,clang_index_store,file_macro
+export CCACHE_DIR=/var/tmp/ccache
+export CCACHE_BASEDIR=/builddir/build/BUILD
+#export CCACHE_LOGFILE=/var/tmp/ccache/cache.debug
+#export CCACHE_DEBUG=true
+#export CCACHE_NODIRECT=true
 ## altflags_pgo end
-##
-%global _lto_cflags 1
-##
 sd --flags mi '^AC_INIT\((.*\n.*\)|.*\))' '$0\nAM_MAINTAINER_MODE([disable])' configure.ac
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%reconfigure  --enable-shared --enable-static --with-ssl=/usr --disable-ldap --without-winidn --with-libidn2 --enable-threaded-resolver --with-zlib --enable-symbol-hiding --with-ca-path=/var/cache/ca-certs/anchors --disable-ntlm-wb --disable-smb --enable-proxy --with-nghttp2 --enable-ipv6 --disable-telnet --disable-tftp --disable-pop3 --disable-gopher --enable-negotiate --with-gssapi=/usr --with-brotli --with-zstd
-find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libidn2.a,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec.a,/usr/lib64/libbrotlicommon.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+%reconfigure  --enable-shared \
+--enable-static \
+--with-ssl=/usr \
+--disable-ldap \
+--without-winidn \
+--with-libidn2 \
+--enable-threaded-resolver \
+--with-zlib \
+--enable-symbol-hiding \
+--with-ca-path=/var/cache/ca-certs/anchors \
+--disable-ntlm-wb \
+--disable-smb \
+--enable-proxy \
+--with-nghttp2 \
+--enable-ipv6 \
+--disable-telnet \
+--disable-tftp \
+--disable-pop3 \
+--disable-gopher \
+--enable-negotiate \
+--with-gssapi=/usr \
+--with-brotli \
+--with-zstd
+## make_prepend64 content
+find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libidn2.a,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec.a,/usr/lib64/libbrotlicommon.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+#find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+## make_prepend64 end
 make -j16 V=1 VERBOSE=1
 
-make -j16 test || :
+#make -j16 test || :
 make clean
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%reconfigure  --enable-shared --enable-static --with-ssl=/usr --disable-ldap --without-winidn --with-libidn2 --enable-threaded-resolver --with-zlib --enable-symbol-hiding --with-ca-path=/var/cache/ca-certs/anchors --disable-ntlm-wb --disable-smb --enable-proxy --with-nghttp2 --enable-ipv6 --disable-telnet --disable-tftp --disable-pop3 --disable-gopher --enable-negotiate --with-gssapi=/usr --with-brotli --with-zstd
-find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libidn2.a,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec.a,/usr/lib64/libbrotlicommon.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
-find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \; 
+%reconfigure  --enable-shared \
+--enable-static \
+--with-ssl=/usr \
+--disable-ldap \
+--without-winidn \
+--with-libidn2 \
+--enable-threaded-resolver \
+--with-zlib \
+--enable-symbol-hiding \
+--with-ca-path=/var/cache/ca-certs/anchors \
+--disable-ntlm-wb \
+--disable-smb \
+--enable-proxy \
+--with-nghttp2 \
+--enable-ipv6 \
+--disable-telnet \
+--disable-tftp \
+--disable-pop3 \
+--disable-gopher \
+--enable-negotiate \
+--with-gssapi=/usr \
+--with-brotli \
+--with-zstd
+## make_prepend64 content
+find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libidn2.a,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec.a,/usr/lib64/libbrotlicommon.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+#find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+## make_prepend64 end
 make -j16 V=1 VERBOSE=1
 
 pushd ../build32/
-export CFLAGS="-g -O2 -fuse-linker-plugin -pipe"
-export CXXFLAGS="-g -O2 -fuse-linker-plugin -fvisibility-inlines-hidden -pipe"
-export LDFLAGS="-g -O2 -fuse-linker-plugin -pipe"
+export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -256,12 +395,31 @@ export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 sd --flags mi '^AC_INIT\((.*\n.*\)|.*\))' '$0\nAM_MAINTAINER_MODE([disable])' configure.ac
-%reconfigure  --disable-static --enable-shared --with-ssl=/usr --disable-ldap --without-winidn --with-libidn2 --enable-threaded-resolver --with-zlib --enable-symbol-hiding --with-ca-path=/var/cache/ca-certs/anchors --disable-ntlm-wb --disable-smb --enable-proxy --with-nghttp2 --enable-ipv6 --disable-telnet --disable-tftp --disable-pop3 --disable-gopher --enable-negotiate --without-brotli --without-zstd --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make  %{?_smp_mflags}
+%reconfigure  --enable-shared \
+--disable-ldap \
+--without-winidn \
+--with-libidn2 \
+--enable-threaded-resolver \
+--with-zlib \
+--enable-symbol-hiding \
+--with-ca-path=/var/cache/ca-certs/anchors \
+--disable-ntlm-wb \
+--disable-smb \
+--enable-proxy \
+--with-nghttp2 \
+--enable-ipv6 \
+--disable-telnet \
+--disable-tftp \
+--disable-pop3 \
+--disable-gopher \
+--enable-negotiate \
+--with-brotli \
+--with-zstd --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1602723289
+export SOURCE_DATE_EPOCH=1618919250
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -297,6 +455,27 @@ popd
 /usr/lib64/libcurl.so
 /usr/lib64/pkgconfig/libcurl.pc
 /usr/share/aclocal/*.m4
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libcurl.so
+/usr/lib32/pkgconfig/32libcurl.pc
+/usr/lib32/pkgconfig/libcurl.pc
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/libcurl.so.4
+/usr/lib64/libcurl.so.4.7.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libcurl.so.4
+/usr/lib32/libcurl.so.4.7.0
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/curl-config.1
+/usr/share/man/man1/curl.1
 /usr/share/man/man3/CURLINFO_ACTIVESOCKET.3
 /usr/share/man/man3/CURLINFO_APPCONNECT_TIME.3
 /usr/share/man/man3/CURLINFO_APPCONNECT_TIME_T.3
@@ -339,6 +518,7 @@ popd
 /usr/share/man/man3/CURLINFO_REDIRECT_TIME.3
 /usr/share/man/man3/CURLINFO_REDIRECT_TIME_T.3
 /usr/share/man/man3/CURLINFO_REDIRECT_URL.3
+/usr/share/man/man3/CURLINFO_REFERER.3
 /usr/share/man/man3/CURLINFO_REQUEST_SIZE.3
 /usr/share/man/man3/CURLINFO_RESPONSE_CODE.3
 /usr/share/man/man3/CURLINFO_RETRY_AFTER.3
@@ -387,6 +567,7 @@ popd
 /usr/share/man/man3/CURLOPT_ALTSVC_CTRL.3
 /usr/share/man/man3/CURLOPT_APPEND.3
 /usr/share/man/man3/CURLOPT_AUTOREFERER.3
+/usr/share/man/man3/CURLOPT_AWS_SIGV4.3
 /usr/share/man/man3/CURLOPT_BUFFERSIZE.3
 /usr/share/man/man3/CURLOPT_CAINFO.3
 /usr/share/man/man3/CURLOPT_CAPATH.3
@@ -425,6 +606,9 @@ popd
 /usr/share/man/man3/CURLOPT_DNS_SERVERS.3
 /usr/share/man/man3/CURLOPT_DNS_SHUFFLE_ADDRESSES.3
 /usr/share/man/man3/CURLOPT_DNS_USE_GLOBAL_CACHE.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYHOST.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYPEER.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYSTATUS.3
 /usr/share/man/man3/CURLOPT_DOH_URL.3
 /usr/share/man/man3/CURLOPT_EGDSOCKET.3
 /usr/share/man/man3/CURLOPT_ERRORBUFFER.3
@@ -455,6 +639,12 @@ popd
 /usr/share/man/man3/CURLOPT_HEADERDATA.3
 /usr/share/man/man3/CURLOPT_HEADERFUNCTION.3
 /usr/share/man/man3/CURLOPT_HEADEROPT.3
+/usr/share/man/man3/CURLOPT_HSTS.3
+/usr/share/man/man3/CURLOPT_HSTSREADDATA.3
+/usr/share/man/man3/CURLOPT_HSTSREADFUNCTION.3
+/usr/share/man/man3/CURLOPT_HSTSWRITEDATA.3
+/usr/share/man/man3/CURLOPT_HSTSWRITEFUNCTION.3
+/usr/share/man/man3/CURLOPT_HSTS_CTRL.3
 /usr/share/man/man3/CURLOPT_HTTP09_ALLOWED.3
 /usr/share/man/man3/CURLOPT_HTTP200ALIASES.3
 /usr/share/man/man3/CURLOPT_HTTPAUTH.3
@@ -744,27 +934,10 @@ popd
 /usr/share/man/man3/libcurl-url.3
 /usr/share/man/man3/libcurl.3
 
-%files dev32
-%defattr(-,root,root,-)
-/usr/lib32/libcurl.so
-/usr/lib32/pkgconfig/32libcurl.pc
-/usr/lib32/pkgconfig/libcurl.pc
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/libcurl.so.4
-/usr/lib64/libcurl.so.4.7.0
-
-%files lib32
-%defattr(-,root,root,-)
-/usr/lib32/libcurl.so.4
-/usr/lib32/libcurl.so.4.7.0
-
-%files man
-%defattr(0644,root,root,0755)
-/usr/share/man/man1/curl-config.1
-/usr/share/man/man1/curl.1
-
 %files staticdev
 %defattr(-,root,root,-)
 /usr/lib64/libcurl.a
+
+%files staticdev32
+%defattr(-,root,root,-)
+/usr/lib32/libcurl.a
