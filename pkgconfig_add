@@ -3,3 +3,6 @@
 libbrotlicommon
 libbrotlidec
 libbrotlienc
+gthread-2.0
+liblzma
+sqlite3

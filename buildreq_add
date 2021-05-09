@@ -5,8 +5,8 @@ acl-staticdev
 automake
 automake-dev
 brotli-dev
-brotli-staticdev
 brotli-dev32
+brotli-staticdev
 brotli-staticdev32
 buildreq-cmake
 buildreq-distutils3
@@ -48,9 +48,7 @@ json-c-staticdev
 libassuan-dev
 libc6
 libcomps-dev
-libcomps-staticdev
 libdnf-dev
-libdnf-staticdev
 libgcrypt
 libgcrypt-dev
 libidn2-dev
@@ -61,11 +59,8 @@ libidn-dev
 libidn-dev32
 libmodulemd
 libmodulemd-dev
-libmodulemd-staticdev
 librepo-dev
-librepo-staticdev
 libsolv-dev
-libsolv-staticdev
 libstdc++
 libtool
 libtool-dev
@@ -81,7 +76,6 @@ lzo-dev
 lzo-staticdev
 m4
 nettle-dev
-nettle-staticdev
 nghttp2-dev
 nghttp2-dev32
 nose
@@ -91,9 +85,6 @@ openssl-staticdev
 perl
 pkg-config
 pkg-config-dev
-pkgconfig(gthread-2.0)
-pkgconfig(liblzma)
-pkgconfig(sqlite3)
 pluggy
 popt-dev
 py-python
@@ -101,7 +92,6 @@ pytest
 python3-dev
 python3-staticdev
 rpm-dev
-rpm-staticdev
 Sphinx
 sqlite-autoconf-dev
 sqlite-autoconf-staticdev
