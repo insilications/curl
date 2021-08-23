@@ -100,6 +100,7 @@ m4
 nettle-dev
 nghttp2-dev
 nghttp2-dev32
+nghttp2-staticdev
 nose
 openssl-dev
 openssl-dev32
