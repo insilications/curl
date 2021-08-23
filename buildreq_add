@@ -19,9 +19,10 @@ ca-certs-static
 c-ares
 c-ares-dev
 check-dev
+CUnit-dev
+CUnit-staticdev
 curl-dev
 Cython
-Cython-dev
 dbus-dev
 dbus-dev32
 diffstat
