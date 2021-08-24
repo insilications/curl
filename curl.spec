@@ -224,7 +224,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629777014
+export SOURCE_DATE_EPOCH=1629777097
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -365,9 +365,9 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {
 find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a,/usr/lib64/libunistring.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a /usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:/usr/lib64/libunistring.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a,/usr/lib64/libbrotlicommon-static.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a /usr/lib64/libbrotlicommon-static.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 ## make_prepend64 end
@@ -445,9 +445,9 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {
 find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a,/usr/lib64/libunistring.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a /usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:/usr/lib64/libunistring.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a,/usr/lib64/libbrotlicommon-static.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a /usr/lib64/libbrotlicommon-static.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 ## make_prepend64 end
@@ -503,7 +503,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1629777014
+export SOURCE_DATE_EPOCH=1629777097
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
