@@ -37,8 +37,15 @@ BuildRequires : ca-certs
 BuildRequires : ca-certs-static
 BuildRequires : check-dev
 BuildRequires : curl-dev
+BuildRequires : dbus
+BuildRequires : dbus-broker
 BuildRequires : dbus-dev
 BuildRequires : dbus-dev32
+BuildRequires : dbus-extras
+BuildRequires : dbus-glib
+BuildRequires : dbus-glib-dev
+BuildRequires : dbus-python
+BuildRequires : desktop-file-utils
 BuildRequires : diffstat
 BuildRequires : diffutils
 BuildRequires : docbook-xml
@@ -143,21 +150,34 @@ BuildRequires : pytest
 BuildRequires : python3
 BuildRequires : python3-dev
 BuildRequires : python3-staticdev
+BuildRequires : readline-dev
 BuildRequires : rpm-dev
 BuildRequires : rsync
 BuildRequires : setuptools
+BuildRequires : sqlite-autoconf
 BuildRequires : sqlite-autoconf-dev
 BuildRequires : sqlite-autoconf-staticdev
+BuildRequires : sshpass
+BuildRequires : sshtunnel
 BuildRequires : stunnel
 BuildRequires : swig
 BuildRequires : systemd
 BuildRequires : systemd-dev
+BuildRequires : texinfo
 BuildRequires : tox
 BuildRequires : util-linux
 BuildRequires : util-linux-dev
 BuildRequires : util-linux-staticdev
 BuildRequires : virtualenv
 BuildRequires : xattr
+BuildRequires : xdg-dbus-proxy
+BuildRequires : xdg-desktop-portal
+BuildRequires : xdg-desktop-portal-dev
+BuildRequires : xdg-desktop-portal-gtk
+BuildRequires : xdg-desktop-portal-kde
+BuildRequires : xdg-user-dirs
+BuildRequires : xdg-user-dirs-gtk
+BuildRequires : xdg-utils
 BuildRequires : xz-dev
 BuildRequires : xz-dev32
 BuildRequires : xz-staticdev
@@ -204,7 +224,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629775793
+export SOURCE_DATE_EPOCH=1629776828
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -293,27 +313,42 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%reconfigure  --enable-shared \
---enable-static \
---disable-gopher \
+%reconfigure  --disable-gopher \
+--disable-ipv6 \
 --disable-ldap \
 --disable-ntlm-wb \
 --disable-pop3 \
 --disable-smb \
 --disable-telnet \
 --disable-tftp \
---disable-ipv6 \
+--disable-werror \
+--enable-cookies \
+--enable-crypto-auth \
+--enable-dict \
+--enable-doh \
+--enable-http-auth \
+--enable-libcurl-option \
+--enable-mime \
 --enable-negotiate \
+--enable-optimize \
+--enable-progress-meter \
 --enable-proxy \
+--enable-pthreads \
+--enable-shared \
+--enable-socketpair \
+--enable-static \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
+--enable-tls-srp \
+--enable-unix-sockets \
+--enable-versioned-symbols \
 --with-brotli \
 --with-ca-path=/var/cache/ca-certs/anchors \
 --with-gssapi=/usr \
 --with-libidn2 \
 --with-nghttp2 \
+--with-openssl=/usr \
 --without-winidn \
---with-ssl=/usr \
 --with-zlib \
 --with-zstd
 ## make_prepend64 content
@@ -349,27 +384,42 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%reconfigure  --enable-shared \
---enable-static \
---disable-gopher \
+%reconfigure  --disable-gopher \
+--disable-ipv6 \
 --disable-ldap \
 --disable-ntlm-wb \
 --disable-pop3 \
 --disable-smb \
 --disable-telnet \
 --disable-tftp \
---disable-ipv6 \
+--disable-werror \
+--enable-cookies \
+--enable-crypto-auth \
+--enable-dict \
+--enable-doh \
+--enable-http-auth \
+--enable-libcurl-option \
+--enable-mime \
 --enable-negotiate \
+--enable-optimize \
+--enable-progress-meter \
 --enable-proxy \
+--enable-pthreads \
+--enable-shared \
+--enable-socketpair \
+--enable-static \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
+--enable-tls-srp \
+--enable-unix-sockets \
+--enable-versioned-symbols \
 --with-brotli \
 --with-ca-path=/var/cache/ca-certs/anchors \
 --with-gssapi=/usr \
 --with-libidn2 \
 --with-nghttp2 \
+--with-openssl=/usr \
 --without-winidn \
---with-ssl=/usr \
 --with-zlib \
 --with-zstd
 ## make_prepend64 content
@@ -435,7 +485,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1629775793
+export SOURCE_DATE_EPOCH=1629776828
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
