@@ -126,6 +126,9 @@ python3-staticdev
 readline-dev
 rpm-dev
 rsync
+rtmpdump
+rtmpdump-dev
+rtmpdump-staticdev
 setuptools
 Sphinx
 sqlite-autoconf

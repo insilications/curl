@@ -21,11 +21,9 @@
 --enable-progress-meter
 --enable-proxy
 --enable-pthreads
---enable-socketpair
 --enable-symbol-hiding
 --enable-threaded-resolver
 --enable-tls-srp
---enable-unix-sockets
 --enable-versioned-symbols
 --with-brotli
 --with-ca-path=/var/cache/ca-certs/anchors
@@ -36,3 +34,4 @@
 --without-winidn
 --with-zlib
 --with-zstd
+--with-librtmp=/usr

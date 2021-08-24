@@ -153,6 +153,9 @@ BuildRequires : python3-staticdev
 BuildRequires : readline-dev
 BuildRequires : rpm-dev
 BuildRequires : rsync
+BuildRequires : rtmpdump
+BuildRequires : rtmpdump-dev
+BuildRequires : rtmpdump-staticdev
 BuildRequires : setuptools
 BuildRequires : sqlite-autoconf
 BuildRequires : sqlite-autoconf-dev
@@ -224,7 +227,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629777981
+export SOURCE_DATE_EPOCH=1629793446
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -313,7 +316,9 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%reconfigure  --disable-gopher \
+%reconfigure  --enable-shared \
+--enable-static \
+--disable-gopher \
 --disable-ipv6 \
 --disable-ldap \
 --disable-ntlm-wb \
@@ -334,9 +339,7 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 --enable-progress-meter \
 --enable-proxy \
 --enable-pthreads \
---enable-shared \
 --enable-socketpair \
---enable-static \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
 --enable-tls-srp \
@@ -419,7 +422,9 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%reconfigure  --disable-gopher \
+%reconfigure  --enable-shared \
+--enable-static \
+--disable-gopher \
 --disable-ipv6 \
 --disable-ldap \
 --disable-ntlm-wb \
@@ -440,9 +445,7 @@ export LDFLAGS="${LDFLAGS_USE}"
 --enable-progress-meter \
 --enable-proxy \
 --enable-pthreads \
---enable-shared \
 --enable-socketpair \
---enable-static \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
 --enable-tls-srp \
@@ -506,14 +509,15 @@ export CFFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-h
 export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
 sd --flags mi '^AC_INIT\((.*\n.*\)|.*\))' '$0\nAM_MAINTAINER_MODE([disable])' configure.ac
 %reconfigure  --enable-shared \
+--disable-static \
 --disable-gopher \
+--disable-ipv6 \
 --disable-ldap \
 --disable-ntlm-wb \
 --disable-pop3 \
 --disable-smb \
 --disable-telnet \
 --disable-tftp \
---enable-ipv6 \
 --enable-negotiate \
 --enable-proxy \
 --enable-symbol-hiding \
@@ -521,7 +525,7 @@ sd --flags mi '^AC_INIT\((.*\n.*\)|.*\))' '$0\nAM_MAINTAINER_MODE([disable])' co
 --with-brotli \
 --with-ca-path=/var/cache/ca-certs/anchors \
 --with-libidn2 \
---with-nghttp2 \
+--with-openssl=/usr \
 --without-winidn \
 --with-zlib \
 --with-zstd --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
@@ -529,7 +533,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1629777981
+export SOURCE_DATE_EPOCH=1629793446
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
