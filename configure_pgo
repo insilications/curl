@@ -1,3 +1,5 @@
+--enable-shared
+--enable-static
 --disable-gopher
 --disable-ipv6
 --disable-ldap
@@ -19,9 +21,7 @@
 --enable-progress-meter
 --enable-proxy
 --enable-pthreads
---enable-shared
 --enable-socketpair
---enable-static
 --enable-symbol-hiding
 --enable-threaded-resolver
 --enable-tls-srp

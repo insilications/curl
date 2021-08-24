@@ -1,12 +1,13 @@
 --enable-shared
+--disable-static
 --disable-gopher
+--disable-ipv6
 --disable-ldap
 --disable-ntlm-wb
 --disable-pop3
 --disable-smb
 --disable-telnet
 --disable-tftp
---enable-ipv6
 --enable-negotiate
 --enable-proxy
 --enable-symbol-hiding
@@ -14,7 +15,7 @@
 --with-brotli
 --with-ca-path=/var/cache/ca-certs/anchors
 --with-libidn2
---with-nghttp2
+--with-openssl=/usr
 --without-winidn
 --with-zlib
 --with-zstd
