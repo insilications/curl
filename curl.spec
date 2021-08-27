@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : curl
-Version  : 26.8.2021
+Version  : 7.78.0
 Release  : 401
-URL      : file:///aot/build/clearlinux/packages/curl/curl-v26.8.2021.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/curl/curl-v26.8.2021.tar.gz
+URL      : file:///aot/build/clearlinux/packages/curl/curl-v7.78.0.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/curl/curl-v7.78.0.tar.gz
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -229,7 +229,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1630055248
+export SOURCE_DATE_EPOCH=1630077625
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -351,10 +351,10 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 --with-libidn2 \
 --with-nghttp2 \
 --with-openssl=/usr \
---without-winidn \
 --with-zlib \
 --with-zstd \
---with-librtmp=/usr
+--with-librtmp=/usr \
+--without-winidn
 ## make_prepend64 content
 # find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
@@ -365,15 +365,17 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 # find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec-static.a,/usr/lib64/libbrotlicommon-static.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
+sd "\-lssl" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libssl.a,/usr/lib64/libcrypto.a,/usr/lib64/libz.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a /usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:/usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a /usr/lib64/libbrotlicommon-static.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 ## make_prepend64 end
 ## make_macro content
 make -j16 V=1 VERBOSE=1
@@ -456,10 +458,10 @@ export LDFLAGS="${LDFLAGS_USE}"
 --with-libidn2 \
 --with-nghttp2 \
 --with-openssl=/usr \
---without-winidn \
 --with-zlib \
 --with-zstd \
---with-librtmp=/usr
+--with-librtmp=/usr \
+--without-winidn
 ## make_prepend64 content
 # find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
@@ -470,15 +472,17 @@ export LDFLAGS="${LDFLAGS_USE}"
 # find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec-static.a,/usr/lib64/libbrotlicommon-static.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
+sd "\-lssl" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libssl.a,/usr/lib64/libcrypto.a,/usr/lib64/libz.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a /usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:/usr/lib64/libunistring.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a /usr/lib64/libbrotlicommon-static.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
-find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 ## make_prepend64 end
 ## make_macro content
 make -j16 V=1 VERBOSE=1
@@ -533,7 +537,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1630055248
+export SOURCE_DATE_EPOCH=1630077625
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
