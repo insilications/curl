@@ -25,4 +25,4 @@ export LD_LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
 export LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
 export $(dbus-launch)
 make -j1 test V=1 VERBOSE=1 || :
-make -j1 test-torture V=1 VERBOSE=1 || :
+# make -j1 test-torture V=1 VERBOSE=1 || :
