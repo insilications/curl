@@ -27,7 +27,9 @@
 --enable-versioned-symbols
 --with-brotli
 --with-ca-path=/var/cache/ca-certs/anchors
---with-gssapi
+--with-gssapi-includes=/usr/include/gssapi
+--with-gssapi-libs=/usr/lib64
+--with-gssapi=/usr
 --with-libidn2
 --with-nghttp2
 --with-openssl=/usr
