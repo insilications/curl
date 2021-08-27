@@ -5,6 +5,7 @@
 --disable-ldap
 --disable-ntlm-wb
 --disable-pop3
+--disable-gcc-warnings
 --disable-smb
 --disable-telnet
 --disable-tftp

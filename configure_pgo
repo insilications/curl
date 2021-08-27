@@ -9,6 +9,7 @@
 --disable-telnet
 --disable-tftp
 --disable-werror
+--disable-gcc-warnings
 --enable-cookies
 --enable-crypto-auth
 --enable-dict
