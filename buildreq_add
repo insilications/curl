@@ -9,6 +9,7 @@ acl-dev
 acl-staticdev
 automake
 automake-dev
+bison
 boost-dev
 brotli-dev
 brotli-dev32
@@ -23,6 +24,7 @@ ca-certs
 ca-certs-static
 check-dev
 curl-dev
+cyrus-sasl-dev
 c-ares
 c-ares-dev
 dbus
@@ -33,18 +35,23 @@ dbus-extras
 dbus-glib
 dbus-glib-dev
 dbus-python
+dejagnu
 desktop-file-utils
 diffstat
 diffutils
 docbook-xml
 doxygen
+e2fsprogs-data
 e2fsprogs-dev
 e2fsprogs-dev32
+e2fsprogs-extras
 expat-dev
 expat-staticdev
+expect
 extra-cmake-modules
 file-dev
 findutils
+flex
 gcc-dev32
 gcc-libgcc32
 gcc-libstdc++32
@@ -68,8 +75,12 @@ gtk-doc-dev
 json-c
 json-c-dev
 json-c-staticdev
+keyutils-dev
 krb5
+krb5-bin
+krb5-data
 krb5-dev
+krb5-lib
 libassuan-dev
 libc6
 libcomps-dev
@@ -104,6 +115,7 @@ libxml2-staticdev
 libxslt-bin
 libxslt-dev
 libxslt-staticdev
+lmdb-dev
 lz4-dev
 lz4-staticdev
 lzo-dev
@@ -114,6 +126,7 @@ nghttp2-dev
 nghttp2-dev32
 nghttp2-staticdev
 nose
+openldap-dev
 openssl-dev
 openssl-dev32
 openssl-staticdev
@@ -347,9 +360,6 @@ perl-Encode-JIS2K
 perl-Encode-Locale
 perl-Error
 perl-Eval-Closure
-perl-Event
-perl-Event-Lib
-perl-Event-RPC
 perl-Exception-Class
 perl-Exporter-Declare
 perl-Exporter-Easy
@@ -935,6 +945,7 @@ python3-dev
 python3-staticdev
 py-python
 readline-dev
+readline-dev32
 rpm-dev
 rsync
 rtmpdump
@@ -951,6 +962,7 @@ swig
 systemd
 systemd-dev
 tcl
+tcl-dev
 texinfo
 time
 tk
@@ -972,6 +984,7 @@ xmlto
 xz-dev
 xz-dev32
 xz-staticdev
+yasm
 zlib
 zlib-dev
 zlib-dev32
