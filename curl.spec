@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : curl
-Version  : 7.78.0
+Version  : 26.8.2021
 Release  : 401
-URL      : file:///aot/build/clearlinux/packages/curl/curl-v7.78.0.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/curl/curl-v7.78.0.tar.gz
+URL      : file:///aot/build/clearlinux/packages/curl/curl-v26.8.2021.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/curl/curl-v26.8.2021.tar.gz
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
@@ -80,11 +80,13 @@ BuildRequires : gperf
 BuildRequires : gpgme
 BuildRequires : gpgme-dev
 BuildRequires : groff
+BuildRequires : gssapi
 BuildRequires : gtk-doc
 BuildRequires : gtk-doc-dev
 BuildRequires : json-c
 BuildRequires : json-c-dev
 BuildRequires : json-c-staticdev
+BuildRequires : krb5
 BuildRequires : libassuan-dev
 BuildRequires : libc6
 BuildRequires : libcomps-dev
@@ -227,7 +229,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629793446
+export SOURCE_DATE_EPOCH=1630055248
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -339,11 +341,9 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 --enable-progress-meter \
 --enable-proxy \
 --enable-pthreads \
---enable-socketpair \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
 --enable-tls-srp \
---enable-unix-sockets \
 --enable-versioned-symbols \
 --with-brotli \
 --with-ca-path=/var/cache/ca-certs/anchors \
@@ -353,7 +353,8 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 --with-openssl=/usr \
 --without-winidn \
 --with-zlib \
---with-zstd
+--with-zstd \
+--with-librtmp=/usr
 ## make_prepend64 content
 # find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
@@ -445,11 +446,9 @@ export LDFLAGS="${LDFLAGS_USE}"
 --enable-progress-meter \
 --enable-proxy \
 --enable-pthreads \
---enable-socketpair \
 --enable-symbol-hiding \
 --enable-threaded-resolver \
 --enable-tls-srp \
---enable-unix-sockets \
 --enable-versioned-symbols \
 --with-brotli \
 --with-ca-path=/var/cache/ca-certs/anchors \
@@ -459,7 +458,8 @@ export LDFLAGS="${LDFLAGS_USE}"
 --with-openssl=/usr \
 --without-winidn \
 --with-zlib \
---with-zstd
+--with-zstd \
+--with-librtmp=/usr
 ## make_prepend64 content
 # find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
@@ -533,7 +533,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1629793446
+export SOURCE_DATE_EPOCH=1630055248
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

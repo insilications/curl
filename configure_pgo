@@ -31,7 +31,7 @@
 --with-libidn2
 --with-nghttp2
 --with-openssl=/usr
---without-winidn
 --with-zlib
 --with-zstd
 --with-librtmp=/usr
+--without-winidn
