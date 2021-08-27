@@ -1,3 +1,5 @@
+libcurl.so.4:CURL_OPENSSL_4
+libcurl.so.4:HIDDEN
 libcurl.so.4:curl_easy_cleanup
 libcurl.so.4:curl_easy_duphandle
 libcurl.so.4:curl_easy_escape
