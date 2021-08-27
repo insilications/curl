@@ -76,7 +76,6 @@ json-c
 json-c-dev
 json-c-staticdev
 keyutils-dev
-krb5
 krb5-bin
 krb5-data
 krb5-dev
