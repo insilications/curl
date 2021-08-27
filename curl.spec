@@ -11,6 +11,9 @@ Source0  : file:///aot/build/clearlinux/packages/curl/curl-v7.78.0.tar.gz
 Summary  : Library to transfer files with ftp, http, etc.
 Group    : Development/Tools
 License  : MIT
+Requires: curl-bin = %{version}-%{release}
+Requires: curl-lib = %{version}-%{release}
+Requires: curl-man = %{version}-%{release}
 Requires: ca-certs
 BuildRequires : CUnit-dev
 BuildRequires : CUnit-staticdev
@@ -1027,6 +1030,7 @@ Patch2: 0002-Add-pacrunner-call-for-autoproxy-resolution.patch
 Patch3: 0003-Check-the-state-file-pacdiscovery-sets.patch
 Patch4: 0004-Avoid-stripping-the-g-option.patch
 Patch5: 0001-Open-library-file-descriptors-with-O_CLOEXEC.patch
+Patch6: 0001-http2-test-ipv4-only.patch
 
 %description
 _   _ ____  _
@@ -1034,6 +1038,70 @@ ___| | | |  _ \| |
 / __| | | | |_) | |
 | (__| |_| |  _ <| |___
 \___|\___/|_| \_\_____|
+
+%package bin
+Summary: bin components for the curl package.
+Group: Binaries
+
+%description bin
+bin components for the curl package.
+
+
+%package dev
+Summary: dev components for the curl package.
+Group: Development
+Requires: curl-lib = %{version}-%{release}
+Requires: curl-bin = %{version}-%{release}
+Provides: curl-devel = %{version}-%{release}
+Requires: curl = %{version}-%{release}
+
+%description dev
+dev components for the curl package.
+
+
+%package dev32
+Summary: dev32 components for the curl package.
+Group: Default
+Requires: curl-lib32 = %{version}-%{release}
+Requires: curl-bin = %{version}-%{release}
+Requires: curl-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the curl package.
+
+
+%package lib
+Summary: lib components for the curl package.
+Group: Libraries
+
+%description lib
+lib components for the curl package.
+
+
+%package lib32
+Summary: lib32 components for the curl package.
+Group: Default
+
+%description lib32
+lib32 components for the curl package.
+
+
+%package man
+Summary: man components for the curl package.
+Group: Default
+
+%description man
+man components for the curl package.
+
+
+%package staticdev
+Summary: staticdev components for the curl package.
+Group: Default
+Requires: curl-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the curl package.
+
 
 %prep
 %setup -q -n curl
@@ -1043,6 +1111,7 @@ cd %{_builddir}/curl
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 pushd %{_builddir}
 cp -a %{_builddir}/curl build32
 popd
@@ -1053,23 +1122,30 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1630092614
+export SOURCE_DATE_EPOCH=1630096237
 export GCC_IGNORE_WERROR=1
-## altflags1 content
-export CFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+## altflags_pgo content
+## pgo generate
+export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage -fprofile-partial-training -fprofile-correction -freorder-functions --coverage -lgcov"
+export CFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export FFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export LIBS="-lgcov"
+## pgo use
 ## -fno-tree-vectorize: disable -ftree-vectorize thus disable -ftree-loop-vectorize and -ftree-slp-vectorize
 ## -Ofast -ffast-math
 ## -funroll-loops maybe dangerous
 ## -Wl,-z,max-page-size=0x1000
 ## -pthread -lpthread
 ## -Wl,-Bsymbolic-functions
-export CXXFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
-#
-export FCFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
-export FFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
-export CFFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
-#
-export LDFLAGS="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+export PGO_USE="-Wmissing-profile -Wcoverage-mismatch -fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-partial-training -fprofile-correction -freorder-functions"
+export CFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export FCFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export FFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export CXXFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export LDFLAGS_USE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
 #
 export AR=/usr/bin/gcc-ar
 export RANLIB=/usr/bin/gcc-ranlib
@@ -1125,10 +1201,17 @@ export LIBVA_DRIVER_NAME=vdpau
 export LIBVA_DRIVERS_PATH=/usr/lib64/dri
 export GTK_RC_FILES=/etc/gtk/gtkrc
 export FONTCONFIG_PATH=/usr/share/defaults/fonts
-## altflags1 end
+## altflags_pgo end
 sd -r '\s--dirty\s' ' ' .
 sd -r 'git describe' 'git describe --abbrev=0' .
 sd --flags mi '^AC_INIT\((.*\n.*\)|.*\))' '$0\nAM_MAINTAINER_MODE([disable])' configure.ac
+if [ ! -f statuspgo ]; then
+echo PGO Phase 1
+export CFLAGS="${CFLAGS_GENERATE}"
+export CXXFLAGS="${CXXFLAGS_GENERATE}"
+export FFLAGS="${FFLAGS_GENERATE}"
+export FCFLAGS="${FCFLAGS_GENERATE}"
+export LDFLAGS="${LDFLAGS_GENERATE}"
 %reconfigure  --enable-shared \
 --enable-static \
 --disable-gopher \
@@ -1192,6 +1275,115 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite
 make -j16 V=1 VERBOSE=1
 ## make_macro end
 
+## profile_payload start
+unset LD_LIBRARY_PATH
+unset LIBRARY_PATH
+exit
+export DISPLAY=:0
+export __GL_SYNC_TO_VBLANK=0
+export __GL_SYNC_DISPLAY_DEVICE=DFP-1
+export VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE=DFP-1
+export LANG=en_US.UTF-8
+export XDG_CONFIG_DIRS=/usr/share/xdg:/etc/xdg
+export XDG_SEAT=seat0
+export XDG_SESSION_TYPE=tty
+export XDG_CURRENT_DESKTOP=KDE
+export XDG_SESSION_CLASS=user
+export XDG_VTNR=1
+export XDG_SESSION_ID=1
+export XDG_RUNTIME_DIR=/run/user/1000
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export KDE_SESSION_VERSION=5
+export KDE_SESSION_UID=1000
+export KDE_FULL_SESSION=true
+export KDE_APPLICATIONS_AS_SCOPE=1
+export VDPAU_DRIVER=nvidia
+export LIBVA_DRIVER_NAME=vdpau
+export LIBVA_DRIVERS_PATH=/usr/lib64/dri
+export GTK_RC_FILES=/etc/gtk/gtkrc
+export FONTCONFIG_PATH=/usr/share/defaults/fonts
+export LD_LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
+export LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
+export $(dbus-launch)
+make -j1 test V=1 VERBOSE=1 || :
+# make -j1 test-torture V=1 VERBOSE=1 || :
+export LD_LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/haswell/pulseaudio:/usr/lib64/haswell/alsa-lib:/usr/lib64/haswell/gstreamer-1.0:/usr/lib64/haswell/pipewire-0.3:/usr/lib64/haswell/spa-0.2:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
+export LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/haswell/pulseaudio:/usr/lib64/haswell/alsa-lib:/usr/lib64/haswell/gstreamer-1.0:/usr/lib64/haswell/pipewire-0.3:/usr/lib64/haswell/spa-0.2:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
+## profile_payload end
+make clean || :
+echo USED > statuspgo
+fi
+if [ -f statuspgo ]; then
+echo PGO Phase 2
+export CFLAGS="${CFLAGS_USE}"
+export CXXFLAGS="${CXXFLAGS_USE}"
+export FFLAGS="${FFLAGS_USE}"
+export FCFLAGS="${FCFLAGS_USE}"
+export LDFLAGS="${LDFLAGS_USE}"
+%reconfigure  --enable-shared \
+--enable-static \
+--disable-gopher \
+--disable-ipv6 \
+--disable-ldap \
+--disable-ntlm-wb \
+--disable-pop3 \
+--disable-smb \
+--disable-telnet \
+--disable-tftp \
+--disable-werror \
+--enable-cookies \
+--enable-crypto-auth \
+--enable-dict \
+--enable-doh \
+--enable-http-auth \
+--enable-libcurl-option \
+--enable-mime \
+--enable-negotiate \
+--enable-optimize \
+--enable-progress-meter \
+--enable-proxy \
+--enable-pthreads \
+--enable-symbol-hiding \
+--enable-threaded-resolver \
+--enable-tls-srp \
+--enable-versioned-symbols \
+--with-brotli \
+--with-ca-path=/var/cache/ca-certs/anchors \
+--with-gssapi \
+--with-libidn2 \
+--with-nghttp2 \
+--with-openssl=/usr \
+--with-zlib \
+--with-zstd \
+--with-librtmp=/usr \
+--without-winidn
+## make_prepend64 content
+# find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libssl.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libcrypto.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libnghttp2.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libsqlite3.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libidn2.a,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libunistring.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libbrotlidec-static.a,/usr/lib64/libbrotlicommon-static.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+# sd "\-lssl" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libssl.a,/usr/lib64/libcrypto.a,/usr/lib64/libz.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lidn2\b:/usr/lib64/libidn2.a /usr/lib64/libunistring.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lunistring\b:/usr/lib64/libunistring.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrotlidec-static.a /usr/lib64/libbrotlicommon-static.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
+## make_prepend64 end
+## make_macro content
+make -j16 V=1 VERBOSE=1
+## make_macro end
+fi
+
 pushd ../build32/
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -1240,7 +1432,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1630092614
+export SOURCE_DATE_EPOCH=1630096237
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -1255,3 +1447,508 @@ popd
 
 %files
 %defattr(-,root,root,-)
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/curl
+/usr/bin/curl-config
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/curl/curl.h
+/usr/include/curl/curlver.h
+/usr/include/curl/easy.h
+/usr/include/curl/mprintf.h
+/usr/include/curl/multi.h
+/usr/include/curl/options.h
+/usr/include/curl/stdcheaders.h
+/usr/include/curl/system.h
+/usr/include/curl/typecheck-gcc.h
+/usr/include/curl/urlapi.h
+/usr/lib64/libcurl.so
+/usr/lib64/pkgconfig/libcurl.pc
+/usr/share/aclocal/*.m4
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libcurl.so
+/usr/lib32/pkgconfig/32libcurl.pc
+/usr/lib32/pkgconfig/libcurl.pc
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/libcurl.so.4
+/usr/lib64/libcurl.so.4.7.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libcurl.so.4
+/usr/lib32/libcurl.so.4.7.0
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/curl-config.1
+/usr/share/man/man1/curl.1
+/usr/share/man/man3/CURLINFO_ACTIVESOCKET.3
+/usr/share/man/man3/CURLINFO_APPCONNECT_TIME.3
+/usr/share/man/man3/CURLINFO_APPCONNECT_TIME_T.3
+/usr/share/man/man3/CURLINFO_CERTINFO.3
+/usr/share/man/man3/CURLINFO_CONDITION_UNMET.3
+/usr/share/man/man3/CURLINFO_CONNECT_TIME.3
+/usr/share/man/man3/CURLINFO_CONNECT_TIME_T.3
+/usr/share/man/man3/CURLINFO_CONTENT_LENGTH_DOWNLOAD.3
+/usr/share/man/man3/CURLINFO_CONTENT_LENGTH_DOWNLOAD_T.3
+/usr/share/man/man3/CURLINFO_CONTENT_LENGTH_UPLOAD.3
+/usr/share/man/man3/CURLINFO_CONTENT_LENGTH_UPLOAD_T.3
+/usr/share/man/man3/CURLINFO_CONTENT_TYPE.3
+/usr/share/man/man3/CURLINFO_COOKIELIST.3
+/usr/share/man/man3/CURLINFO_EFFECTIVE_METHOD.3
+/usr/share/man/man3/CURLINFO_EFFECTIVE_URL.3
+/usr/share/man/man3/CURLINFO_FILETIME.3
+/usr/share/man/man3/CURLINFO_FILETIME_T.3
+/usr/share/man/man3/CURLINFO_FTP_ENTRY_PATH.3
+/usr/share/man/man3/CURLINFO_HEADER_SIZE.3
+/usr/share/man/man3/CURLINFO_HTTPAUTH_AVAIL.3
+/usr/share/man/man3/CURLINFO_HTTP_CONNECTCODE.3
+/usr/share/man/man3/CURLINFO_HTTP_VERSION.3
+/usr/share/man/man3/CURLINFO_LASTSOCKET.3
+/usr/share/man/man3/CURLINFO_LOCAL_IP.3
+/usr/share/man/man3/CURLINFO_LOCAL_PORT.3
+/usr/share/man/man3/CURLINFO_NAMELOOKUP_TIME.3
+/usr/share/man/man3/CURLINFO_NAMELOOKUP_TIME_T.3
+/usr/share/man/man3/CURLINFO_NUM_CONNECTS.3
+/usr/share/man/man3/CURLINFO_OS_ERRNO.3
+/usr/share/man/man3/CURLINFO_PRETRANSFER_TIME.3
+/usr/share/man/man3/CURLINFO_PRETRANSFER_TIME_T.3
+/usr/share/man/man3/CURLINFO_PRIMARY_IP.3
+/usr/share/man/man3/CURLINFO_PRIMARY_PORT.3
+/usr/share/man/man3/CURLINFO_PRIVATE.3
+/usr/share/man/man3/CURLINFO_PROTOCOL.3
+/usr/share/man/man3/CURLINFO_PROXYAUTH_AVAIL.3
+/usr/share/man/man3/CURLINFO_PROXY_ERROR.3
+/usr/share/man/man3/CURLINFO_PROXY_SSL_VERIFYRESULT.3
+/usr/share/man/man3/CURLINFO_REDIRECT_COUNT.3
+/usr/share/man/man3/CURLINFO_REDIRECT_TIME.3
+/usr/share/man/man3/CURLINFO_REDIRECT_TIME_T.3
+/usr/share/man/man3/CURLINFO_REDIRECT_URL.3
+/usr/share/man/man3/CURLINFO_REFERER.3
+/usr/share/man/man3/CURLINFO_REQUEST_SIZE.3
+/usr/share/man/man3/CURLINFO_RESPONSE_CODE.3
+/usr/share/man/man3/CURLINFO_RETRY_AFTER.3
+/usr/share/man/man3/CURLINFO_RTSP_CLIENT_CSEQ.3
+/usr/share/man/man3/CURLINFO_RTSP_CSEQ_RECV.3
+/usr/share/man/man3/CURLINFO_RTSP_SERVER_CSEQ.3
+/usr/share/man/man3/CURLINFO_RTSP_SESSION_ID.3
+/usr/share/man/man3/CURLINFO_SCHEME.3
+/usr/share/man/man3/CURLINFO_SIZE_DOWNLOAD.3
+/usr/share/man/man3/CURLINFO_SIZE_DOWNLOAD_T.3
+/usr/share/man/man3/CURLINFO_SIZE_UPLOAD.3
+/usr/share/man/man3/CURLINFO_SIZE_UPLOAD_T.3
+/usr/share/man/man3/CURLINFO_SPEED_DOWNLOAD.3
+/usr/share/man/man3/CURLINFO_SPEED_DOWNLOAD_T.3
+/usr/share/man/man3/CURLINFO_SPEED_UPLOAD.3
+/usr/share/man/man3/CURLINFO_SPEED_UPLOAD_T.3
+/usr/share/man/man3/CURLINFO_SSL_ENGINES.3
+/usr/share/man/man3/CURLINFO_SSL_VERIFYRESULT.3
+/usr/share/man/man3/CURLINFO_STARTTRANSFER_TIME.3
+/usr/share/man/man3/CURLINFO_STARTTRANSFER_TIME_T.3
+/usr/share/man/man3/CURLINFO_TLS_SESSION.3
+/usr/share/man/man3/CURLINFO_TLS_SSL_PTR.3
+/usr/share/man/man3/CURLINFO_TOTAL_TIME.3
+/usr/share/man/man3/CURLINFO_TOTAL_TIME_T.3
+/usr/share/man/man3/CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE.3
+/usr/share/man/man3/CURLMOPT_CONTENT_LENGTH_PENALTY_SIZE.3
+/usr/share/man/man3/CURLMOPT_MAXCONNECTS.3
+/usr/share/man/man3/CURLMOPT_MAX_CONCURRENT_STREAMS.3
+/usr/share/man/man3/CURLMOPT_MAX_HOST_CONNECTIONS.3
+/usr/share/man/man3/CURLMOPT_MAX_PIPELINE_LENGTH.3
+/usr/share/man/man3/CURLMOPT_MAX_TOTAL_CONNECTIONS.3
+/usr/share/man/man3/CURLMOPT_PIPELINING.3
+/usr/share/man/man3/CURLMOPT_PIPELINING_SERVER_BL.3
+/usr/share/man/man3/CURLMOPT_PIPELINING_SITE_BL.3
+/usr/share/man/man3/CURLMOPT_PUSHDATA.3
+/usr/share/man/man3/CURLMOPT_PUSHFUNCTION.3
+/usr/share/man/man3/CURLMOPT_SOCKETDATA.3
+/usr/share/man/man3/CURLMOPT_SOCKETFUNCTION.3
+/usr/share/man/man3/CURLMOPT_TIMERDATA.3
+/usr/share/man/man3/CURLMOPT_TIMERFUNCTION.3
+/usr/share/man/man3/CURLOPT_ABSTRACT_UNIX_SOCKET.3
+/usr/share/man/man3/CURLOPT_ACCEPTTIMEOUT_MS.3
+/usr/share/man/man3/CURLOPT_ACCEPT_ENCODING.3
+/usr/share/man/man3/CURLOPT_ADDRESS_SCOPE.3
+/usr/share/man/man3/CURLOPT_ALTSVC.3
+/usr/share/man/man3/CURLOPT_ALTSVC_CTRL.3
+/usr/share/man/man3/CURLOPT_APPEND.3
+/usr/share/man/man3/CURLOPT_AUTOREFERER.3
+/usr/share/man/man3/CURLOPT_AWS_SIGV4.3
+/usr/share/man/man3/CURLOPT_BUFFERSIZE.3
+/usr/share/man/man3/CURLOPT_CAINFO.3
+/usr/share/man/man3/CURLOPT_CAINFO_BLOB.3
+/usr/share/man/man3/CURLOPT_CAPATH.3
+/usr/share/man/man3/CURLOPT_CERTINFO.3
+/usr/share/man/man3/CURLOPT_CHUNK_BGN_FUNCTION.3
+/usr/share/man/man3/CURLOPT_CHUNK_DATA.3
+/usr/share/man/man3/CURLOPT_CHUNK_END_FUNCTION.3
+/usr/share/man/man3/CURLOPT_CLOSESOCKETDATA.3
+/usr/share/man/man3/CURLOPT_CLOSESOCKETFUNCTION.3
+/usr/share/man/man3/CURLOPT_CONNECTTIMEOUT.3
+/usr/share/man/man3/CURLOPT_CONNECTTIMEOUT_MS.3
+/usr/share/man/man3/CURLOPT_CONNECT_ONLY.3
+/usr/share/man/man3/CURLOPT_CONNECT_TO.3
+/usr/share/man/man3/CURLOPT_CONV_FROM_NETWORK_FUNCTION.3
+/usr/share/man/man3/CURLOPT_CONV_FROM_UTF8_FUNCTION.3
+/usr/share/man/man3/CURLOPT_CONV_TO_NETWORK_FUNCTION.3
+/usr/share/man/man3/CURLOPT_COOKIE.3
+/usr/share/man/man3/CURLOPT_COOKIEFILE.3
+/usr/share/man/man3/CURLOPT_COOKIEJAR.3
+/usr/share/man/man3/CURLOPT_COOKIELIST.3
+/usr/share/man/man3/CURLOPT_COOKIESESSION.3
+/usr/share/man/man3/CURLOPT_COPYPOSTFIELDS.3
+/usr/share/man/man3/CURLOPT_CRLF.3
+/usr/share/man/man3/CURLOPT_CRLFILE.3
+/usr/share/man/man3/CURLOPT_CURLU.3
+/usr/share/man/man3/CURLOPT_CUSTOMREQUEST.3
+/usr/share/man/man3/CURLOPT_DEBUGDATA.3
+/usr/share/man/man3/CURLOPT_DEBUGFUNCTION.3
+/usr/share/man/man3/CURLOPT_DEFAULT_PROTOCOL.3
+/usr/share/man/man3/CURLOPT_DIRLISTONLY.3
+/usr/share/man/man3/CURLOPT_DISALLOW_USERNAME_IN_URL.3
+/usr/share/man/man3/CURLOPT_DNS_CACHE_TIMEOUT.3
+/usr/share/man/man3/CURLOPT_DNS_INTERFACE.3
+/usr/share/man/man3/CURLOPT_DNS_LOCAL_IP4.3
+/usr/share/man/man3/CURLOPT_DNS_LOCAL_IP6.3
+/usr/share/man/man3/CURLOPT_DNS_SERVERS.3
+/usr/share/man/man3/CURLOPT_DNS_SHUFFLE_ADDRESSES.3
+/usr/share/man/man3/CURLOPT_DNS_USE_GLOBAL_CACHE.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYHOST.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYPEER.3
+/usr/share/man/man3/CURLOPT_DOH_SSL_VERIFYSTATUS.3
+/usr/share/man/man3/CURLOPT_DOH_URL.3
+/usr/share/man/man3/CURLOPT_EGDSOCKET.3
+/usr/share/man/man3/CURLOPT_ERRORBUFFER.3
+/usr/share/man/man3/CURLOPT_EXPECT_100_TIMEOUT_MS.3
+/usr/share/man/man3/CURLOPT_FAILONERROR.3
+/usr/share/man/man3/CURLOPT_FILETIME.3
+/usr/share/man/man3/CURLOPT_FNMATCH_DATA.3
+/usr/share/man/man3/CURLOPT_FNMATCH_FUNCTION.3
+/usr/share/man/man3/CURLOPT_FOLLOWLOCATION.3
+/usr/share/man/man3/CURLOPT_FORBID_REUSE.3
+/usr/share/man/man3/CURLOPT_FRESH_CONNECT.3
+/usr/share/man/man3/CURLOPT_FTPPORT.3
+/usr/share/man/man3/CURLOPT_FTPSSLAUTH.3
+/usr/share/man/man3/CURLOPT_FTP_ACCOUNT.3
+/usr/share/man/man3/CURLOPT_FTP_ALTERNATIVE_TO_USER.3
+/usr/share/man/man3/CURLOPT_FTP_CREATE_MISSING_DIRS.3
+/usr/share/man/man3/CURLOPT_FTP_FILEMETHOD.3
+/usr/share/man/man3/CURLOPT_FTP_RESPONSE_TIMEOUT.3
+/usr/share/man/man3/CURLOPT_FTP_SKIP_PASV_IP.3
+/usr/share/man/man3/CURLOPT_FTP_SSL_CCC.3
+/usr/share/man/man3/CURLOPT_FTP_USE_EPRT.3
+/usr/share/man/man3/CURLOPT_FTP_USE_EPSV.3
+/usr/share/man/man3/CURLOPT_FTP_USE_PRET.3
+/usr/share/man/man3/CURLOPT_GSSAPI_DELEGATION.3
+/usr/share/man/man3/CURLOPT_HAPPY_EYEBALLS_TIMEOUT_MS.3
+/usr/share/man/man3/CURLOPT_HAPROXYPROTOCOL.3
+/usr/share/man/man3/CURLOPT_HEADER.3
+/usr/share/man/man3/CURLOPT_HEADERDATA.3
+/usr/share/man/man3/CURLOPT_HEADERFUNCTION.3
+/usr/share/man/man3/CURLOPT_HEADEROPT.3
+/usr/share/man/man3/CURLOPT_HSTS.3
+/usr/share/man/man3/CURLOPT_HSTSREADDATA.3
+/usr/share/man/man3/CURLOPT_HSTSREADFUNCTION.3
+/usr/share/man/man3/CURLOPT_HSTSWRITEDATA.3
+/usr/share/man/man3/CURLOPT_HSTSWRITEFUNCTION.3
+/usr/share/man/man3/CURLOPT_HSTS_CTRL.3
+/usr/share/man/man3/CURLOPT_HTTP09_ALLOWED.3
+/usr/share/man/man3/CURLOPT_HTTP200ALIASES.3
+/usr/share/man/man3/CURLOPT_HTTPAUTH.3
+/usr/share/man/man3/CURLOPT_HTTPGET.3
+/usr/share/man/man3/CURLOPT_HTTPHEADER.3
+/usr/share/man/man3/CURLOPT_HTTPPOST.3
+/usr/share/man/man3/CURLOPT_HTTPPROXYTUNNEL.3
+/usr/share/man/man3/CURLOPT_HTTP_CONTENT_DECODING.3
+/usr/share/man/man3/CURLOPT_HTTP_TRANSFER_DECODING.3
+/usr/share/man/man3/CURLOPT_HTTP_VERSION.3
+/usr/share/man/man3/CURLOPT_IGNORE_CONTENT_LENGTH.3
+/usr/share/man/man3/CURLOPT_INFILESIZE.3
+/usr/share/man/man3/CURLOPT_INFILESIZE_LARGE.3
+/usr/share/man/man3/CURLOPT_INTERFACE.3
+/usr/share/man/man3/CURLOPT_INTERLEAVEDATA.3
+/usr/share/man/man3/CURLOPT_INTERLEAVEFUNCTION.3
+/usr/share/man/man3/CURLOPT_IOCTLDATA.3
+/usr/share/man/man3/CURLOPT_IOCTLFUNCTION.3
+/usr/share/man/man3/CURLOPT_IPRESOLVE.3
+/usr/share/man/man3/CURLOPT_ISSUERCERT.3
+/usr/share/man/man3/CURLOPT_ISSUERCERT_BLOB.3
+/usr/share/man/man3/CURLOPT_KEEP_SENDING_ON_ERROR.3
+/usr/share/man/man3/CURLOPT_KEYPASSWD.3
+/usr/share/man/man3/CURLOPT_KRBLEVEL.3
+/usr/share/man/man3/CURLOPT_LOCALPORT.3
+/usr/share/man/man3/CURLOPT_LOCALPORTRANGE.3
+/usr/share/man/man3/CURLOPT_LOGIN_OPTIONS.3
+/usr/share/man/man3/CURLOPT_LOW_SPEED_LIMIT.3
+/usr/share/man/man3/CURLOPT_LOW_SPEED_TIME.3
+/usr/share/man/man3/CURLOPT_MAIL_AUTH.3
+/usr/share/man/man3/CURLOPT_MAIL_FROM.3
+/usr/share/man/man3/CURLOPT_MAIL_RCPT.3
+/usr/share/man/man3/CURLOPT_MAIL_RCPT_ALLLOWFAILS.3
+/usr/share/man/man3/CURLOPT_MAXAGE_CONN.3
+/usr/share/man/man3/CURLOPT_MAXCONNECTS.3
+/usr/share/man/man3/CURLOPT_MAXFILESIZE.3
+/usr/share/man/man3/CURLOPT_MAXFILESIZE_LARGE.3
+/usr/share/man/man3/CURLOPT_MAXREDIRS.3
+/usr/share/man/man3/CURLOPT_MAX_RECV_SPEED_LARGE.3
+/usr/share/man/man3/CURLOPT_MAX_SEND_SPEED_LARGE.3
+/usr/share/man/man3/CURLOPT_MIMEPOST.3
+/usr/share/man/man3/CURLOPT_NETRC.3
+/usr/share/man/man3/CURLOPT_NETRC_FILE.3
+/usr/share/man/man3/CURLOPT_NEW_DIRECTORY_PERMS.3
+/usr/share/man/man3/CURLOPT_NEW_FILE_PERMS.3
+/usr/share/man/man3/CURLOPT_NOBODY.3
+/usr/share/man/man3/CURLOPT_NOPROGRESS.3
+/usr/share/man/man3/CURLOPT_NOPROXY.3
+/usr/share/man/man3/CURLOPT_NOSIGNAL.3
+/usr/share/man/man3/CURLOPT_OPENSOCKETDATA.3
+/usr/share/man/man3/CURLOPT_OPENSOCKETFUNCTION.3
+/usr/share/man/man3/CURLOPT_PASSWORD.3
+/usr/share/man/man3/CURLOPT_PATH_AS_IS.3
+/usr/share/man/man3/CURLOPT_PINNEDPUBLICKEY.3
+/usr/share/man/man3/CURLOPT_PIPEWAIT.3
+/usr/share/man/man3/CURLOPT_PORT.3
+/usr/share/man/man3/CURLOPT_POST.3
+/usr/share/man/man3/CURLOPT_POSTFIELDS.3
+/usr/share/man/man3/CURLOPT_POSTFIELDSIZE.3
+/usr/share/man/man3/CURLOPT_POSTFIELDSIZE_LARGE.3
+/usr/share/man/man3/CURLOPT_POSTQUOTE.3
+/usr/share/man/man3/CURLOPT_POSTREDIR.3
+/usr/share/man/man3/CURLOPT_PREQUOTE.3
+/usr/share/man/man3/CURLOPT_PRE_PROXY.3
+/usr/share/man/man3/CURLOPT_PRIVATE.3
+/usr/share/man/man3/CURLOPT_PROGRESSDATA.3
+/usr/share/man/man3/CURLOPT_PROGRESSFUNCTION.3
+/usr/share/man/man3/CURLOPT_PROTOCOLS.3
+/usr/share/man/man3/CURLOPT_PROXY.3
+/usr/share/man/man3/CURLOPT_PROXYAUTH.3
+/usr/share/man/man3/CURLOPT_PROXYHEADER.3
+/usr/share/man/man3/CURLOPT_PROXYPASSWORD.3
+/usr/share/man/man3/CURLOPT_PROXYPORT.3
+/usr/share/man/man3/CURLOPT_PROXYTYPE.3
+/usr/share/man/man3/CURLOPT_PROXYUSERNAME.3
+/usr/share/man/man3/CURLOPT_PROXYUSERPWD.3
+/usr/share/man/man3/CURLOPT_PROXY_CAINFO.3
+/usr/share/man/man3/CURLOPT_PROXY_CAINFO_BLOB.3
+/usr/share/man/man3/CURLOPT_PROXY_CAPATH.3
+/usr/share/man/man3/CURLOPT_PROXY_CRLFILE.3
+/usr/share/man/man3/CURLOPT_PROXY_ISSUERCERT.3
+/usr/share/man/man3/CURLOPT_PROXY_ISSUERCERT_BLOB.3
+/usr/share/man/man3/CURLOPT_PROXY_KEYPASSWD.3
+/usr/share/man/man3/CURLOPT_PROXY_PINNEDPUBLICKEY.3
+/usr/share/man/man3/CURLOPT_PROXY_SERVICE_NAME.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLCERT.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLCERTTYPE.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLCERT_BLOB.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLKEY.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLKEYTYPE.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLKEY_BLOB.3
+/usr/share/man/man3/CURLOPT_PROXY_SSLVERSION.3
+/usr/share/man/man3/CURLOPT_PROXY_SSL_CIPHER_LIST.3
+/usr/share/man/man3/CURLOPT_PROXY_SSL_OPTIONS.3
+/usr/share/man/man3/CURLOPT_PROXY_SSL_VERIFYHOST.3
+/usr/share/man/man3/CURLOPT_PROXY_SSL_VERIFYPEER.3
+/usr/share/man/man3/CURLOPT_PROXY_TLS13_CIPHERS.3
+/usr/share/man/man3/CURLOPT_PROXY_TLSAUTH_PASSWORD.3
+/usr/share/man/man3/CURLOPT_PROXY_TLSAUTH_TYPE.3
+/usr/share/man/man3/CURLOPT_PROXY_TLSAUTH_USERNAME.3
+/usr/share/man/man3/CURLOPT_PROXY_TRANSFER_MODE.3
+/usr/share/man/man3/CURLOPT_PUT.3
+/usr/share/man/man3/CURLOPT_QUOTE.3
+/usr/share/man/man3/CURLOPT_RANDOM_FILE.3
+/usr/share/man/man3/CURLOPT_RANGE.3
+/usr/share/man/man3/CURLOPT_READDATA.3
+/usr/share/man/man3/CURLOPT_READFUNCTION.3
+/usr/share/man/man3/CURLOPT_REDIR_PROTOCOLS.3
+/usr/share/man/man3/CURLOPT_REFERER.3
+/usr/share/man/man3/CURLOPT_REQUEST_TARGET.3
+/usr/share/man/man3/CURLOPT_RESOLVE.3
+/usr/share/man/man3/CURLOPT_RESOLVER_START_DATA.3
+/usr/share/man/man3/CURLOPT_RESOLVER_START_FUNCTION.3
+/usr/share/man/man3/CURLOPT_RESUME_FROM.3
+/usr/share/man/man3/CURLOPT_RESUME_FROM_LARGE.3
+/usr/share/man/man3/CURLOPT_RTSP_CLIENT_CSEQ.3
+/usr/share/man/man3/CURLOPT_RTSP_REQUEST.3
+/usr/share/man/man3/CURLOPT_RTSP_SERVER_CSEQ.3
+/usr/share/man/man3/CURLOPT_RTSP_SESSION_ID.3
+/usr/share/man/man3/CURLOPT_RTSP_STREAM_URI.3
+/usr/share/man/man3/CURLOPT_RTSP_TRANSPORT.3
+/usr/share/man/man3/CURLOPT_SASL_AUTHZID.3
+/usr/share/man/man3/CURLOPT_SASL_IR.3
+/usr/share/man/man3/CURLOPT_SEEKDATA.3
+/usr/share/man/man3/CURLOPT_SEEKFUNCTION.3
+/usr/share/man/man3/CURLOPT_SERVICE_NAME.3
+/usr/share/man/man3/CURLOPT_SHARE.3
+/usr/share/man/man3/CURLOPT_SOCKOPTDATA.3
+/usr/share/man/man3/CURLOPT_SOCKOPTFUNCTION.3
+/usr/share/man/man3/CURLOPT_SOCKS5_AUTH.3
+/usr/share/man/man3/CURLOPT_SOCKS5_GSSAPI_NEC.3
+/usr/share/man/man3/CURLOPT_SOCKS5_GSSAPI_SERVICE.3
+/usr/share/man/man3/CURLOPT_SSH_AUTH_TYPES.3
+/usr/share/man/man3/CURLOPT_SSH_COMPRESSION.3
+/usr/share/man/man3/CURLOPT_SSH_HOST_PUBLIC_KEY_MD5.3
+/usr/share/man/man3/CURLOPT_SSH_KEYDATA.3
+/usr/share/man/man3/CURLOPT_SSH_KEYFUNCTION.3
+/usr/share/man/man3/CURLOPT_SSH_KNOWNHOSTS.3
+/usr/share/man/man3/CURLOPT_SSH_PRIVATE_KEYFILE.3
+/usr/share/man/man3/CURLOPT_SSH_PUBLIC_KEYFILE.3
+/usr/share/man/man3/CURLOPT_SSLCERT.3
+/usr/share/man/man3/CURLOPT_SSLCERTTYPE.3
+/usr/share/man/man3/CURLOPT_SSLCERT_BLOB.3
+/usr/share/man/man3/CURLOPT_SSLENGINE.3
+/usr/share/man/man3/CURLOPT_SSLENGINE_DEFAULT.3
+/usr/share/man/man3/CURLOPT_SSLKEY.3
+/usr/share/man/man3/CURLOPT_SSLKEYTYPE.3
+/usr/share/man/man3/CURLOPT_SSLKEY_BLOB.3
+/usr/share/man/man3/CURLOPT_SSLVERSION.3
+/usr/share/man/man3/CURLOPT_SSL_CIPHER_LIST.3
+/usr/share/man/man3/CURLOPT_SSL_CTX_DATA.3
+/usr/share/man/man3/CURLOPT_SSL_CTX_FUNCTION.3
+/usr/share/man/man3/CURLOPT_SSL_EC_CURVES.3
+/usr/share/man/man3/CURLOPT_SSL_ENABLE_ALPN.3
+/usr/share/man/man3/CURLOPT_SSL_ENABLE_NPN.3
+/usr/share/man/man3/CURLOPT_SSL_FALSESTART.3
+/usr/share/man/man3/CURLOPT_SSL_OPTIONS.3
+/usr/share/man/man3/CURLOPT_SSL_SESSIONID_CACHE.3
+/usr/share/man/man3/CURLOPT_SSL_VERIFYHOST.3
+/usr/share/man/man3/CURLOPT_SSL_VERIFYPEER.3
+/usr/share/man/man3/CURLOPT_SSL_VERIFYSTATUS.3
+/usr/share/man/man3/CURLOPT_STDERR.3
+/usr/share/man/man3/CURLOPT_STREAM_DEPENDS.3
+/usr/share/man/man3/CURLOPT_STREAM_DEPENDS_E.3
+/usr/share/man/man3/CURLOPT_STREAM_WEIGHT.3
+/usr/share/man/man3/CURLOPT_SUPPRESS_CONNECT_HEADERS.3
+/usr/share/man/man3/CURLOPT_TCP_FASTOPEN.3
+/usr/share/man/man3/CURLOPT_TCP_KEEPALIVE.3
+/usr/share/man/man3/CURLOPT_TCP_KEEPIDLE.3
+/usr/share/man/man3/CURLOPT_TCP_KEEPINTVL.3
+/usr/share/man/man3/CURLOPT_TCP_NODELAY.3
+/usr/share/man/man3/CURLOPT_TELNETOPTIONS.3
+/usr/share/man/man3/CURLOPT_TFTP_BLKSIZE.3
+/usr/share/man/man3/CURLOPT_TFTP_NO_OPTIONS.3
+/usr/share/man/man3/CURLOPT_TIMECONDITION.3
+/usr/share/man/man3/CURLOPT_TIMEOUT.3
+/usr/share/man/man3/CURLOPT_TIMEOUT_MS.3
+/usr/share/man/man3/CURLOPT_TIMEVALUE.3
+/usr/share/man/man3/CURLOPT_TIMEVALUE_LARGE.3
+/usr/share/man/man3/CURLOPT_TLS13_CIPHERS.3
+/usr/share/man/man3/CURLOPT_TLSAUTH_PASSWORD.3
+/usr/share/man/man3/CURLOPT_TLSAUTH_TYPE.3
+/usr/share/man/man3/CURLOPT_TLSAUTH_USERNAME.3
+/usr/share/man/man3/CURLOPT_TRAILERDATA.3
+/usr/share/man/man3/CURLOPT_TRAILERFUNCTION.3
+/usr/share/man/man3/CURLOPT_TRANSFERTEXT.3
+/usr/share/man/man3/CURLOPT_TRANSFER_ENCODING.3
+/usr/share/man/man3/CURLOPT_UNIX_SOCKET_PATH.3
+/usr/share/man/man3/CURLOPT_UNRESTRICTED_AUTH.3
+/usr/share/man/man3/CURLOPT_UPKEEP_INTERVAL_MS.3
+/usr/share/man/man3/CURLOPT_UPLOAD.3
+/usr/share/man/man3/CURLOPT_UPLOAD_BUFFERSIZE.3
+/usr/share/man/man3/CURLOPT_URL.3
+/usr/share/man/man3/CURLOPT_USERAGENT.3
+/usr/share/man/man3/CURLOPT_USERNAME.3
+/usr/share/man/man3/CURLOPT_USERPWD.3
+/usr/share/man/man3/CURLOPT_USE_SSL.3
+/usr/share/man/man3/CURLOPT_VERBOSE.3
+/usr/share/man/man3/CURLOPT_WILDCARDMATCH.3
+/usr/share/man/man3/CURLOPT_WRITEDATA.3
+/usr/share/man/man3/CURLOPT_WRITEFUNCTION.3
+/usr/share/man/man3/CURLOPT_XFERINFODATA.3
+/usr/share/man/man3/CURLOPT_XFERINFOFUNCTION.3
+/usr/share/man/man3/CURLOPT_XOAUTH2_BEARER.3
+/usr/share/man/man3/curl_easy_cleanup.3
+/usr/share/man/man3/curl_easy_duphandle.3
+/usr/share/man/man3/curl_easy_escape.3
+/usr/share/man/man3/curl_easy_getinfo.3
+/usr/share/man/man3/curl_easy_init.3
+/usr/share/man/man3/curl_easy_option_by_id.3
+/usr/share/man/man3/curl_easy_option_by_name.3
+/usr/share/man/man3/curl_easy_option_next.3
+/usr/share/man/man3/curl_easy_pause.3
+/usr/share/man/man3/curl_easy_perform.3
+/usr/share/man/man3/curl_easy_recv.3
+/usr/share/man/man3/curl_easy_reset.3
+/usr/share/man/man3/curl_easy_send.3
+/usr/share/man/man3/curl_easy_setopt.3
+/usr/share/man/man3/curl_easy_strerror.3
+/usr/share/man/man3/curl_easy_unescape.3
+/usr/share/man/man3/curl_easy_upkeep.3
+/usr/share/man/man3/curl_escape.3
+/usr/share/man/man3/curl_formadd.3
+/usr/share/man/man3/curl_formfree.3
+/usr/share/man/man3/curl_formget.3
+/usr/share/man/man3/curl_free.3
+/usr/share/man/man3/curl_getdate.3
+/usr/share/man/man3/curl_getenv.3
+/usr/share/man/man3/curl_global_cleanup.3
+/usr/share/man/man3/curl_global_init.3
+/usr/share/man/man3/curl_global_init_mem.3
+/usr/share/man/man3/curl_global_sslset.3
+/usr/share/man/man3/curl_mime_addpart.3
+/usr/share/man/man3/curl_mime_data.3
+/usr/share/man/man3/curl_mime_data_cb.3
+/usr/share/man/man3/curl_mime_encoder.3
+/usr/share/man/man3/curl_mime_filedata.3
+/usr/share/man/man3/curl_mime_filename.3
+/usr/share/man/man3/curl_mime_free.3
+/usr/share/man/man3/curl_mime_headers.3
+/usr/share/man/man3/curl_mime_init.3
+/usr/share/man/man3/curl_mime_name.3
+/usr/share/man/man3/curl_mime_subparts.3
+/usr/share/man/man3/curl_mime_type.3
+/usr/share/man/man3/curl_mprintf.3
+/usr/share/man/man3/curl_multi_add_handle.3
+/usr/share/man/man3/curl_multi_assign.3
+/usr/share/man/man3/curl_multi_cleanup.3
+/usr/share/man/man3/curl_multi_fdset.3
+/usr/share/man/man3/curl_multi_info_read.3
+/usr/share/man/man3/curl_multi_init.3
+/usr/share/man/man3/curl_multi_perform.3
+/usr/share/man/man3/curl_multi_poll.3
+/usr/share/man/man3/curl_multi_remove_handle.3
+/usr/share/man/man3/curl_multi_setopt.3
+/usr/share/man/man3/curl_multi_socket.3
+/usr/share/man/man3/curl_multi_socket_action.3
+/usr/share/man/man3/curl_multi_socket_all.3
+/usr/share/man/man3/curl_multi_strerror.3
+/usr/share/man/man3/curl_multi_timeout.3
+/usr/share/man/man3/curl_multi_wait.3
+/usr/share/man/man3/curl_multi_wakeup.3
+/usr/share/man/man3/curl_share_cleanup.3
+/usr/share/man/man3/curl_share_init.3
+/usr/share/man/man3/curl_share_setopt.3
+/usr/share/man/man3/curl_share_strerror.3
+/usr/share/man/man3/curl_slist_append.3
+/usr/share/man/man3/curl_slist_free_all.3
+/usr/share/man/man3/curl_strequal.3
+/usr/share/man/man3/curl_strnequal.3
+/usr/share/man/man3/curl_unescape.3
+/usr/share/man/man3/curl_url.3
+/usr/share/man/man3/curl_url_cleanup.3
+/usr/share/man/man3/curl_url_dup.3
+/usr/share/man/man3/curl_url_get.3
+/usr/share/man/man3/curl_url_set.3
+/usr/share/man/man3/curl_version.3
+/usr/share/man/man3/curl_version_info.3
+/usr/share/man/man3/libcurl-easy.3
+/usr/share/man/man3/libcurl-env.3
+/usr/share/man/man3/libcurl-errors.3
+/usr/share/man/man3/libcurl-multi.3
+/usr/share/man/man3/libcurl-security.3
+/usr/share/man/man3/libcurl-share.3
+/usr/share/man/man3/libcurl-symbols.3
+/usr/share/man/man3/libcurl-thread.3
+/usr/share/man/man3/libcurl-tutorial.3
+/usr/share/man/man3/libcurl-url.3
+/usr/share/man/man3/libcurl.3
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libcurl.a

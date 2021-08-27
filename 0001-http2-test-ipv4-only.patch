@@ -1,0 +1,28 @@
+From b014615bf3edb0a2ec5a4597f52fe4ab8e842e56 Mon Sep 17 00:00:00 2001
+From: Francisco Boni <boboniboni@gmail.com>
+Date: Fri, 27 Aug 2021 16:59:53 -0300
+Subject: [PATCH] http2 test ipv4 only
+
+---
+ tests/http2-server.pl | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/http2-server.pl b/tests/http2-server.pl
+index 9708c8939..53f97b253 100755
+--- a/tests/http2-server.pl
++++ b/tests/http2-server.pl
+@@ -75,9 +75,10 @@ while(@ARGV) {
+ }
+ 
+ my $cmdline="$nghttpx --backend=$connect ".
+-    "--frontend=\"*,$listenport;no-tls\" ".
++    "--frontend=\"127.0.0.1,$listenport;no-tls\" ".
+     "--log-level=INFO ".
+     "--pid-file=$pidfile ".
++    "--backend-address-family=IPv4 ".
+     "--errorlog-file=$logfile";
+ print "RUN: $cmdline\n" if($verbose);
+ system("$cmdline 2>/dev/null");
+-- 
+2.32.0
+
