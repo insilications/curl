@@ -101,6 +101,7 @@ BuildRequires : krb5-bin
 BuildRequires : krb5-data
 BuildRequires : krb5-dev
 BuildRequires : krb5-lib
+BuildRequires : krb5-staticdev
 BuildRequires : libassuan-dev
 BuildRequires : libc6
 BuildRequires : libcomps-dev
@@ -1057,7 +1058,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1630131249
+export SOURCE_DATE_EPOCH=1630131360
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -1384,7 +1385,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1630131249
+export SOURCE_DATE_EPOCH=1630131360
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
