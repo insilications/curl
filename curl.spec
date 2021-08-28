@@ -1058,7 +1058,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1630131360
+export SOURCE_DATE_EPOCH=1630132221
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -1207,13 +1207,14 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g'
 find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
 sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lkrb5" -- "/usr/lib64/libkrb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lresolv" -- "/usr/lib64/libresolv.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lkrb5" -- "/usr/lib64/libkrb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lresolv" -- "/usr/lib64/libresolv.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lk5crypto" -- "/usr/lib64/libk5crypto.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lcom_err" -- "/usr/lib64/libcom_err.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lkrb5support" -- "/usr/lib64/libkrb5support.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lgssapi_krb5" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libgssapi_krb5.a,/usr/lib64/libkrb5.a,/usr/lib64/libkeyutils.a,/usr/lib64/libresolv.a,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 ## make_prepend64 end
 ## make_macro content
 make -j16 V=1 VERBOSE=1
@@ -1323,13 +1324,14 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g'
 find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
 sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lkrb5" -- "/usr/lib64/libkrb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lresolv" -- "/usr/lib64/libresolv.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lkrb5" -- "/usr/lib64/libkrb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lresolv" -- "/usr/lib64/libresolv.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lk5crypto" -- "/usr/lib64/libk5crypto.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lcom_err" -- "/usr/lib64/libcom_err.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 sd "\-lkrb5support" -- "/usr/lib64/libkrb5support.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lgssapi_krb5" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libgssapi_krb5.a,/usr/lib64/libkrb5.a,/usr/lib64/libkeyutils.a,/usr/lib64/libresolv.a,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 ## make_prepend64 end
 ## make_macro content
 make -j16 V=1 VERBOSE=1
@@ -1385,7 +1387,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1630131360
+export SOURCE_DATE_EPOCH=1630132221
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
