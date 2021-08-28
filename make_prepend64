@@ -8,7 +8,6 @@
 # find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libzstd.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:-Wl,--whole-archive,--as-needed,/usr/lib64/libz.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
 # sd "\-lssl" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libssl.a,/usr/lib64/libcrypto.a,/usr/lib64/libz.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 find . -type f -name 'Makefile' -exec sed -i 's:-lssl\b:/usr/lib64/libssl.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lcrypto\b:/usr/lib64/libcrypto.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lnghttp2\b:/usr/lib64/libnghttp2.a:g' {} \;
@@ -18,3 +17,44 @@ find . -type f -name 'Makefile' -exec sed -i 's:-lbrotlidec\b:/usr/lib64/libbrot
 find . -type f -name 'Makefile' -exec sed -i 's:-lzstd\b:/usr/lib64/libzstd.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lz\b:/usr/lib64/libz.a:g' {} \;
 find . -type f -name 'Makefile' -exec sed -i 's:-lsqlite3\b:/usr/lib64/libsqlite3.a:g' {} \;
+sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkrb5" -- "/usr/lib64/libkrb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lresolv" -- "/usr/lib64/libresolv.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lk5crypto" -- "/usr/lib64/libk5crypto.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lcom_err" -- "/usr/lib64/libcom_err.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkrb5support" -- "/usr/lib64/libkrb5support.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+
+#  libgssapi_krb5.so.2 => /usr/lib64/libgssapi_krb5.so.2
+#         libkrb5.so.3 => /usr/lib64/libkrb5.so.3
+#             libkeyutils.so.1 => /usr/lib64/libkeyutils.so.1
+#             libresolv.so.2 => /usr/lib64/libresolv.so.2
+#         libk5crypto.so.3 => /usr/lib64/libk5crypto.so.3
+#         libcom_err.so.2 => /usr/lib64/libcom_err.so.2
+#         libkrb5support.so.0 => /usr/lib64/libkrb5support.so.0
+#
+#         /usr/lib64/libresolv.a
+#
+#         /usr/lib64/libcom_err.a
+#         /usr/lib64/libgssapi_krb5.a
+# /usr/lib64/libgssrpc.a
+# /usr/lib64/libk5crypto.a
+# /usr/lib64/libkadm5clnt.a
+# /usr/lib64/libkadm5clnt_mit.a
+# /usr/lib64/libkadm5srv.a
+# /usr/lib64/libkadm5srv_mit.a
+# /usr/lib64/libkdb5.a
+# /usr/lib64/libkdb_ldap.a
+# /usr/lib64/libkrad.a
+# /usr/lib64/libkrb5.a
+# /usr/lib64/libkrb5_db2.a
+# /usr/lib64/libkrb5_k5tls.a
+# /usr/lib64/libkrb5_kldap.a
+# /usr/lib64/libkrb5_klmdb.a
+# /usr/lib64/libkrb5_otp.a
+# /usr/lib64/libkrb5_pkinit.a
+# /usr/lib64/libkrb5_spake.a
+# /usr/lib64/libkrb5_test.a
+# /usr/lib64/libkrb5support.a
+# /usr/lib64/libverto.a
