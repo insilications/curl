@@ -25,5 +25,23 @@ sd "\-lrtmp" -- "/usr/lib64/librtmp.a" $(fd -uu --follow .*Makefile$) $(fd -uu -
 # sd "\-lk5crypto" -- "/usr/lib64/libk5crypto.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 # sd "\-lcom_err" -- "/usr/lib64/libcom_err.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
 # sd "\-lkrb5support" -- "/usr/lib64/libkrb5support.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+#
 # sd "\-lgssapi_krb5" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libgssapi_krb5.a,/usr/lib64/libkrb5.a,/usr/lib64/libkeyutils.a,/usr/lib64/libresolv.a,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
-sd "\-lk5crypto" -- "-Wl,--whole-archive,--start-group,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+#
+# sd "\-lk5crypto" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lcom_err" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lk5crypto" -- "-Wl,--whole-archive,--as-needed,--start-group,/usr/lib64/libk5crypto.a,/usr/lib64/libcom_err.a,/usr/lib64/libkrb5support.a,--end-group,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lgssapi_krb5" -- "/usr/lib64/libgssapi_krb5.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lkeyutils" -- "/usr/lib64/libkeyutils.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lk5crypto" -- "/usr/lib64/libk5crypto.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# sd "\-lcom_err" -- "/usr/lib64/libcom_err.a" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+#
+sd "\-lrtmp" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/librtmp.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lgssapi_krb5" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libgssapi_krb5.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkrb5" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libkrb5.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkeyutils" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libkeyutils.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lk5crypto" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libk5crypto.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lcom_err" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libcom_err.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+sd "\-lkrb5support" -- "-Wl,--whole-archive,--as-needed,/usr/lib64/libkrb5support.a,--no-whole-archive" $(fd -uu --follow .*Makefile$) $(fd -uu --follow .*pro$) $(fd -uu --follow .*mk$)
+# export LD_LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
+# export LIBRARY_PATH="/builddir/build/BUILD/curl/lib/.libs/"
